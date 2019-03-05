@@ -96,19 +96,19 @@ function get_merged_defaults_and_customisations() : array {
 function get_merged_settings( array $config, array $overrides ) : array {
 	$merged = $config;
 
-    foreach ( $overrides as $key => &$value ) {
-        if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
-            $merged[ $key ] = get_merged_settings( $merged[ $key ], $value );
-        } else if ( is_numeric( $key ) ) {
-             if ( ! in_array( $value, $merged ) ) {
-                $merged[] = $value;
-             }
-        } else {
-            $merged[ $key ] = $value;
-        }
-    }
+	foreach ( $overrides as $key => &$value ) {
+		if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
+			$merged[ $key ] = get_merged_settings( $merged[ $key ], $value );
+		} elseif ( is_numeric( $key ) ) {
+			 if ( ! in_array( $value, $merged ) ) {
+				$merged[] = $value;
+			 }
+		} else {
+			$merged[ $key ] = $value;
+		}
+	}
 
-    return $merged;
+	return $merged;
 }
 
 /**
