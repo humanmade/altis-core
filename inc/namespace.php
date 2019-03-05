@@ -37,3 +37,29 @@ function get_environment_architecture() : string {
 	}
 	return 'ec2';
 }
+
+/**
+ * Get the name of the current environment.
+ *
+ * @return string
+ */
+function get_environment_name() : string {
+	if ( defined( 'HM_ENV' ) ) {
+		return HM_ENV;
+	}
+	return 'unknown';
+}
+
+/**
+ * Get the type of the current environment.
+ *
+ * Can be "local", "development", "staging", "prodiction" etc.
+ *
+ * @return string
+ */
+function get_environment_type() : string {
+	if ( defined( 'HM_ENV_TYPE' ) ) {
+		return HM_ENV_TYPE;
+	}
+	return 'local';
+}
