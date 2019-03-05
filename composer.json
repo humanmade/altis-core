@@ -10,8 +10,8 @@
 		}
 	],
 	"autoload": {
-		"files": [
-			"load.php"
+		"classmap": [
+			"inc/"
 		]
 	}
 }
