@@ -63,3 +63,19 @@ function get_environment_type() : string {
 	}
 	return 'local';
 }
+
+/**
+ * Fix the plugins_url for files in the vendor directory
+ *
+ * @param string $url
+ * @param string $path
+ * @param string $plugin
+ * @return string
+ */
+function fix_plugins_url( string $url, string $path, string $plugin ) : string {
+	if ( strpos( $plugin, dirname( ABSPATH ) ) === false ) {
+		return $url;
+	}
+
+	return str_replace( dirname( ABSPATH ), dirname( WP_CONTENT_URL ), dirname( $plugin ) ) . $path;
+}
