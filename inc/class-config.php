@@ -131,7 +131,7 @@ class Config {
 	 *
 	 * @return array Decoded data in array form, empty array if JSON data could not read.
 	 */
-	protected static function get_json_file_contents_as_array( $file ) {
+	protected static function get_json_file_contents_as_array( $file ) : array {
 		if ( ! strpos( $file, '.json' ) ) {
 			// phpcs:ignore
 			trigger_error( $file . ' is not a JSON file.', E_USER_WARNING );
