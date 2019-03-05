@@ -53,7 +53,7 @@ function get_environment_name() : string {
 /**
  * Get the type of the current environment.
  *
- * Can be "local", "development", "staging", "prodiction" etc.
+ * Can be "local", "development", "staging", "production" etc.
  *
  * @return string
  */
