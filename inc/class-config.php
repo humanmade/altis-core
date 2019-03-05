@@ -69,8 +69,14 @@ class Config {
 
 		// @todo get registered modules & their defaults here.
 
+		if ( ! defined( 'ROOT_DIR' ) ) {
+			// phpcs:ignore
+			trigger_error( 'ROOT_DIR must be defined before loading the composer autoloader.', E_USER_WARNING );
+			return $config;
+		}
+
 		// Find composer file.
-		$composer_file = dirname( ABSPATH ) . '/composer.json';
+		$composer_file = ROOT_DIR . '/composer.json';
 
 		// Look for a `composer.json` file.
 		if ( is_readable( $composer_file ) ) {
