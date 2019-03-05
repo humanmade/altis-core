@@ -8,5 +8,10 @@
 			"name": "Human Made",
 			"email": "hello@humanmade.com"
 		}
-	]
+	],
+	"autoload": {
+		"files": [
+			"load.php"
+		]
+	}
 }
