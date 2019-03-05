@@ -5,11 +5,9 @@
  * @package altis-core
  */
 
-namespace Altis\Core;
-
 const ALTIS_CORE_DIR = __DIR__;
 
-include ALTIS_CORE_DIR . '/inc/config.php';
+include ALTIS_CORE_DIR . '/inc/namespace.php';
 
 // Define the env type as local if not set higher up the chain.
 if ( ! defined( 'HM_ENV_TYPE' ) ) {
