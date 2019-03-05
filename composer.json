@@ -1,0 +1,12 @@
+{
+	"name": "humanmade/core",
+	"description": "Human Made Platform Core Module",
+	"type": "package",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Human Made",
+			"email": "hello@humanmade.com"
+		}
+	]
+}
