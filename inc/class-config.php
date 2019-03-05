@@ -43,11 +43,11 @@ class Config {
 	 * @return string The environment type string.
 	 */
 	static function get_environment_type() : string {
-		if ( ! defined( 'HM_ENV_TYPE' ) ) {
-			define( 'HM_ENV_TYPE', 'local' );
+		if ( defined( 'HM_ENV_TYPE' ) ) {
+			return HM_ENV_TYPE;
 		}
 
-		return HM_ENV_TYPE;
+		return 'local';
 	}
 
 	/**
