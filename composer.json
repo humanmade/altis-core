@@ -8,5 +8,14 @@
 			"name": "Human Made",
 			"email": "hello@humanmade.com"
 		}
-	]
+	],
+	"require": {
+		"aws/aws-sdk-php": "^3.73.0"
+	},
+	"autoload": {
+		"files": [
+			"inc/namespace.php",
+			"load.php"
+		]
+	}
 }
