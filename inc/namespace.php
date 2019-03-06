@@ -1,11 +1,13 @@
 <?php
 /**
- * Core platform config loader.
+ * Core platform functions.
  *
- * @package hm-platform-core
+ * @package hm-platform
  */
 
 namespace HM\Platform;
+
+use Aws\Sdk;
 
 /**
  * Retrieve the configuration for HM Platform.
@@ -19,7 +21,7 @@ function get_config() : array {
 	static $config = [];
 
 	if ( empty( $config ) ) {
-		$config = get_merged_defaults_and_customizations();
+		$config = get_merged_config();
 	}
 
 	/**
@@ -37,35 +39,20 @@ function get_config() : array {
  *
  * @return array Configuration data.
  */
-function get_merged_defaults_and_customizations() : array {
+function get_merged_config() : array {
 	// Default config.
 	$config = [
 		'modules' => [],
-		'environments' => [
-			'local' => [],
-			'development' => [],
-			'staging' => [],
-			'production' => [],
-		],
 	];
 
-	// Find composer file.
+	// Path to composer file.
 	$composer_file = ROOT_DIR . '/composer.json';
-
-	// Look for a `composer.json` file.
-	if ( is_readable( $composer_file ) ) {
-		$config = get_merged_settings( $config, get_json_file_contents_as_array( $composer_file ) );
-	} else {
-		// phpcs:ignore
-		trigger_error( 'A composer file could not be found at ' . $composer_file, E_USER_WARNING );
-		return $config;
-	}
+	$composer_json = get_json_file_contents_as_array( $composer_file );
+	$config = merge_config_settings( $config, $composer_json['extra']['platform'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
-	if ( isset( $config['environments'], $config['environments'][ $environment ] ) ) {
-		$config = get_merged_settings( $config, $config['environments'][ $environment ] );
-	}
+	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
 }
@@ -78,25 +65,23 @@ function get_merged_defaults_and_customizations() : array {
  *
  * @return array Configuration data.
  */
-function get_merged_settings( array $config, array $overrides ) : array {
-	$merged = $config;
-
+function merge_config_settings( array $config, array $overrides ) : array {
 	foreach ( $overrides as $key => $value ) {
 		switch ( $key ) {
 			// Merge module settings together.
 			case 'modules':
 				foreach ( $value as $module => $settings ) {
-					$merged[ $key ][ $module ] = array_merge( $merged[ $key ][ $module ] ?? [], $settings );
+					$config[ $key ][ $module ] = array_merge( $config[ $key ][ $module ] ?? [], $settings );
 				}
 				break;
 			// Replace property by default.
 			default:
-				$merged[ $key ] = $value;
+				$config[ $key ] = $value;
 				break;
 		}
 	}
 
-	return $merged;
+	return $config;
 }
 
 /**
@@ -127,5 +112,81 @@ function get_json_file_contents_as_array( $file ) : array {
 		return [];
 	}
 
-	return $contents['extra']['platform'] ?? [];
+	return $contents;
+}
+
+/**
+ * Get a globally configured instance of the AWS SDK.
+ */
+function get_aws_sdk() : Sdk {
+	static $sdk;
+	if ( $sdk ) {
+		return $sdk;
+	}
+	$params = [
+		'region'   => HM_ENV_REGION,
+		'version'  => 'latest',
+	];
+	if ( defined( 'AWS_KEY' ) ) {
+		$params['credentials'] = [
+			'key'    => AWS_KEY,
+			'secret' => AWS_SECRET,
+		];
+	}
+	$sdk = new Sdk( $params );
+	return $sdk;
+}
+
+/**
+ * Get the application architecture for the current site.
+ *
+ * @return string
+ */
+function get_environment_architecture() : string {
+	if ( defined( 'HM_ENV_ARCHITECTURE' ) ) {
+		return HM_ENV_ARCHITECTURE;
+	}
+	return 'ec2';
+}
+
+/**
+ * Get the name of the current environment.
+ *
+ * @return string
+ */
+function get_environment_name() : string {
+	if ( defined( 'HM_ENV' ) ) {
+		return HM_ENV;
+	}
+	return 'unknown';
+}
+
+/**
+ * Get the type of the current environment.
+ *
+ * Can be "local", "development", "staging", "production" etc.
+ *
+ * @return string
+ */
+function get_environment_type() : string {
+	if ( defined( 'HM_ENV_TYPE' ) ) {
+		return HM_ENV_TYPE;
+	}
+	return 'local';
+}
+
+/**
+ * Fix the plugins_url for files in the vendor directory
+ *
+ * @param string $url
+ * @param string $path
+ * @param string $plugin
+ * @return string
+ */
+function fix_plugins_url( string $url, string $path, string $plugin ) : string {
+	if ( strpos( $plugin, dirname( ABSPATH ) ) === false ) {
+		return $url;
+	}
+
+	return str_replace( dirname( ABSPATH ), dirname( WP_CONTENT_URL ), dirname( $plugin ) ) . $path;
 }
