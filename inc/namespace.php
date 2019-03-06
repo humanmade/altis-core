@@ -40,7 +40,6 @@ function get_config() : array {
  * @return array Configuration data.
  */
 function get_merged_config() : array {
-	// Path to composer file.
 	$composer_file = ROOT_DIR . '/composer.json';
 	$composer_json = get_json_file_contents_as_array( $composer_file );
 	$config = merge_config_settings( [], $composer_json['extra']['platform'] ?? [] );
