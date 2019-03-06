@@ -29,7 +29,7 @@ function get_config() : array {
 	 *
 	 * @param array $config The full config array.
 	 */
-	$config = apply_filters( 'hm-platform.config', self::$config );
+	$config = apply_filters( 'hm-platform.config', $config );
 
 	return $config;
 }
