@@ -22,14 +22,14 @@ function get_config() : array {
 
 	if ( empty( $config ) ) {
 		$config = get_merged_config();
-	}
 
-	/**
-	 * Filter the entire platform config.
-	 *
-	 * @param array $config The full config array.
-	 */
-	$config = apply_filters( 'hm-platform.config', $config );
+		/**
+		 * Filter the entire platform config.
+		 *
+		 * @param array $config The full config array.
+		 */
+		$config = apply_filters( 'hm-platform.config', $config );
+	}
 
 	return $config;
 }
