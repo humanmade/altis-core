@@ -185,3 +185,40 @@ function fix_plugins_url( string $url, string $path, string $plugin ) : string {
 
 	return str_replace( dirname( ABSPATH ), dirname( WP_CONTENT_URL ), dirname( $plugin ) ) . $path;
 }
+
+/**
+ * Get all enabled modules.
+ *
+ * @return array
+ */
+function get_enabled_modules() : array {
+	$modules = Module::get_all();
+	$enabled = array_filter( $modules, function ( Module $module ) {
+		return $module->get_setting( 'enabled' );
+	} );
+
+	return $enabled;
+}
+
+/**
+ * Load all enabled plugins, along with their customisation files.
+ */
+function load_enabled_modules() {
+	foreach ( get_enabled_modules() as $name => $module ) {
+
+		// Load module.
+		$module->load();
+
+		/**
+		 * Runs after the module has been loaded.
+		 *
+		 * @param Module $module The module object.
+		 */
+		do_action( "hm-platform.modules.{$name}.loaded", $module );
+	}
+
+	/**
+	 * Runs after all modules have loaded.
+	 */
+	do_action( 'hm-platform.modules.loaded' );
+}
