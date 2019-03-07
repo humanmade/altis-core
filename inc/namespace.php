@@ -54,7 +54,7 @@ function get_merged_config() : array {
 /**
  * Merge settings in an existing configuration file.
  *
- * @param array $config    Existing configuration.
+ * @param array $config Existing configuration.
  * @param array $overrides Settings to merge in.
  *
  * @return array Configuration data.
@@ -68,6 +68,7 @@ function merge_config_settings( array $config, array $overrides ) : array {
 					$config[ $key ][ $module ] = array_merge( $config[ $key ][ $module ] ?? [], $settings );
 				}
 				break;
+
 			// Replace property by default.
 			default:
 				$config[ $key ] = $value;
@@ -100,9 +101,9 @@ function get_json_file_contents_as_array( $file ) : array {
 
 	$contents = json_decode( file_get_contents( $file ), true );
 
-	if ( ! is_array( $contents ) ) {
+	if ( json_last_error() !== JSON_ERROR_NONE ) {
 		// phpcs:ignore
-		trigger_error( 'Decoding the JSON in ' . $file . ' .', E_USER_WARNING );
+		trigger_error( json_last_error_msg(), E_USER_WARNING );
 		return [];
 	}
 
