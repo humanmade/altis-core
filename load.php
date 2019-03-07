@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Main entry point loader for the Core module.
  */
 
