@@ -9,7 +9,6 @@
 namespace HM\Platform;
 
 class Module {
-
 	/**
 	 * Store of all registered modules.
 	 *
@@ -110,6 +109,15 @@ class Module {
 	}
 
 	/**
+	 * Get the module slug.
+	 *
+	 * @return string
+	 */
+	public function get_slug() : string {
+		return $this->slug;
+	}
+
+	/**
 	 * Get the module title.
 	 *
 	 * @return string
@@ -144,5 +152,4 @@ class Module {
 	public function get_directory() : string {
 		return $this->directory;
 	}
-
 }

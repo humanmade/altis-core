@@ -205,7 +205,6 @@ function get_enabled_modules() : array {
  */
 function load_enabled_modules() {
 	foreach ( get_enabled_modules() as $name => $module ) {
-
 		// Load module.
 		$module->load();
 
