@@ -38,29 +38,21 @@ class Module {
 	protected $title;
 
 	/**
-	 * Module settings at a minimum indicate the enabled status of the
+	 * Module default settings at a minimum indicate the enabled status of the
 	 * module but can contain any arbitrary values to use as feature flags
 	 * or to modify the modules behaviour.
 	 *
 	 * @var array
 	 */
-	protected $settings;
+	protected $default_settings;
 
-	/**
-	 * Module default settings. Core and Basic tier modules will need
-	 * to be enabled by default specifically during registration.
-	 *
-	 * @var array
-	 */
-	protected static $default_settings = [
-		'enabled' => false,
-	];
-
-	protected function __construct( string $slug, string $directory, string $title, ?array $settings = null ) {
+	protected function __construct( string $slug, string $directory, string $title, ?array $default_settings = null ) {
 		$this->slug = $slug;
 		$this->directory = $directory;
 		$this->title = $title;
-		$this->settings = array_merge( self::$default_settings, $settings ?? [] );
+		$this->default_settings = array_merge( [
+			'enabled' => false,
+		], $default_settings ?? [] );
 	}
 
 	/**
@@ -73,16 +65,23 @@ class Module {
 	 * @param ?callable $loader Optional loader function to call module bootstrapping code.
 	 * @return Module
 	 */
-	public static function register( string $slug, string $directory, string $title, ?array $settings = null, ?callable $loader = null ) : Module {
-		$module = new Module( $slug, $directory, $title, $settings );
+	public static function register( string $slug, string $directory, string $title, ?array $default_settings = null, ?callable $loader = null ) : Module {
+		$module = new Module( $slug, $directory, $title, $default_settings );
 
 		// Store the module.
 		self::$modules[ $slug ] = $module;
 
 		// Add the loader to the module's loaded action.
 		if ( is_callable( $loader ) ) {
-			add_action( "hm-platform.modules.{$slug}.loaded", $loader );
+			add_action( "hm-platform.modules.{$slug}.loaded", $loader, 1 );
 		}
+
+		// Add the module's default settings to the default config.
+		add_filter( 'hm-platform.config.default', function ( $config ) use ( $module ) {
+			$config['modules'] = $config['modules'] ?? [];
+			$config['modules'][ $module->get_slug() ] = $module->get_default_settings();
+			return $config;
+		} );
 
 		return $module;
 	}
@@ -129,8 +128,24 @@ class Module {
 	 *
 	 * @return array
 	 */
+	public function get_default_settings() : array {
+		return $this->default_settings;
+	}
+
+	/**
+	 * Get the modules settings.
+	 *
+	 * @return array
+	 */
 	public function get_settings() : array {
-		return $this->settings;
+		if ( ! did_action( 'hm-platform.modules.init' ) ) {
+			trigger_error( 'Module get_settings() was called too early', E_USER_WARNING );
+			return [];
+		}
+
+		$config = get_config();
+
+		return $config['modules'][ $this->slug ] ?? [];
 	}
 
 	/**
@@ -139,7 +154,9 @@ class Module {
 	 * @return mixed
 	 */
 	public function get_setting( $name ) {
-		return $this->settings[ $name ] ?? false;
+		$settings = $this->get_settings();
+
+		return $settings[ $name ] ?? null;
 	}
 
 	/**
