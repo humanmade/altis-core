@@ -187,6 +187,20 @@ function fix_plugins_url( string $url, string $path, string $plugin ) : string {
 }
 
 /**
+ * Registers a module with the store.
+ *
+ * @param string $slug The string identifier for the module used for later reference.
+ * @param string $directory The root directory of the module.
+ * @param string $title Human readable module title.
+ * @param ?array $settings Optional default settings array.
+ * @param ?callable $loader Optional loader function to call module bootstrapping code.
+ * @return Module
+ */
+function register_module( string $slug, string $directory, string $title, ?array $settings = null, ?callable $loader = null ) : Module {
+	return Module::register( $slug, $directory, $title, $settings, $loader );
+}
+
+/**
  * Get all enabled modules.
  *
  * @return array
@@ -204,16 +218,13 @@ function get_enabled_modules() : array {
  * Load all enabled plugins, along with their customisation files.
  */
 function load_enabled_modules() {
-	foreach ( get_enabled_modules() as $name => $module ) {
-		// Load module.
-		$module->load();
-
+	foreach ( get_enabled_modules() as $slug => $module ) {
 		/**
 		 * Runs after the module has been loaded.
 		 *
 		 * @param Module $module The module object.
 		 */
-		do_action( "hm-platform.modules.{$name}.loaded", $module );
+		do_action( "hm-platform.modules.{$slug}.loaded", $module );
 	}
 
 	/**

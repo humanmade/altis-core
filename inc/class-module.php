@@ -38,42 +38,51 @@ class Module {
 	protected $title;
 
 	/**
-	 * Settings array.
+	 * Module settings at a minimum indicate the enabled status of the
+	 * module but can contain any arbitrary values to use as feature flags
+	 * or to modify the modules behaviour.
 	 *
 	 * @var array
 	 */
 	protected $settings;
 
 	/**
-	 * Module loader callback function.
+	 * Module default settings. Core and Basic tier modules will need
+	 * to be enabled by default specifically during registration.
 	 *
-	 * @var callable
+	 * @var array
 	 */
-	protected $loader;
+	protected static $default_settings = [
+		'enabled' => false,
+	];
 
-	protected function __construct( string $slug, string $directory, string $title, array $settings, callable $loader ) {
+	protected function __construct( string $slug, string $directory, string $title, ?array $settings = null ) {
 		$this->slug = $slug;
 		$this->directory = $directory;
 		$this->title = $title;
-		$this->settings = $settings;
-		$this->loader = $loader;
+		$this->settings = array_merge( self::$default_settings, $settings ?? [] );
 	}
 
 	/**
 	 * Registers a module with the store.
 	 *
-	 * @param string $slug
-	 * @param string $directory
-	 * @param string $title
-	 * @param array $settings
-	 * @param callable $loader
+	 * @param string $slug The string identifier for the module used for later reference.
+	 * @param string $directory The root directory of the module.
+	 * @param string $title Human readable module title.
+	 * @param ?array $settings Optional default settings array.
+	 * @param ?callable $loader Optional loader function to call module bootstrapping code.
 	 * @return Module
 	 */
-	public static function register( string $slug, string $directory, string $title, array $settings, callable $loader ) : Module {
-		$module = new Module( $slug, $directory, $title, $settings, $loader );
+	public static function register( string $slug, string $directory, string $title, ?array $settings = null, ?callable $loader = null ) : Module {
+		$module = new Module( $slug, $directory, $title, $settings );
 
 		// Store the module.
 		self::$modules[ $slug ] = $module;
+
+		// Add the loader to the module's loaded action.
+		if ( is_callable( $loader ) ) {
+			add_action( "hm-platform.modules.{$slug}.loaded", $loader );
+		}
 
 		return $module;
 	}
@@ -95,17 +104,6 @@ class Module {
 	 */
 	public static function get_all() : array {
 		return self::$modules;
-	}
-
-	/**
-	 * Calls the module loader function.
-	 *
-	 * @return void
-	 */
-	public function load() {
-		if ( $this->settings['enabled'] ?? false ) {
-			$this->loader( $this->settings );
-		}
 	}
 
 	/**
