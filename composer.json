@@ -1,7 +1,7 @@
 {
 	"name": "humanmade/core",
 	"description": "Human Made Platform Core Module",
-	"type": "package",
+	"type": "composer-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
@@ -16,6 +16,14 @@
 		"files": [
 			"inc/namespace.php",
 			"load.php"
-		]
+		],
+		"classmap": [ "inc/" ]
+	},
+	"extra": {
+		"class": "HM\\Platform\\Composer\\Plugin"
+	},
+	"require": {
+		"composer-plugin-api": "^1.0",
+		"composer/installers": "^1.4"
 	}
 }
