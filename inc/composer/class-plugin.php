@@ -9,7 +9,7 @@ use Composer\Plugin\PluginInterface;
 class Plugin implements PluginInterface {
 
 	/**
-	 * Activate is not used, but is part of the abstract class.
+	 * Called when the plugin is activated.
 	 *
 	 * @param Composer $composer
 	 * @param IOInterface $io
