@@ -20,7 +20,7 @@ add_action( 'hm-platform.loaded_autoloader', function () {
 
 	// Load modules.
 	load_enabled_modules();
-} );
+}, 0 );
 
 // Register core module.
 add_action( 'hm-platform.modules.init', function () {
