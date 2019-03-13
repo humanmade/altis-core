@@ -1,7 +1,7 @@
 {
 	"name": "humanmade/core",
 	"description": "Human Made Platform Core Module",
-	"type": "package",
+	"type": "composer-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
@@ -10,7 +10,9 @@
 		}
 	],
 	"require": {
-		"aws/aws-sdk-php": "^3.73.0"
+		"aws/aws-sdk-php": "^3.73.0",
+		"composer-plugin-api": "^1.0",
+		"composer/installers": "^1.4"
 	},
 	"autoload": {
 		"files": [
@@ -19,5 +21,8 @@
 		"classmap": [
 			"inc/"
 		]
+	},
+	"extra": {
+		"class": "HM\\Platform\\Composer\\Plugin"
 	}
 }
