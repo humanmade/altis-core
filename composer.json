@@ -14,8 +14,10 @@
 	},
 	"autoload": {
 		"files": [
-			"inc/namespace.php",
 			"load.php"
+		],
+		"classmap": [
+			"inc/"
 		]
 	}
 }
