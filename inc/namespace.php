@@ -40,9 +40,17 @@ function get_config() : array {
  * @return array Configuration data.
  */
 function get_merged_config() : array {
+	/**
+	 * Use this filter to build up the default configuration.
+	 *
+	 * @param array $default_config
+	 */
+	$default_config = apply_filters( 'hm-platform.config.default', [] );
+
+	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
 	$composer_json = get_json_file_contents_as_array( $composer_file );
-	$config = merge_config_settings( [], $composer_json['extra']['platform'] ?? [] );
+	$config = merge_config_settings( $default_config, $composer_json['extra']['platform'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
@@ -184,4 +192,51 @@ function fix_plugins_url( string $url, string $path, string $plugin ) : string {
 	}
 
 	return str_replace( dirname( ABSPATH ), dirname( WP_CONTENT_URL ), dirname( $plugin ) ) . $path;
+}
+
+/**
+ * Registers a module with the store.
+ *
+ * @param string $slug The string identifier for the module used for later reference.
+ * @param string $directory The root directory of the module.
+ * @param string $title Human readable module title.
+ * @param ?array $default_settings Optional default settings array.
+ * @param ?callable $loader Optional loader function to call module bootstrapping code.
+ * @return Module
+ */
+function register_module( string $slug, string $directory, string $title, ?array $default_settings = null, ?callable $loader = null ) : Module {
+	return Module::register( $slug, $directory, $title, $default_settings, $loader );
+}
+
+/**
+ * Get all enabled modules.
+ *
+ * @return array
+ */
+function get_enabled_modules() : array {
+	$modules = Module::get_all();
+	$enabled = array_filter( $modules, function ( Module $module ) {
+		return $module->get_setting( 'enabled' );
+	} );
+
+	return $enabled;
+}
+
+/**
+ * Load all enabled plugins, along with their customisation files.
+ */
+function load_enabled_modules() {
+	foreach ( get_enabled_modules() as $slug => $module ) {
+		/**
+		 * Runs after the module has been loaded.
+		 *
+		 * @param Module $module The module object.
+		 */
+		do_action( "hm-platform.modules.{$slug}.loaded", $module );
+	}
+
+	/**
+	 * Runs after all modules have loaded.
+	 */
+	do_action( 'hm-platform.modules.loaded' );
 }
