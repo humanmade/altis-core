@@ -17,6 +17,8 @@ class Installer extends BaseInstaller {
 			'humanmade/smart-media',
 			'humanmade/tachyon-plugin',
 			'humanmade/s3-uploads',
+			'humanmade/gaussholder',
+			'humanmade/aws-rekognition',
 			'10up/elasticpress',
 		];
 
