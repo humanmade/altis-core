@@ -19,6 +19,9 @@ class Installer extends BaseInstaller {
 			'humanmade/s3-uploads',
 			'humanmade/gaussholder',
 			'humanmade/aws-rekognition',
+			'humanmade/two-factor',
+			'humanmade/require-login',
+			'humanmade/stream',
 			'10up/elasticpress',
 		];
 
