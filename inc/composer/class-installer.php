@@ -25,9 +25,9 @@ class Installer extends BaseInstaller {
 			'10up/elasticpress',
 			'humanmade/hm-redirects',
 			'humanmade/msm-sitemap',
-			'alleyinteractive/wp-seo',
-			'wpackagist-plugin/amp',
-			'wpackagist-plugin/wp-native-articles',
+			'humanmade/wp-seo',
+			'humanmade/amp',
+			'humanmade/facebook-instant-articles-wp',
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
