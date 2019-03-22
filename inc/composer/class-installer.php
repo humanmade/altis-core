@@ -23,6 +23,11 @@ class Installer extends BaseInstaller {
 			'humanmade/require-login',
 			'humanmade/stream',
 			'10up/elasticpress',
+			'humanmade/hm-redirects',
+			'humanmade/msm-sitemap',
+			'humanmade/wp-seo',
+			'humanmade/amp',
+			'humanmade/facebook-instant-articles-wp',
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
