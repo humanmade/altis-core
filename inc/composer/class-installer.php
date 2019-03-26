@@ -26,7 +26,7 @@ class Installer extends BaseInstaller {
 			'humanmade/hm-redirects',
 			'humanmade/msm-sitemap',
 			'humanmade/wp-seo',
-			'humanmade/amp-wp',
+			'humanmade/amp',
 			'humanmade/facebook-instant-articles-wp',
 			'humanmade/meta-tags',
 		];
