@@ -191,6 +191,10 @@ function fix_plugins_url( string $url, string $path, string $plugin ) : string {
 		return $url;
 	}
 
+	if ( ! empty( $path ) ) {
+		$path = '/' . ltrim( $path, '/' );
+	}
+
 	return str_replace( dirname( ABSPATH ), dirname( WP_CONTENT_URL ), dirname( $plugin ) ) . $path;
 }
 
