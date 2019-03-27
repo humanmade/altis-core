@@ -28,6 +28,7 @@ class Installer extends BaseInstaller {
 			'humanmade/wp-seo',
 			'humanmade/amp',
 			'humanmade/facebook-instant-articles-wp',
+			'humanmade/meta-tags',
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
