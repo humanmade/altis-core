@@ -22,6 +22,8 @@ class Installer extends BaseInstaller {
 			'humanmade/two-factor',
 			'humanmade/require-login',
 			'humanmade/stream',
+			'humanmade/wp-simple-saml',
+			'humanmade/delegated-oauth',
 			'10up/elasticpress',
 			'humanmade/hm-redirects',
 			'humanmade/msm-sitemap',
