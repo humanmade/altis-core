@@ -32,6 +32,7 @@ class Installer extends BaseInstaller {
 			'humanmade/facebook-instant-articles-wp',
 			'humanmade/meta-tags',
 			'johnbillion/query-monitor',
+			'humanmade/workflows'
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
