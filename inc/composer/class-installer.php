@@ -24,6 +24,8 @@ class Installer extends BaseInstaller {
 			'humanmade/stream',
 			'humanmade/wp-simple-saml',
 			'humanmade/delegated-oauth',
+			'humanmade/cavalcade',
+			'humanmade/wp-redis',
 			'10up/elasticpress',
 			'humanmade/hm-redirects',
 			'humanmade/msm-sitemap',
@@ -36,7 +38,7 @@ class Installer extends BaseInstaller {
 			'humanmade/workflows',
 		];
 
-		if ( ! in_array( $package->getType(), [ 'wordpress-plugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
+		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
 			return parent::getInstallPath( $package, $framework_type );
 		}
 
