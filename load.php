@@ -8,6 +8,11 @@ namespace HM\Platform;
 // Get module functions.
 require_once __DIR__ . '/inc/namespace.php';
 
+// Don't self-initialize if this is not a Platform execution.
+if ( ! function_exists( 'add_action' ) ) {
+	return;
+}
+
 // Patch plugins URL for vendor directory.
 add_filter( 'plugins_url', 'HM\\Platform\\fix_plugins_url', 10, 3 );
 
