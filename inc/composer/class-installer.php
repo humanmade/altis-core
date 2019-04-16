@@ -36,6 +36,7 @@ class Installer extends BaseInstaller {
 			'johnbillion/query-monitor',
 			'humanmade/hm-gtm',
 			'humanmade/workflows',
+			'cmb2/cmb2',
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
