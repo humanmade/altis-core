@@ -2,7 +2,7 @@
 
 The core module provides the entry point for platform code. It includes functionality for retrieving information about the current environment, the module registry, plus parsing and reading the project configuration.
 
-**Note** all functions documented below are under the `HM\Platform` namespace.
+**Note:** all functions documented below are under the `HM\Platform` namespace.
 
 ## Environment
 
