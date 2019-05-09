@@ -3,10 +3,10 @@
  * The Module object provides a common interface for registering
  * modules and carrying out module related tasks.
  *
- * @package hm-platform
+ * @package altis
  */
 
-namespace HM\Platform;
+namespace Altis;
 
 class Module {
 	/**
@@ -73,11 +73,11 @@ class Module {
 
 		// Add the loader to the module's loaded action.
 		if ( is_callable( $loader ) ) {
-			add_action( "hm-platform.modules.{$slug}.loaded", $loader, 1 );
+			add_action( "altis.modules.{$slug}.loaded", $loader, 1 );
 		}
 
 		// Add the module's default settings to the default config.
-		add_filter( 'hm-platform.config.default', function ( $config ) use ( $module ) {
+		add_filter( 'altis.config.default', function ( $config ) use ( $module ) {
 			$config['modules'] = $config['modules'] ?? [];
 			$config['modules'][ $module->get_slug() ] = $module->get_default_settings();
 			return $config;
@@ -138,7 +138,7 @@ class Module {
 	 * @return array
 	 */
 	public function get_settings() : array {
-		if ( ! did_action( 'hm-platform.modules.init' ) ) {
+		if ( ! did_action( 'altis.modules.init' ) ) {
 			trigger_error( 'Module get_settings() was called too early', E_USER_WARNING );
 			return [];
 		}

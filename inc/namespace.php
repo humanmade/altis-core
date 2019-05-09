@@ -2,15 +2,15 @@
 /**
  * Core platform functions.
  *
- * @package hm-platform
+ * @package altis
  */
 
-namespace HM\Platform;
+namespace Altis;
 
 use Aws\Sdk;
 
 /**
- * Retrieve the configuration for HM Platform.
+ * Retrieve the configuration for Altis.
  *
  * The configuration is defined by merging the defaults set by modules
  * with any overrides present in composer.json.
@@ -24,11 +24,11 @@ function get_config() : array {
 		$config = get_merged_config();
 
 		/**
-		 * Filter the entire platform config.
+		 * Filter the entire altis config.
 		 *
 		 * @param array $config The full config array.
 		 */
-		$config = apply_filters( 'hm-platform.config', $config );
+		$config = apply_filters( 'altis.config', $config );
 	}
 
 	return $config;
@@ -45,12 +45,12 @@ function get_merged_config() : array {
 	 *
 	 * @param array $default_config
 	 */
-	$default_config = apply_filters( 'hm-platform.config.default', [] );
+	$default_config = apply_filters( 'altis.config.default', [] );
 
 	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
 	$composer_json = get_json_file_contents_as_array( $composer_file );
-	$config = merge_config_settings( $default_config, $composer_json['extra']['platform'] ?? [] );
+	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
@@ -236,11 +236,11 @@ function load_enabled_modules() {
 		 *
 		 * @param Module $module The module object.
 		 */
-		do_action( "hm-platform.modules.{$slug}.loaded", $module );
+		do_action( "altis.modules.{$slug}.loaded", $module );
 	}
 
 	/**
 	 * Runs after all modules have loaded.
 	 */
-	do_action( 'hm-platform.modules.loaded' );
+	do_action( 'altis.modules.loaded' );
 }
