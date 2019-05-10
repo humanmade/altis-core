@@ -33,3 +33,10 @@ add_action( 'altis.modules.init', function () {
 		'enabled' => true,
 	] );
 } );
+
+// Load config entry point.
+add_action( 'altis.loaded_autoloader', function () {
+	if ( file_exists( ROOT_DIR . '/.config/load.php' ) ) {
+		require_once ROOT_DIR . '/.config/load.php';
+	}
+} );
