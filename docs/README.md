@@ -2,11 +2,11 @@
 
 The core module provides the entry point for platform code. It includes functionality for retrieving information about the current environment, the module registry, plus parsing and reading the project configuration.
 
-**Note:** all functions documented below are under the `HM\Platform` namespace.
+**Note:** all functions documented below are under the `Altis` namespace.
 
 ## Environment
 
-The following functions are available to use at any point on or after the `hm-platform.autoloader_loaded` action.
+The following functions are available to use at any point on or after the `altis.autoloader_loaded` action.
 
 **`get_environment_name() : string`**
 
@@ -44,11 +44,11 @@ Returns the complete configuration for the project including modules and their d
 
 These filters are intended for use by autoloaded files in modules and must be hooked into early. They provide a means of adding additional configuration features such as per environment overrides and configuration post-processing.
 
-**`hm-platform.config.default : array $default_config`**
+**`altis.config.default : array $default_config`**
 
 Filters the default base config to merge defaults and overrides into.
 
-**`hm-platform.config : array $config`**
+**`altis.config : array $config`**
 
 Filters the final config returned by `get_config()`.
 
@@ -60,9 +60,9 @@ Note that the modules interface is intended for internal use only and is documen
 
 **`register_module( string $slug, string $directory, string $title, ?array $default_settings, ?callable $loader ) : Module`**
 
-Registers and returns a `Module` object. If the module setting `enabled` is true the loader callback will be run on the `hm-platform.modules.<slug>.loaded` action hook.
+Registers and returns a `Module` object. If the module setting `enabled` is true the loader callback will be run on the `altis.modules.<slug>.loaded` action hook.
 
-This function must be called on the `hm-platform.modules.init` action hook.
+This function must be called on the `altis.modules.init` action hook.
 
 **`get_enabled_modules() : array`**
 
@@ -70,10 +70,10 @@ Returns an array of `Module` objects with their `enabled` setting set to `true`.
 
 ### Actions
 
-**`hm-platform.modules.init`**
+**`altis.modules.init`**
 
 Fired after the autoloader has been included. Modules can only be registered on this hook.
 
-**`hm-platform.modules.<slug>.loaded : Module $module`**
+**`altis.modules.<slug>.loaded : Module $module`**
 
 Used to fire a module's registered loader callback. Recieves the `Module` object registered with the corresponding slug as an argument.

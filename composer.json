@@ -1,6 +1,6 @@
 {
 	"name": "humanmade/core",
-	"description": "Human Made Platform Core Module",
+	"description": "Core module for Altis",
 	"type": "composer-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
@@ -24,6 +24,6 @@
 		]
 	},
 	"extra": {
-		"class": "HM\\Platform\\Composer\\Plugin"
+		"class": "Altis\\Composer\\Plugin"
 	}
 }

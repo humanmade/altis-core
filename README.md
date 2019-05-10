@@ -2,7 +2,7 @@
 	<tr>
 		<td align="left" width="70">
 			<strong>Core</strong><br />
-			Core module for Platform.
+			Core module for Altis.
 		</td>
 		<td align="right" width="20%">
 		</td>
@@ -19,4 +19,4 @@
 
 # Core
 
-The Core module provides meta APIs like configuration and module registration to other Platform modules.
+The Core module provides meta APIs like configuration and module registration to other Altis modules.
