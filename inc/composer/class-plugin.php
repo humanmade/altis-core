@@ -15,8 +15,9 @@ class Plugin implements PluginInterface {
 	 * @param IOInterface $io
 	 */
 	public function activate( Composer $composer, IOInterface $io ) {
+		$default_installer = $composer->getInstallationManager()->getInstaller( 'library' );
 		$current_installer = $composer->getInstallationManager()->getInstaller( 'wordpress-plugin' );
-		if ( $current_installer ) {
+		if ( $current_installer && $current_installer !== $default_installer ) {
 			$composer->getInstallationManager()->removeInstaller( $current_installer );
 		}
 
