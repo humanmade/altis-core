@@ -1,5 +1,5 @@
 {
-	"name": "humanmade/core",
+	"name": "altis/core",
 	"description": "Core module for Altis",
 	"type": "composer-plugin",
 	"license": "GPL-2.0-or-later",
