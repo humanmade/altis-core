@@ -2,7 +2,7 @@
 
 <p align="center">Core engine for <strong><a href="https://altis-dxp.com/">Altis</a></strong>.</p>
 
-<p align="center"><img alt="Packagist Version" src="https://img.shields.io/packagist/v/altis/core.svg"></p>
+<p align="center"><a href="https://packagist.org/packages/altis/core"><img alt="Packagist Version" src="https://img.shields.io/packagist/v/altis/core.svg"></a></p>
 
 
 # Core
