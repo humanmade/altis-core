@@ -14,7 +14,7 @@ class Installer extends BaseInstaller {
 	 * @return bool
 	 */
 	public function supports( $type ) {
-		return $type === 'wordpress-plugin';
+		return in_array( $type, [ 'wordpress-plugin', 'wordpress-muplugin' ], true );
 	}
 
 	public function getInstallPath( PackageInterface $package, $framework_type = '' ) {

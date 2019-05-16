@@ -19,6 +19,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 		$this->composer = $composer;
 		$this->io = $io;
 
+		$installer = new Installer( $this->io, $this->composer );
+		$this->composer->getInstallationManager()->addInstaller( $installer );
 	}
 
 	/**
@@ -36,7 +38,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * Register the installer on the `init` hook.
 	 *
 	 * We want to register later than the composer-installers installer
-	 * as the last-added installer takes precedence.
+	 * as the last-added installer takes precedence. This event only runs
+	 * on update (if this plugin is already present), so we have to add it
+	 * in addition ot the $this->activate() method.
 	 */
 	public function init() {
 		$installer = new Installer( $this->io, $this->composer );
