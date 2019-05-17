@@ -6,8 +6,18 @@ use Composer\Installers\Installer as BaseInstaller;
 use Composer\Package\PackageInterface;
 
 class Installer extends BaseInstaller {
-	public function getInstallPath( PackageInterface $package, $framework_type = '' ) {
 
+	/**
+	 * Check if the installer supports a given type.
+	 *
+	 * @param string $type
+	 * @return bool
+	 */
+	public function supports( $type ) {
+		return in_array( $type, [ 'wordpress-plugin', 'wordpress-muplugin' ], true );
+	}
+
+	public function getInstallPath( PackageInterface $package, $framework_type = '' ) {
 		/**
 		 * Allow specific wordpress-plugin packages to skip the wordpress-plugin
 		 * installer. We use this to stop plugins that are bundled with modules are
