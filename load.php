@@ -3,7 +3,7 @@
  * Main entry point loader for the Core module.
  */
 
-namespace Altis;
+namespace Altis; // @codingStandardsIgnoreLine
 
 // Get module functions.
 require_once __DIR__ . '/inc/namespace.php';
