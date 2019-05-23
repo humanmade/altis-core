@@ -198,14 +198,14 @@ function render_credits_page() {
 		$credits = wp_credits();
 		$libraries = $credits['groups']['libraries'] ?? null;
 		if ( ! empty( $libraries ) ) :
-		?>
+			?>
 
-		<h2><?php esc_html_e( 'Other Libraries', 'altis' ) ?></h2>
-		<p>Altis includes other libraries as part of WordPress.</p>
-		<?php
-		array_walk( $libraries['data'], '_wp_credits_build_object_link' );
-		echo '<p class="wp-credits-list">' . wp_sprintf( '%l.', $libraries['data'] ) . "</p>\n\n";
-		?>
+			<h2><?php esc_html_e( 'Other Libraries', 'altis' ) ?></h2>
+			<p>Altis includes other libraries as part of WordPress.</p>
+			<?php
+			array_walk( $libraries['data'], '_wp_credits_build_object_link' );
+			echo '<p class="wp-credits-list">' . wp_sprintf( '%l.', $libraries['data'] ) . "</p>\n\n";
+			?>
 
 		<?php endif ?>
 
