@@ -10,6 +10,13 @@ namespace Altis;
 use Aws\Sdk;
 
 /**
+ * Bootstrap any core functions as necessary.
+ */
+function bootstrap() {
+	About\bootstrap();
+}
+
+/**
  * Retrieve the configuration for Altis.
  *
  * The configuration is defined by merging the defaults set by modules

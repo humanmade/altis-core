@@ -7,6 +7,7 @@ namespace Altis;
 
 // Get module functions.
 require_once __DIR__ . '/inc/namespace.php';
+require_once __DIR__ . '/inc/about/namespace.php';
 
 // Don't self-initialize if this is not an Altis execution.
 if ( ! function_exists( 'add_action' ) ) {
@@ -29,9 +30,15 @@ add_action( 'altis.loaded_autoloader', function () {
 
 // Register core module.
 add_action( 'altis.modules.init', function () {
-	register_module( 'core', __DIR__, 'Core', [
-		'enabled' => true,
-	] );
+	register_module(
+		'core',
+		__DIR__,
+		'Core',
+		[
+			'enabled' => true,
+		],
+		__NAMESPACE__ . '\\bootstrap'
+	);
 } );
 
 // Load config entry point.
