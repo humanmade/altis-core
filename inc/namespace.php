@@ -244,3 +244,29 @@ function load_enabled_modules() {
 	 */
 	do_action( 'altis.modules.loaded' );
 }
+
+/**
+ * Get raw data from Composer's installed.json
+ *
+ * This returns the raw data that Composer generates. installed.json is
+ * equivalent to composer.lock, but is stored within the vendor directory, and
+ * is a more accurate data store.
+ *
+ * @return array Map of package name => package data.
+ */
+function get_composer_data() {
+	static $data = null;
+
+	if ( empty( $data ) ) {
+		$composer_file = ROOT_DIR . '/vendor/composer/installed.json';
+		$raw_data = json_decode( file_get_contents( $composer_file ) );
+
+		// Re-index by package slug.
+		$data = [];
+		foreach ( $raw_data as $package ) {
+			$data[ $package->name ] = $package;
+		}
+	}
+
+	return $data;
+}
