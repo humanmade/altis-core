@@ -55,7 +55,10 @@ class Installer extends BaseInstaller {
 
 		$this->initializeVendorDir();
 
-		$base_path = ( $this->vendorDir ? $this->vendorDir . '/' : '' ) . $package->getPrettyName();
+		// @codingStandardsIgnoreLine
+		$vendor_dir = $this->vendorDir;
+
+		$base_path = ( $vendor_dir ? $vendor_dir . '/' : '' ) . $package->getPrettyName();
 		$target_dir = $package->getTargetDir();
 
 		return $base_path . ( $target_dir ? '/' . $target_dir : '' );
