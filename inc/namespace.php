@@ -244,3 +244,19 @@ function load_enabled_modules() {
 	 */
 	do_action( 'altis.modules.loaded' );
 }
+
+/**
+ * Register a class path to be autoloaded.
+ *
+ * Registers a namespace to be autoloaded from a given path, using the
+ * WordPress/HM-style filenames (`class-{name}.php`).
+ *
+ * @link https://engineering.hmn.md/standards/style/php/#file-naming
+ *
+ * @param string $prefix Prefix to autoload from.
+ * @param string $path Path to validate.
+ */
+function register_class_path( $prefix, $path ) {
+	$loader = new Autoloader( $prefix, $path );
+	spl_autoload_register( [ $loader, 'load' ] );
+}
