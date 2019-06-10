@@ -256,7 +256,7 @@ function load_enabled_modules() {
  * @param string $prefix Prefix to autoload from.
  * @param string $path Path to validate.
  */
-function register_class_path( $prefix, $path ) {
+function register_class_path( string $prefix, string $path ) {
 	$loader = new Autoloader( $prefix, $path );
 	spl_autoload_register( [ $loader, 'load' ] );
 }
