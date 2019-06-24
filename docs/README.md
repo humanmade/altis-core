@@ -32,7 +32,7 @@ The credentials can be supplied locally by defining the constants `HM_ENV_REGION
 
 ## Autoloader
 
-For convenience, an autoloader which follows the WordPress class file naming standard is available.
+For convenience, an autoloader which follows the WordPress class file naming standard is available. This can be used in code following the WordPress file naming standards; if using PSR-based standards, we recommend using the Composer autoloaders instead.
 
 **`register_class_path( string $prefix, string $path ) : void`**
 
