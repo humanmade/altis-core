@@ -30,6 +30,25 @@ Returns an instance of the base AWS SDK with preconfigured credentials.
 
 The credentials can be supplied locally by defining the constants `HM_ENV_REGION`, `AWS_KEY` and `AWS_SECRET`.
 
+## Autoloader
+
+For convenience, an autoloader which follows the WordPress class file naming standard is available. This can be used in code following the WordPress file naming standards; if using PSR-based standards, we recommend using the Composer autoloaders instead.
+
+**`register_class_path( string $prefix, string $path ) : void`**
+
+Registers the given prefix to be autoloaded from the given path. The prefix can either be a legacy-style class prefix (e.g. `Altis_CMS_`) or a namespace (e.g. `Altis\CMS`).
+
+Classes are mapped to paths through the following process:
+
+1. The prefix is removed from the class name
+2. The class name is lower-cased
+3. If the class name contains namespace separators, these are converted to directory separators
+4. Underscores in the class name (but not the parent namespace) are converted to dashes
+5. The name is prefixed with `class-`
+
+For example, with `register_class_path( 'Altis\CMS', '/dir' )`, the class `Altis\CMS\Alpha_Beta\Gamma_Delta` would be expected to live at `/dir/alpha_beta/class-gamma-delta.php`.
+
+
 ## Configuration
 
 The configuration for the project determines which modules are loaded and how they behave. It can also be used for arbitrary project configuration.
