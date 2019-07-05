@@ -127,9 +127,17 @@ function get_aws_sdk() : Sdk {
 		return $sdk;
 	}
 	$params = [
-		'region'   => HM_ENV_REGION,
 		'version'  => 'latest',
 	];
+
+	$config = get_config();
+	if ( isset( $config['core']['aws'] ) ) {
+		$params = array_merge( $params, $config['core']['aws'] );
+	}
+
+	if ( defined( 'HM_ENV_REGION' ) ) {
+		$params['region'] = HM_ENV_REGION;
+	}
 	if ( defined( 'AWS_KEY' ) ) {
 		$params['credentials'] = [
 			'key'    => AWS_KEY,

@@ -28,7 +28,30 @@ The AWS SDK is always available and preconfigured with the necessary credentials
 
 Returns an instance of the base AWS SDK with preconfigured credentials.
 
-The credentials can be supplied locally by defining the constants `HM_ENV_REGION`, `AWS_KEY` and `AWS_SECRET`.
+The credentials can be supplied by providing the `modules.core.aws` setting in the configuration. It's recommended that this be done only for the local environment:
+
+
+```
+{
+	"extra": {
+		"altis": {
+			"environments":{
+				"local": {
+					"modules": {
+						"core" : {
+							"aws":{
+								"region": "us-east-1",
+								"key": "xxxxxxxxxxxxxxxxxxxx",
+								"secret: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+```
 
 ## Autoloader
 
