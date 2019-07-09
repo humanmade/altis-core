@@ -69,7 +69,7 @@ function get_module_version_data() : array {
  * @param string $package Package name.
  * @return string|null Package license if known, or null otherwise.
  */
-function get_package_license( string $package ) {
+function get_package_license( string $package ) : ?string {
 	// Manually except some packages which have inaccurate Composer
 	// license data.
 	$exceptions = [
