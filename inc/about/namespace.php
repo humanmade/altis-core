@@ -2,8 +2,8 @@
 
 namespace Altis\About;
 
-use function ALtis\get_composer_data;
 use Altis\Module;
+use function Altis\get_composer_data;
 use WP_Admin_Bar;
 
 const PAGE_SLUG = 'altis-about';
