@@ -261,7 +261,7 @@ function load_enabled_modules() {
  *
  * @return array Map of package name => package data.
  */
-function get_composer_data() {
+function get_composer_data() : array {
 	static $data = null;
 
 	if ( empty( $data ) ) {
