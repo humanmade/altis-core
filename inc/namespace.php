@@ -134,9 +134,17 @@ function get_aws_sdk() : Sdk {
 		return $sdk;
 	}
 	$params = [
-		'region'   => HM_ENV_REGION,
 		'version'  => 'latest',
 	];
+
+	$config = get_config();
+	if ( isset( $config['core']['aws'] ) ) {
+		$params = array_merge( $params, $config['core']['aws'] );
+	}
+
+	if ( defined( 'HM_ENV_REGION' ) ) {
+		$params['region'] = HM_ENV_REGION;
+	}
 	if ( defined( 'AWS_KEY' ) ) {
 		$params['credentials'] = [
 			'key'    => AWS_KEY,
@@ -276,4 +284,20 @@ function get_composer_data() : array {
 	}
 
 	return $data;
+}
+
+/**
+ * Register a class path to be autoloaded.
+ *
+ * Registers a namespace to be autoloaded from a given path, using the
+ * WordPress/HM-style filenames (`class-{name}.php`).
+ *
+ * @link https://engineering.hmn.md/standards/style/php/#file-naming
+ *
+ * @param string $prefix Prefix to autoload from.
+ * @param string $path Path to validate.
+ */
+function register_class_path( string $prefix, string $path ) {
+	$loader = new Autoloader( $prefix, $path );
+	spl_autoload_register( [ $loader, 'load' ] );
 }
