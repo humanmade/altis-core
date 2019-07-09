@@ -38,7 +38,7 @@ function register_menu_item( WP_Admin_Bar $wp_admin_bar ) {
  *
  * @return array Map of module slug => module data.
  */
-function get_module_version_data() {
+function get_module_version_data() : array {
 	$composer_data = get_composer_data();
 	$modules = Module::get_all();
 
@@ -69,7 +69,7 @@ function get_module_version_data() {
  * @param string $package Package name.
  * @return string|null Package license if known, or null otherwise.
  */
-function get_package_license( $package ) {
+function get_package_license( string $package ) {
 	// Manually except some packages which have inaccurate Composer
 	// license data.
 	$exceptions = [
