@@ -24,6 +24,7 @@ class Installer extends BaseInstaller {
 		 * not installed to the wp-content/plugins path.
 		 */
 		$excluded_plugins = [
+			'humanmade/publication-checklist',
 			'humanmade/smart-media',
 			'humanmade/tachyon-plugin',
 			'humanmade/s3-uploads',
