@@ -194,6 +194,27 @@ function get_environment_type() : string {
 }
 
 /**
+ * Get the current revision of the codebase deployed to the current environment.
+ *
+ * @return string
+ */
+function get_environment_codebase_revision() : string {
+	// This is the constant that is defined in wp-config-production.php
+	// in the EC2 architecture in Altis Cloud.
+	if ( defined( 'HM_APPLICATION_REVISION' ) ) {
+		return HM_APPLICATION_REVISION;
+	}
+
+	// This is the constant that is defined in wp-config-production.php
+	// in the ECS architecture in Altis Cloud.
+	if ( defined( 'HM_DEPLOYMENT_REVISION' ) ) {
+		return HM_DEPLOYMENT_REVISION;
+	}
+
+	return 'unknown';
+}
+
+/**
  * Fix the plugins_url for files in the vendor directory
  *
  * @param string $url
