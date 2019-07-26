@@ -20,6 +20,10 @@ Returns one of `local`, `development`, `staging` or `production`. This is read f
 
 Returns the current server architecture, currently this is one of `ecs` or `ec2`. `ec2` is the legacy architecture while `ecs` is the new container based system.
 
+**`get_environment_codebase_revision() : string`**
+
+Returns the current revision of the codebase deployed to the current environment. This will be the GIT commit hash of the latest commit that was deployed in the most recent deploy.
+
 ## AWS SDK
 
 The AWS SDK is always available and preconfigured with the necessary credentials on all non local servers. Access to additional APIs can be requested if needed.
