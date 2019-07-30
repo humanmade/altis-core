@@ -49,7 +49,7 @@ class Installer extends BaseInstaller {
 			'humanmade/workflows',
 			'stuttter/wp-user-signups',
 			'altis/aws-analytics',
-			'altis/ab-tests',
+			'altis/experiments',
 		];
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
