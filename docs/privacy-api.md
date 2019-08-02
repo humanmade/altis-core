@@ -34,7 +34,7 @@ The standard content hierarchy is as follows:
 
 ### Using an Existing or Alternative Page
 
-Under the Settings > Privacy admin menu item it is possible to select which page you would like to use as the privacy policy page.
+Under the [Settings > Privacy admin menu item](internal://admin/privacy.php) it is possible to select which page you would like to use as the privacy policy page.
 
 ![Privacy page settings screen](./assets/privacy-page-settings.png)
 
@@ -72,7 +72,7 @@ add_action( 'admin_init', function () {
 
 ## Personal Data Exports
 
-When a user makes a request for an export of their personal data a confirmation request should be sent to them via the [ Export Personal Data tool](internal://admin/tools.php?page=export_personal_data) by filling in their email address and clicking send.
+When a user makes a request for an export of their personal data a confirmation request should be sent to them via the [Export Personal Data tool](internal://admin/tools.php?page=export_personal_data) by filling in their email address and clicking send.
 
 ![Personal Data Export admin screen](./assets/data-export.png)
 
@@ -85,11 +85,11 @@ By default the export will contain any data known to be associated with the requ
 To extend the data export use the `wp_privacy_personal_data_exporters` filter:
 
 ```php
-add_filter( 'wp_privacy_personal_data_exporters', function ( $exporters ) {
-	$exporters['form-responses'] = array(
+add_filter( 'wp_privacy_personal_data_exporters', function ( array $exporters ) : array {
+	$exporters['form-responses'] = [
 		'exporter_friendly_name' => __( 'Form Response Exporter' ),
 		'callback' => 'form_response_exporter',
-	);
+	];
 	return $exporters;
 } );
 ```
@@ -119,7 +119,7 @@ function form_response_exporter( string $email, int $page = 1 ) : array {
 		// If you don't have a post, comment or other ID to work with,
 		// use a unique value to avoid having this item's export
 		// combined in the final report with other items of the same id.
-		$item_id = "form-responses-{$post->ID}";
+		$item_id = sprintf( 'form-responses-%d', $post->ID );
 
 		// Core group IDs include 'comments', 'posts', etc.
 		// But you can add your own group IDs as needed.
@@ -163,7 +163,7 @@ function form_response_exporter( string $email, int $page = 1 ) : array {
 
 ## Erasing Personal Data
 
-Following a similar mechanism to the personal data export should a user request that their personal data be deleted you can send a confirmation email to them via the CMS admin.
+Following a similar mechanism to the personal data export should a user request that their personal data be deleted you can send a confirmation email to them via the [Tools > Erase Personal Data page](internal://admin/tools.php?page=remove_personal_data).
 
 Once confirmed all known data associated with their email address will be deleted. Note the data deleted does not extend to any backups as those are not covered under "making a reasonable effort to remove all data" in accordance with GDPR.
 
@@ -176,11 +176,11 @@ Again via a similar mechanism to the data export custom code can provide a means
 A date deletion callback can be registered via the `wp_privacy_personal_data_erasers` filter:
 
 ```php
-add_filter( 'wp_privacy_personal_data_erasers', function ( $erasers ) {
-	$erasers['form_response_eraser'] = array(
+add_filter( 'wp_privacy_personal_data_erasers', function ( array $erasers ) : array {
+	$erasers['form_response_eraser'] = [
 		'eraser_friendly_name' => __( 'Form Response Eraser' ),
 		'callback'             => 'form_response_eraser',
-	);
+	];
 	return $erasers;
 } );
 ```
@@ -188,7 +188,7 @@ add_filter( 'wp_privacy_personal_data_erasers', function ( $erasers ) {
 The following example shows the deletion of the hypothetical `form_responses` custom post type from earlier and takes the exact same arguments of email address and page:
 
 ```php
-function form_response_eraser( string $email, $page = 1 ) {
+function form_response_eraser( string $email, $page = 1 ) : array {
 
 	// Fetch form responses from this email address.
 	$responses = new WP_Query( [
