@@ -38,6 +38,12 @@ Under the Settings > Privacy admin menu item it is possible to select which page
 
 ![Privacy page settings screen](./assets/privacy-page-settings.png)
 
+The Privacy Policy page ID is stored as an option:
+
+```php
+$privacy_page_id = get_option( 'wp_page_for_privacy_policy' );
+```
+
 ## Suggesting Privacy Policy Content
 
 **`wp_add_privacy_policy_content( string $identifier, string $policy_text )`**
@@ -68,10 +74,186 @@ add_action( 'admin_init', function () {
 
 When a user makes a request for an export of their personal data a confirmation request should be sent to them via the [ Export Personal Data tool](internal://admin/tools.php?page=export_personal_data) by filling in their email address and clicking send.
 
+![Personal Data Export admin screen](./assets/data-export.png)
+
 Once they have confirmed their request a zip file is created and emailed to them.
 
-### Extending User Data Export
+### Extending Personal Data Export
 
 By default the export will contain any data known to be associated with the requester's email address such as comments or posts. Some code may extend the platform in such a way that it cannot determine all the data associated with the user automatically.
 
-To extend the data export use the following function:
+To extend the data export use the `wp_privacy_personal_data_exporters` filter:
+
+```php
+add_filter( 'wp_privacy_personal_data_exporters', function ( $exporters ) {
+	$exporters['form-responses'] = array(
+		'exporter_friendly_name' => __( 'Form Response Exporter' ),
+		'callback' => 'form_response_exporter',
+	);
+	return $exporters;
+} );
+```
+
+The `form_response_exporter` callback function recieves the requester's email address and is responsible for collecting the custom data.
+
+The function should paginate results to avoid timeouts and performance issues. To help with this core checks the value of `done` in the returned array and if false will call the function again with the `$page` argument incremented by 1.
+
+The following example exports data from a hypothetical `form_responses` custom post type:
+
+```php
+function form_response_exporter( string $email, int $page = 1 ) : array {
+
+	$export_items = [];
+
+	// Fetch form responses from this email address.
+	$responses = new WP_Query( [
+		'posts_per_page' => 300,
+		'paged' => $page,
+		'post_type' => 'form_responses',
+		'meta_key' => 'email',
+		'meta_value' => $meail,
+	] );
+
+	foreach ( $responses->posts as $post ) {
+		// Most item IDs should look like postType-postID
+		// If you don't have a post, comment or other ID to work with,
+		// use a unique value to avoid having this item's export
+		// combined in the final report with other items of the same id.
+		$item_id = "form-responses-{$post->ID}";
+
+		// Core group IDs include 'comments', 'posts', etc.
+		// But you can add your own group IDs as needed.
+		$group_id = 'form-responses';
+
+		// Optional group label. Core provides these for core groups.
+		// If you define your own group, the first exporter to
+		// include a label will be used as the group label in the
+		// final exported report.
+		$group_label = __( 'Form Responses' );
+
+		// Add as many items in the item data array as needed.
+		$data = [
+			[
+				'name' => __( 'Message' ),
+				'value' => $post->post_content,
+			],
+			[
+				'name' => __( 'Interests' ),
+				'value' => implode( ', ', get_post_meta( $post->ID, 'interests' ) ),
+			],
+			// ... more fields ...
+		];
+
+		// Exported items must match this array structure.
+		$export_items[] = [
+			'group_id' => $group_id,
+			'group_label' => $group_label,
+			'item_id' => $item_id,
+			'data' => $data,
+		];
+	}
+
+	// Must return an array of data and a "done" flag.
+	return [
+		'data' => $export_items,
+		'done' => $responses->have_posts(),
+	];
+}
+```
+
+## Erasing Personal Data
+
+Following a similar mechanism to the personal data export should a user request that their personal data be deleted you can send a confirmation email to them via the CMS admin.
+
+Once confirmed all known data associated with their email address will be deleted. Note the data deleted does not extend to any backups as those are not covered under "making a reasonable effort to remove all data" in accordance with GDPR.
+
+Should a site ever need to be restored from a backup it is important to go back through previous data removal requests and ensure the data was either already removed or to remove it again.
+
+### Extending Personal Data Erasers
+
+Again via a similar mechanism to the data export custom code can provide a means to remove personal data.
+
+A date deletion callback can be registered via the `wp_privacy_personal_data_erasers` filter:
+
+```php
+add_filter( 'wp_privacy_personal_data_erasers', function ( $erasers ) {
+	$erasers['form_response_eraser'] = array(
+		'eraser_friendly_name' => __( 'Form Response Eraser' ),
+		'callback'             => 'form_response_eraser',
+	);
+	return $erasers;
+} );
+```
+
+The following example shows the deletion of the hypothetical `form_responses` custom post type from earlier and takes the exact same arguments of email address and page:
+
+```php
+function form_response_eraser( string $email, $page = 1 ) {
+
+	// Fetch form responses from this email address.
+	$responses = new WP_Query( [
+		'posts_per_page' => 300,
+		'paged' => $page,
+		'post_type' => 'form_responses',
+		'meta_key' => 'email',
+		'meta_value' => $meail,
+	] );
+
+	$items_removed = 0;
+	$items_retained = 0;
+	$messages = [];
+
+	foreach ( $responses->posts as $post ) {
+		// Force detete the post.
+		$success = wp_delete_post( $post->ID, true );
+
+		if ( $success ) {
+			$items_removed++;
+		} else {
+			$items_retained++;
+			$messages[] = sprintf( __( 'Form Response ID %d could not be deleted.' ), $post->ID );
+		}
+	}
+
+	return [
+		// Number of items removed.
+		'items_removed' => $items_removed,
+		// Number of items retained.
+		'items_retained' => $items_retained,
+		// Optional messages for response.
+		'messages' => $messages,
+		// Whether we have more data to go through.
+		'done' => $responses->have_posts(),
+	];
+}
+```
+
+## Filters
+
+**`user_request_action_confirmed_message : string`**
+
+Allows modifying the confirmation email text sent to the user.
+
+**`wp_privacy_export_expiration : int`**
+
+Allows modifying the time in seconds to retain generated export files for. Defaults to 3 days.
+
+**`wp_privacy_personal_data_email_content : string`**
+
+Allows modifying the email text sent to users with their data export download link.
+
+## Capabilities
+
+The privacy features have some custom capablities allowing for non-admins or custom user roles to be able to manage personal data exports and deletion.
+
+**`erase_others_personal_data`**
+
+Controls whether the user can access the erase data screen under Tools in the admin.
+
+**`export_others_personal_data`**
+
+Controls whether the user can access the export data screen under Tools in the admin.
+
+**`manage_privacy_options`**
+
+Controls whether the user can set the privacy policy page under Settings > Privacy in the admin.
