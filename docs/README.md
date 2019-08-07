@@ -124,4 +124,4 @@ Fired after the autoloader has been included. Modules can only be registered on 
 
 **`altis.modules.<slug>.loaded : Module $module`**
 
-Used to fire a module's registered loader callback. Recieves the `Module` object registered with the corresponding slug as an argument.
+Used to fire a module's registered loader callback. Receives the `Module` object registered with the corresponding slug as an argument.

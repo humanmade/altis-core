@@ -94,7 +94,7 @@ add_filter( 'wp_privacy_personal_data_exporters', function ( array $exporters ) 
 } );
 ```
 
-The `form_response_exporter` callback function recieves the requester's email address and is responsible for collecting the custom data.
+The `form_response_exporter` callback function receives the requester's email address and is responsible for collecting the custom data.
 
 The function should paginate results to avoid timeouts and performance issues. To help with this core checks the value of `done` in the returned array and if false will call the function again with the `$page` argument incremented by 1.
 
@@ -244,7 +244,7 @@ Allows modifying the email text sent to users with their data export download li
 
 ## Capabilities
 
-The privacy features have some custom capablities allowing for non-admins or custom user roles to be able to manage personal data exports and deletion.
+The privacy features have some custom capabilities allowing for non-admins or custom user roles to be able to manage personal data exports and deletion.
 
 **`erase_others_personal_data`**
 
