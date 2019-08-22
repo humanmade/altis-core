@@ -27,6 +27,7 @@ class Installer extends BaseInstaller {
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/experiments',
+			'darylldoyle/safe-svg',
 			'humanmade/amp',
 			'humanmade/aws-rekognition',
 			'humanmade/cavalcade',
