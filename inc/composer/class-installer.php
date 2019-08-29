@@ -30,6 +30,7 @@ class Installer extends BaseInstaller {
 			'darylldoyle/safe-svg',
 			'humanmade/amp',
 			'humanmade/aws-rekognition',
+			'humanmade/aws-ses-wp-mail',
 			'humanmade/cavalcade',
 			'humanmade/delegated-oauth',
 			'humanmade/facebook-instant-articles-wp',
@@ -50,6 +51,7 @@ class Installer extends BaseInstaller {
 			'humanmade/wp-seo',
 			'humanmade/wp-simple-saml',
 			'johnbillion/query-monitor',
+			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
 		];
 
