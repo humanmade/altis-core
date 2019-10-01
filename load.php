@@ -5,15 +5,6 @@
 
 namespace Altis; // @codingStandardsIgnoreLine
 
-// Get module functions.
-require_once __DIR__ . '/inc/namespace.php';
-require_once __DIR__ . '/inc/about/namespace.php';
-
-// Don't self-initialize if this is not an Altis execution.
-if ( ! function_exists( 'add_action' ) ) {
-	return;
-}
-
 // Patch plugins URL for vendor directory.
 add_filter( 'plugins_url', 'Altis\\fix_plugins_url', 10, 3 );
 
