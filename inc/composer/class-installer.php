@@ -25,6 +25,7 @@ class Installer extends BaseInstaller {
 		 */
 		$excluded_plugins = [
 			'10up/elasticpress',
+			'10up/simple-local-avatars',
 			'altis/aws-analytics',
 			'altis/experiments',
 			'darylldoyle/safe-svg',
