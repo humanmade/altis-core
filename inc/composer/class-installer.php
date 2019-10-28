@@ -26,6 +26,7 @@ class Installer extends BaseInstaller {
 		$excluded_plugins = [
 			'10up/elasticpress',
 			'altis/aws-analytics',
+			'altis/browser-security',
 			'altis/experiments',
 			'darylldoyle/safe-svg',
 			'humanmade/amp',
