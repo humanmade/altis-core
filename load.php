@@ -30,7 +30,7 @@ add_action( 'altis.modules.init', function () {
 		],
 		__NAMESPACE__ . '\\bootstrap'
 	);
-} );
+}, 1 );
 
 // Load config entry point.
 add_action( 'altis.loaded_autoloader', function () {
