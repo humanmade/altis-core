@@ -41,6 +41,7 @@ class Installer extends BaseInstaller {
 			'humanmade/hm-limit-login-attempts',
 			'humanmade/meta-tags',
 			'humanmade/msm-sitemap',
+			'humanmade/php-basic-auth',
 			'humanmade/publication-checklist',
 			'humanmade/require-login',
 			'humanmade/s3-uploads',
