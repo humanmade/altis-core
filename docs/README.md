@@ -18,6 +18,10 @@ Returns the current hosting stack name based on the `HM_ENV` constant. On local 
 
 Returns one of `local`, `development`, `staging` or `production`. This is read from the `HM_ENV_TYPE` constant except on local setups.
 
+**`get_environment_region() : ?string`**
+
+Returns the current AWS application's region based on the `HM_ENV_REGION` constant. On local setups or if the region is not set this will return `null`. The region can be `us-east-1`, `ap-northeast-1`, `eu-central-1` etc.
+
 **`get_environment_architecture() : string`**
 
 Returns the current server architecture, currently this is one of `ecs` or `ec2`. `ec2` is the legacy architecture while `ecs` is the new container based system.

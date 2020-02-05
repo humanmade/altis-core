@@ -194,6 +194,20 @@ function get_environment_type() : string {
 }
 
 /**
+ * Get the AWS region of the current environment.
+ *
+ * Can be "us-east-1", "ap-northeast-1", "eu-central-1" etc
+ *
+ * @return string|null Region if set, null otherwise.
+ */
+function get_environment_region() : ?string {
+	if ( defined( 'HM_ENV_REGION' ) ) {
+		return HM_ENV_REGION;
+	}
+	return null;
+}
+
+/**
  * Get the current revision of the codebase deployed to the current environment.
  *
  * @return ?string
