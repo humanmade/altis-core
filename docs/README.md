@@ -116,6 +116,8 @@ Filters the final config returned by `get_config()`.
 
 Filters the final parameters used for creating the global instance of the AWS SDK accessed via `Altis\get_aws_sdk()`.
 
+See [the AWS SDK documentation for the full list of available options](https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#___construct).
+
 ## Modules
 
 Note that the modules interface is intended for internal use only and is documented here for completeness.
