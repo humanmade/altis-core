@@ -36,7 +36,6 @@ Returns an instance of the base AWS SDK with preconfigured credentials.
 
 The credentials can be supplied by providing the `modules.core.aws` setting in the configuration. It's recommended that this be done only for the local environment:
 
-
 ```
 {
 	"extra": {
@@ -56,6 +55,16 @@ The credentials can be supplied by providing the `modules.core.aws` setting in t
 			}
 		}
 	}
+}
+```
+
+AWS SDK can be also configured in code by using `altis.aws_sdk.params` filter which is called right before the global instance of the AWS SDK is created.
+
+```
+add_filter( 'altis.aws_sdk.params', 'aws_sdk_params' );
+
+function aws_sdk_params( $params ) {
+	return $params['region'] = 'new_region';
 }
 ```
 
@@ -99,6 +108,10 @@ Filters the default base config to merge defaults and overrides into.
 **`altis.config : array $config`**
 
 Filters the final config returned by `get_config()`.
+
+**`altis.aws_sdk.params : array $params`**
+
+Filters the final parameters used for creating the global instance of the AWS SDK.
 
 ## Modules
 
