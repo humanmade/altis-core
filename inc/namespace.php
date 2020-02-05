@@ -165,6 +165,14 @@ function get_aws_sdk() : Sdk {
 			'secret' => AWS_SECRET,
 		];
 	}
+
+	/**
+	 * Filter params before new instance of Sdk is created.
+	 *
+	 * @param array $params SDK params specified in config and via constants.
+	 */
+	$params = apply_filters( 'altis.aws_sdk.params', $params );
+
 	$sdk = new Sdk( $params );
 	return $sdk;
 }
