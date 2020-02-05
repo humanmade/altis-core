@@ -58,7 +58,7 @@ The credentials can be supplied by providing the `modules.core.aws` setting in t
 }
 ```
 
-AWS SDK can be also configured in code by using `altis.aws_sdk.params` filter which is called right before the global instance of the AWS SDK is created.
+The AWS SDK can be also configured in code by using `altis.aws_sdk.params` filter which is called right before the global instance of the AWS SDK is created.
 
 **Note:** this filter can only be used in the bootstrap function of an Altis module as it's called very early in the loading process.
 
