@@ -20,7 +20,7 @@ Returns one of `local`, `development`, `staging` or `production`. This is read f
 
 **`get_environment_region() : ?string`**
 
-Returns the current AWS application's region based on `HM_ENV_REGION` constant. On local setups or if the region is not set this will return `null`. The region can be `us-east-1`, `ap-northeast-1`, `eu-central-1` etc.
+Returns the current AWS application's region based on the `HM_ENV_REGION` constant. On local setups or if the region is not set this will return `null`. The region can be `us-east-1`, `ap-northeast-1`, `eu-central-1` etc.
 
 **`get_environment_architecture() : string`**
 
