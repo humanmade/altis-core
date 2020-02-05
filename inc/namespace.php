@@ -169,6 +169,9 @@ function get_aws_sdk() : Sdk {
 	/**
 	 * Filter params before new instance of Sdk is created.
 	 *
+	 * See the AWS SDK docs for all available options:
+	 * https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#___construct
+	 *
 	 * @param array $params SDK params specified in config and via constants.
 	 */
 	$params = apply_filters( 'altis.aws_sdk.params', $params );
