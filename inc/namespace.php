@@ -80,23 +80,22 @@ function merge_config_settings( array $config, array $overrides ) : array {
 			// Merge module settings together.
 			case 'modules':
 				foreach ( $value as $module => $settings ) {
-					// Check config settings syntax is valid.
-					$config_setting = $config[ $key ][ $module ];
+					$config_settings = $config[ $key ][ $module ] ?? [];
 
-					if ( ! is_array( $config_setting ) && ! is_bool( $config_setting ) ) {
-						// phpcs:ignore
+					// Check config settings syntax is valid.
+					if ( ! is_array( $config_settings ) && ! is_bool( $config_settings ) ) {
 						trigger_error( "Settings for the module '{$module}' specified in the composer.json are incorrect. It should be either an object or a boolean.", E_USER_WARNING );
 						continue;
 					}
 
 					// Convert bool value into an array with `enabled` setting.
-					if ( is_bool( $config_setting ) ) {
-						$config_setting = [
-							'enabled' => $config_setting,
+					if ( is_bool( $config_settings ) ) {
+						$config_settings = [
+							'enabled' => $config_settings,
 						];
 					}
 
-					$config[ $key ][ $module ] = array_merge( $config_setting, $settings );
+					$config[ $key ][ $module ] = array_merge( $config_settings, $settings );
 				}
 				break;
 
