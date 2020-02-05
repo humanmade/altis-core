@@ -194,6 +194,19 @@ function get_environment_type() : string {
 }
 
 /**
+ * Get the region of the current environment.
+ *
+ * @return string|null Region if set,
+ *                     null otherwise.
+ */
+function get_environment_region() : ?string {
+	if ( defined( 'HM_ENV_REGION' ) ) {
+		return HM_ENV_REGION;
+	}
+	return null;
+}
+
+/**
  * Get the current revision of the codebase deployed to the current environment.
  *
  * @return ?string
