@@ -60,11 +60,14 @@ The credentials can be supplied by providing the `modules.core.aws` setting in t
 
 AWS SDK can be also configured in code by using `altis.aws_sdk.params` filter which is called right before the global instance of the AWS SDK is created.
 
-```
+**Note:** this filter can only be used in the bootstrap function of an Altis module as it's called very early in the loading process.
+
+```php
 add_filter( 'altis.aws_sdk.params', 'aws_sdk_params' );
 
-function aws_sdk_params( $params ) {
-	return $params['region'] = 'new_region';
+function aws_sdk_params( array $params ) : array {
+	$params['region'] = 'new_region';
+	return $params;
 }
 ```
 
@@ -111,7 +114,7 @@ Filters the final config returned by `get_config()`.
 
 **`altis.aws_sdk.params : array $params`**
 
-Filters the final parameters used for creating the global instance of the AWS SDK.
+Filters the final parameters used for creating the global instance of the AWS SDK accessed via `Altis\get_aws_sdk()`.
 
 ## Modules
 
