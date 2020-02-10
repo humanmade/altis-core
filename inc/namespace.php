@@ -57,6 +57,7 @@ function get_merged_config() : array {
 	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
 	$composer_json = get_json_file_contents_as_array( $composer_file );
+
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
@@ -152,8 +153,8 @@ function get_aws_sdk() : Sdk {
 	];
 
 	$config = get_config();
-	if ( isset( $config['core']['aws'] ) ) {
-		$params = array_merge( $params, $config['core']['aws'] );
+	if ( isset( $config['modules']['core']['aws'] ) ) {
+		$params = array_merge( $params, $config['modules']['core']['aws'] );
 	}
 
 	if ( defined( 'HM_ENV_REGION' ) ) {
