@@ -24,8 +24,8 @@ class Installer extends BaseInstaller {
 		 * not installed to the wp-content/plugins path.
 		 */
 		$excluded_plugins = [
-			'10up/elasticpress',
 			'10up/debug-bar-elasticpress',
+			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
 			'altis/experiments',
