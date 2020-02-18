@@ -24,7 +24,6 @@ class Installer extends BaseInstaller {
 		 * not installed to the wp-content/plugins path.
 		 */
 		$excluded_plugins = [
-			'10up/debug-bar-elasticpress',
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
@@ -34,6 +33,7 @@ class Installer extends BaseInstaller {
 			'humanmade/aws-rekognition',
 			'humanmade/aws-ses-wp-mail',
 			'humanmade/cavalcade',
+			'humanmade/debug-bar-elasticpress',
 			'humanmade/delegated-oauth',
 			'humanmade/facebook-instant-articles-wp',
 			'humanmade/gaussholder',
