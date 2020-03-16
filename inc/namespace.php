@@ -56,6 +56,7 @@ function get_merged_config() : array {
 
 	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
+
 	$composer_json = get_json_file_contents_as_array( $composer_file );
 
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
@@ -117,15 +118,16 @@ function merge_config_settings( array $config, array $overrides ) : array {
  * @return array Decoded data in array form, empty array if JSON data could not read.
  */
 function get_json_file_contents_as_array( $file ) : array {
+
 	if ( ! strpos( $file, '.json' ) ) {
 		// phpcs:ignore
-		trigger_error( $file . ' is not a JSON file.', E_USER_WARNING );
+		trigger_error( $file . ' is not a JSON file.', E_USER_ERROR );
 		return [];
 	}
 
 	if ( ! is_readable( $file ) ) {
 		// phpcs:ignore
-		trigger_error( 'Could not read ' . $file . ' file.', E_USER_WARNING );
+		trigger_error( 'Could not read ' . $file . ' file.', E_USER_ERROR );
 		return [];
 	}
 
@@ -133,10 +135,26 @@ function get_json_file_contents_as_array( $file ) : array {
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
 		// phpcs:ignore
-		trigger_error( json_last_error_msg(), E_USER_WARNING );
+		trigger_error( "composer.json could not be parsed\n" . json_last_error_msg(), E_USER_WARNING );
 		return [];
 	}
-
+	$registered_modules = Module::get_all();
+	foreach ( $contents['extra']['altis'] as $config_prop ) {
+		if ( array_key_exists( $config_prop[0], $registered_modules ) ) {
+			// phpcs:ignore
+			trigger_error( 'Modules should be listed under modules property!', E_USER_WARNING );
+			return [];
+		}
+	}
+	foreach ( $contents['extra']['altis']['modules'] as $module ) {
+		if ( ! in_array( $module, $registered_modules ) ) {
+			if ( ! array_key_exists( 'entrypoint', $module ) ) {
+				// phpcs:ignore
+				trigger_error( 'Custom modules should have entrypoint property!', E_USER_WARNING );
+				return [];
+			}
+		}
+	}
 	return $contents;
 }
 
@@ -295,10 +313,10 @@ function register_module( string $slug, string $directory, string $title, ?array
  */
 function get_enabled_modules() : array {
 	$modules = Module::get_all();
+
 	$enabled = array_filter( $modules, function ( Module $module ) {
 		return $module->get_setting( 'enabled' );
 	} );
-
 	return $enabled;
 }
 
