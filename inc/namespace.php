@@ -58,25 +58,28 @@ function get_merged_config() : array {
 	$composer_file = ROOT_DIR . '/composer.json';
 
 	$composer_json = get_json_file_contents_as_array( $composer_file );
-	validate_config_settings( $composer_json );
+	$environment = get_environment_type();
+	validate_config_settings( $composer_json, $environment );
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
-	$environment = get_environment_type();
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
 }
 
-function validate_config_settings( $composer_json ) {
+function validate_config_settings( $composer_json, $environment ) {
 	$registered_modules = Module::get_all();
-
 	$modules[] = $composer_json['extra']['altis']['modules'];
 
 	foreach ( $modules as $module_name => $module ) {
 		if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
-			// phpcs:ignore
-			trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_WARNING );
+			if ( 'local' === $environment ) {
+				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!',  E_USER_ERROR );
+			} else {
+				// phpcs:ignore
+				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_WARNING );
+			}
 		}
 	}
 }
