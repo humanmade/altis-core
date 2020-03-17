@@ -75,7 +75,7 @@ function validate_config_settings( $composer_json, $environment ) {
 	foreach ( $modules as $module_name => $module ) {
 		if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
 			if ( 'local' === $environment ) {
-				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!',  E_USER_ERROR );
+				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_ERROR );
 			} else {
 				// phpcs:ignore
 				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_WARNING );
@@ -312,10 +312,10 @@ function register_module( string $slug, string $directory, string $title, ?array
  */
 function get_enabled_modules() : array {
 	$modules = Module::get_all();
-
 	$enabled = array_filter( $modules, function ( Module $module ) {
 		return $module->get_setting( 'enabled' );
 	} );
+
 	return $enabled;
 }
 
