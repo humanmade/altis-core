@@ -58,7 +58,7 @@ function get_merged_config() : array {
 	$composer_file = ROOT_DIR . '/composer.json';
 
 	$composer_json = get_json_file_contents_as_array( $composer_file );
-
+	validate_config_settings( $composer_json );
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
 	// Look for environment specific settings in the config and merge it in.
@@ -66,6 +66,19 @@ function get_merged_config() : array {
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
+}
+
+function validate_config_settings( $composer_json ) {
+	$registered_modules = Module::get_all();
+
+	$modules[] = $composer_json['extra']['altis']['modules'];
+
+	foreach ( $modules as $module_name => $module ) {
+		if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
+			// phpcs:ignore
+			trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_WARNING );
+		}
+	}
 }
 
 /**
@@ -118,7 +131,6 @@ function merge_config_settings( array $config, array $overrides ) : array {
  * @return array Decoded data in array form, empty array if JSON data could not read.
  */
 function get_json_file_contents_as_array( $file ) : array {
-
 	if ( ! strpos( $file, '.json' ) ) {
 		// phpcs:ignore
 		trigger_error( $file . ' is not a JSON file.', E_USER_ERROR );
@@ -138,23 +150,7 @@ function get_json_file_contents_as_array( $file ) : array {
 		trigger_error( "composer.json could not be parsed\n" . json_last_error_msg(), E_USER_WARNING );
 		return [];
 	}
-	$registered_modules = Module::get_all();
-	foreach ( $contents['extra']['altis'] as $config_prop ) {
-		if ( array_key_exists( $config_prop[0], $registered_modules ) ) {
-			// phpcs:ignore
-			trigger_error( 'Modules should be listed under modules property!', E_USER_WARNING );
-			return [];
-		}
-	}
-	foreach ( $contents['extra']['altis']['modules'] as $module ) {
-		if ( ! in_array( $module, $registered_modules ) ) {
-			if ( ! array_key_exists( 'entrypoint', $module ) ) {
-				// phpcs:ignore
-				trigger_error( 'Custom modules should have entrypoint property!', E_USER_WARNING );
-				return [];
-			}
-		}
-	}
+
 	return $contents;
 }
 
