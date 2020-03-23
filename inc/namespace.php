@@ -79,20 +79,20 @@ function validate_config_settings( array $config ) {
 	$environment = get_environment_type();
 	$error_type = $environment === 'local' ? E_USER_ERROR : E_USER_WARNING;
 	// Get configs to validate.
-     $configs = [
-         'default' => $config
-     ];
+	$configs = [
+		'default' => $config
+	];
 	$registered_modules = Module::get_all();
 
 	// Validate all environment types locally to help avoid pushing unforeseen problems to production.
-     if ( $environment === 'local' ) {
-          $configs['local'] = merge_config_settings( $config, $config['environments']['local'] ?? [] );
-          $configs['development'] = merge_config_settings( $config, $config['environments']['development'] ?? [] );
-          $configs['staging'] = merge_config_settings( $config, $config['environments']['staging'] ?? [] );
-          $configs['production'] = merge_config_settings( $config, $config['environments']['production'] ?? [] );
-     } else {
-          $configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
-     }
+	if ( $environment === 'local' ) {
+		$configs['local'] = merge_config_settings( $config, $config['environments']['local'] ?? [] );
+		$configs['development'] = merge_config_settings( $config, $config['environments']['development'] ?? [] );
+		$configs['staging'] = merge_config_settings( $config, $config['environments']['staging'] ?? [] );
+		$configs['production'] = merge_config_settings( $config, $config['environments']['production'] ?? [] );
+	} else {
+		$configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+	}
 
      foreach ( $configs as $type => $conf ) {
 		 foreach ( $conf['modules'] as $module_name => $module ) {
