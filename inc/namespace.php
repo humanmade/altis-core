@@ -94,35 +94,33 @@ function validate_config_settings( array $config ) {
 		$configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 	}
 
-     foreach ( $configs as $type => $conf ) {
-		 foreach ( $conf['modules'] as $module_name => $module ) {
- 			if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
- 				trigger_error(
-					 sprintf(
-						 'Custom modules should have entrypoint property! Your module %1$s is missing the entrypoint property at %2$s environment!',
-						 $module_name,
-						 $type
+	foreach ( $configs as $type => $conf ) {
+		foreach ( $conf['modules'] as $module_name => $module ) {
+			if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
+				trigger_error(
+					sprintf(
+						'Custom modules should have entrypoint property! Your module %1$s is missing the entrypoint property at %2$s environment!',
+						$module_name,
+						$type
 					),
 					$error_type
-				 );
- 			}
- 		}
+				);
+			}
+		}
 
 		foreach ( $conf as $key => $value ) {
 			if ( $key !== 'modules' && $key !== 'environments' ) {
 				trigger_error(
-					 sprintf(
-						 'All modules should be under modules property. Your %1$s module is at top level property at %2$s environment!',
-						 $key,
-						 $type
+					sprintf(
+						'All modules should be under modules property. Your %1$s module is at top level property at %2$s environment!',
+						$key,
+						$type
 					),
 					$error_type
-				 );
+				);
 			}
-
 		}
-
-     }
+	}
 }
 
 /**
