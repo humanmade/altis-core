@@ -59,29 +59,70 @@ function get_merged_config() : array {
 
 	$composer_json = get_json_file_contents_as_array( $composer_file );
 	$environment = get_environment_type();
-	validate_config_settings( $composer_json, $environment );
+
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
+	validate_config_settings( $config );
 	// Look for environment specific settings in the config and merge it in.
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
 }
 
-function validate_config_settings( $composer_json, $environment ) {
+/**
+ * Merge settings in an existing configuration file.
+ *
+ * @param array $config Existing configuration.
+ *
+ */
+function validate_config_settings( array $config ) {
+	$environment = get_environment_type();
+	$error_type = $environment === 'local' ? E_USER_ERROR : E_USER_WARNING;
+	// Get configs to validate.
+     $configs = [
+         'default' => $config
+     ];
 	$registered_modules = Module::get_all();
-	$modules[] = $composer_json['extra']['altis']['modules'];
 
-	foreach ( $modules as $module_name => $module ) {
-		if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
-			if ( 'local' === $environment ) {
-				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_ERROR );
-			} else {
-				// phpcs:ignore
-				trigger_error( 'Custom modules should have entrypoint property! Your module ' . $module_name . ' is missing the entrypoint property!', E_USER_WARNING );
+	// Validate all environment types locally to help avoid pushing unforeseen problems to production.
+     if ( $environment === 'local' ) {
+          $configs['local'] = merge_config_settings( $config, $config['environments']['local'] ?? [] );
+          $configs['development'] = merge_config_settings( $config, $config['environments']['development'] ?? [] );
+          $configs['staging'] = merge_config_settings( $config, $config['environments']['staging'] ?? [] );
+          $configs['production'] = merge_config_settings( $config, $config['environments']['production'] ?? [] );
+     } else {
+          $configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+     }
+
+     foreach ( $configs as $type => $conf ) {
+		 foreach ( $conf['modules'] as $module_name => $module ) {
+ 			if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
+ 				trigger_error(
+					 sprintf(
+						 'Custom modules should have entrypoint property! Your module %1$s is missing the entrypoint property at %2$s environment!',
+						 $module_name,
+						 $type
+					),
+					$error_type
+				 );
+ 			}
+ 		}
+
+		foreach ( $conf as $key => $value ) {
+			if ( $key !== 'modules' && $key !== 'environments' ) {
+				trigger_error(
+					 sprintf(
+						 'All modules should be under modules property. Your %1$s module is at top level property at %2$s environment!',
+						 $key,
+						 $type
+					),
+					$error_type
+				 );
 			}
+
 		}
-	}
+
+     }
 }
 
 /**
