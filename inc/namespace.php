@@ -80,7 +80,7 @@ function validate_config_settings( array $config ) {
 	$error_type = $environment === 'local' ? E_USER_ERROR : E_USER_WARNING;
 	// Get configs to validate.
 	$configs = [
-		'default' => $config
+		'default' => $config,
 	];
 	$registered_modules = Module::get_all();
 
