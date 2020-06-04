@@ -129,6 +129,7 @@ function get_json_file_contents_as_array( $file ) : array {
 		return [];
 	}
 
+	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	$contents = json_decode( file_get_contents( $file ), true );
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
@@ -335,6 +336,7 @@ function get_composer_data() : array {
 
 	if ( empty( $data ) ) {
 		$composer_file = ROOT_DIR . '/vendor/composer/installed.json';
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$raw_data = json_decode( file_get_contents( $composer_file ) );
 
 		// Re-index by package slug.
