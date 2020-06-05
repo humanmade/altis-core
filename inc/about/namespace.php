@@ -1,9 +1,14 @@
 <?php
+/**
+ * Altis About Page.
+ *
+ * @package altis
+ */
 
 namespace Altis\About;
 
+use Altis;
 use Altis\Module;
-use function Altis\get_composer_data;
 use WP_Admin_Bar;
 
 const PAGE_SLUG = 'altis-about';
@@ -20,7 +25,7 @@ function bootstrap() {
 /**
  * Add the Altis logo menu.
  *
- * @param WP_Admin_Bar $wp_admin_bar
+ * @param WP_Admin_Bar $wp_admin_bar The admin bar manager class.
  */
 function register_menu_item( WP_Admin_Bar $wp_admin_bar ) {
 	$logo_menu_args = [
@@ -39,12 +44,12 @@ function register_menu_item( WP_Admin_Bar $wp_admin_bar ) {
  * @return array Map of module slug => module data.
  */
 function get_module_version_data() : array {
-	$composer_data = get_composer_data();
+	$composer_data = Altis\get_composer_data();
 	$modules = Module::get_all();
 
 	$data = [];
 	foreach ( $modules as $module ) {
-		/** @var Module $module */
+		/** @var Module $module Altis module object. */
 		$package = sprintf( 'altis/%s', basename( $module->get_directory() ) );
 		$package_data = $composer_data[ $package ] ?? null;
 		$data[ $module->get_slug() ] = (object) [
@@ -82,7 +87,7 @@ function get_package_license( string $package ) : ?string {
 		return $exceptions[ $package ];
 	}
 
-	$all_packages = get_composer_data();
+	$all_packages = Altis\get_composer_data();
 	$package_data = $all_packages[ $package ] ?? null;
 	if ( empty( $package_data ) || empty( $package_data->license ) ) {
 		return null;
@@ -108,8 +113,8 @@ function render_about_page() {
 		<p class="about-text"><?php esc_html_e( 'Welcome to Altis, the next-generation digital experience platform.', 'altis' ) ?></p>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">
-			<a href="<?php echo admin_url( 'about.php' ) ?>" class="nav-tab nav-tab-active"><?php esc_html_e( 'About', 'altis' ) ?></a>
-			<a href="<?php echo admin_url( 'credits.php' ) ?>" class="nav-tab"><?php esc_html_e( 'Credits', 'altis' ) ?></a>
+			<a href="<?php echo esc_attr( admin_url( 'about.php' ) ); ?>" class="nav-tab nav-tab-active"><?php esc_html_e( 'About', 'altis' ) ?></a>
+			<a href="<?php echo esc_attr( admin_url( 'credits.php' ) ); ?>" class="nav-tab"><?php esc_html_e( 'Credits', 'altis' ) ?></a>
 		</h2>
 	</div>
 
@@ -150,8 +155,8 @@ function render_credits_page() {
 		<p class="about-text"><?php esc_html_e( 'Welcome to Altis, the next-generation digital experience platform.', 'altis' ) ?></p>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">
-			<a href="<?php echo admin_url( 'about.php' ) ?>" class="nav-tab"><?php esc_html_e( 'About', 'altis' ) ?></a>
-			<a href="<?php echo admin_url( 'credits.php' ) ?>" class="nav-tab nav-tab-active"><?php esc_html_e( 'Credits', 'altis' ) ?></a>
+			<a href="<?php echo esc_attr( admin_url( 'about.php' ) ); ?>" class="nav-tab"><?php esc_html_e( 'About', 'altis' ) ?></a>
+			<a href="<?php echo esc_attr( admin_url( 'credits.php' ) ); ?>" class="nav-tab nav-tab-active"><?php esc_html_e( 'Credits', 'altis' ) ?></a>
 		</h2>
 
 		<p class="about-description">
@@ -163,7 +168,7 @@ function render_credits_page() {
 	<div class="wrap full-width-layout">
 		<?php
 		// Generate documentation for Composer dependencies.
-		$packages = get_composer_data();
+		$packages = Altis\get_composer_data();
 		?>
 		<h2><?php esc_html_e( 'Packages', 'altis' ) ?></h2>
 		<p>Altis includes code from the following projects, used under their respective licenses.</p>
@@ -204,7 +209,7 @@ function render_credits_page() {
 			<p>Altis includes other libraries as part of WordPress.</p>
 			<?php
 			array_walk( $libraries['data'], '_wp_credits_build_object_link' );
-			echo '<p class="wp-credits-list">' . wp_sprintf( '%l.', $libraries['data'] ) . "</p>\n\n";
+			echo '<p class="wp-credits-list">' . sprintf( '%s.', wp_kses( implode( ', ', $libraries['data'] ), [ 'a' => [ 'href' => [] ] ] ) ) . "</p>\n\n";
 			?>
 
 		<?php endif ?>

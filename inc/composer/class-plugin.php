@@ -1,4 +1,9 @@
 <?php
+/**
+ * Altis Core Composer plugin class.
+ *
+ * @package altis
+ */
 
 namespace Altis\Composer;
 
@@ -7,13 +12,16 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 
+/**
+ * Altis core composer plugin.
+ */
 class Plugin implements PluginInterface, EventSubscriberInterface {
 
 	/**
 	 * Called when the plugin is activated.
 	 *
-	 * @param Composer $composer
-	 * @param IOInterface $io
+	 * @param Composer $composer The composer class.
+	 * @param IOInterface $io The composer disk interface.
 	 */
 	public function activate( Composer $composer, IOInterface $io ) {
 		$this->composer = $composer;

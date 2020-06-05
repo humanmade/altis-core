@@ -84,6 +84,7 @@ function merge_config_settings( array $config, array $overrides ) : array {
 
 					// Check settings syntax is valid.
 					if ( ! is_array( $settings ) && ! is_bool( $settings ) ) {
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						trigger_error( "Settings for the module '{$module}' specified in the composer.json are incorrect. It should be either an object or a boolean.", E_USER_WARNING );
 						continue;
 					}
@@ -258,9 +259,9 @@ function get_environment_codebase_revision() : ?string {
 /**
  * Fix the plugins_url for files in the vendor directory
  *
- * @param string $url
- * @param string $path
- * @param string $plugin
+ * @param string $url The current plugin URL.
+ * @param string $path The relative path to a file in the plugin folder.
+ * @param string $plugin The absolute path to the plugin file.
  * @return string
  */
 function fix_plugins_url( string $url, string $path, string $plugin ) : string {

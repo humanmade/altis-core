@@ -1,22 +1,37 @@
 <?php
+/**
+ * Altis Core Installer.
+ *
+ * @package altis
+ */
 
 namespace Altis\Composer;
 
 use Composer\Installers\Installer as BaseInstaller;
 use Composer\Package\PackageInterface;
 
+/**
+ * Altis Core Composer Installer.
+ */
 class Installer extends BaseInstaller {
 
 	/**
 	 * Check if the installer supports a given type.
 	 *
-	 * @param string $type
+	 * @param string $type Package type string.
 	 * @return bool
 	 */
 	public function supports( $type ) {
 		return in_array( $type, [ 'wordpress-plugin', 'wordpress-muplugin' ], true );
 	}
 
+	/**
+	 * Modifies the install path for Altis module dependencies.
+	 *
+	 * @param PackageInterface $package Composer package manager interface.
+	 * @param string $framework_type The type of framework for deriving the install path.
+	 * @return string
+	 */
 	public function getInstallPath( PackageInterface $package, $framework_type = '' ) {
 		/**
 		 * Allow specific wordpress-plugin packages to skip the wordpress-plugin
