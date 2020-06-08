@@ -1,9 +1,11 @@
 <?php
 /**
  * Main entry point loader for the Core module.
+ *
+ * @package altis/core
  */
 
-namespace Altis; // @codingStandardsIgnoreLine
+namespace Altis;
 
 // Patch plugins URL for vendor directory.
 add_filter( 'plugins_url', 'Altis\\fix_plugins_url', 10, 3 );
