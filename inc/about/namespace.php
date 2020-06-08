@@ -209,7 +209,7 @@ function render_credits_page() {
 			<p>Altis includes other libraries as part of WordPress.</p>
 			<?php
 			array_walk( $libraries['data'], '_wp_credits_build_object_link' );
-			echo '<p class="wp-credits-list">' . sprintf( '%s.', wp_kses( implode( ', ', $libraries['data'] ), [ 'a' => [ 'href' => [] ] ] ) ) . "</p>\n\n";
+			echo '<p class="wp-credits-list">' . wp_kses( implode( ', ', $libraries['data'] ), [ 'a' => [ 'href' => [] ] ] ) . ".</p>\n\n";
 			?>
 
 		<?php endif ?>
