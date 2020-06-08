@@ -2,7 +2,7 @@
 /**
  * Altis About Page.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis\About;

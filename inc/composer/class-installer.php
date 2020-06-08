@@ -2,7 +2,7 @@
 /**
  * Altis Core Installer.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis\Composer;

@@ -2,7 +2,7 @@
 /**
  * Altis Core Composer plugin class.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis\Composer;

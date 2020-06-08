@@ -2,7 +2,7 @@
 /**
  * Main entry point loader for the Core module.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis;

@@ -3,7 +3,7 @@
  * The Module object provides a common interface for registering
  * modules and carrying out module related tasks.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis;

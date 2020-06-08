@@ -2,7 +2,7 @@
 /**
  * Core platform functions.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis;
