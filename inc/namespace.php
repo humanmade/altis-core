@@ -8,6 +8,7 @@
 namespace Altis;
 
 use Aws\Sdk;
+use RuntimeException;
 
 /**
  * Bootstrap any core functions as necessary.
@@ -118,10 +119,9 @@ function merge_config_settings( array $config, array $overrides ) : array {
  * @return array Decoded data in array form, empty array if JSON data could not read.
  */
 function get_json_file_contents_as_array( $file ) : array {
-	if ( ! strpos( $file, '.json' ) ) {
-		// phpcs:ignore
-		trigger_error( $file . ' is not a JSON file.', E_USER_ERROR  );
-		return [];
+	if ( strpos( $file, '.json' ) === false ) {
+		log_error( $file . ' is not a JSON file.' );
+		return  [];
 	}
 
 	if ( ! is_readable( $file ) ) {
@@ -139,7 +139,42 @@ function get_json_file_contents_as_array( $file ) : array {
 		return [];
 	}
 
+	$modules = Module::get_all();
+
+	// Unregistered module with no "entrypoint" property.
+	foreach ( $contents['extra']['altis']['modules'] as $key => $module ) {
+		if ( ! array_key_exists( $key, $modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
+			log_error( 'Please specify an entry point setting for your custom module.' );
+		}
+	}
+
+	// Registered module config not under "modules" property.
+	foreach ( $contents['extra']['altis'] as $key => $config ) {
+		if ( array_key_exists( $key, $modules ) ) {
+			log_error( 'Please specify an entry point setting for your custom module.' );
+		}
+
+		//Custom module at top level with "entrypoint" property:
+		if ( array_key_exists( 'entrypoint', $config ) ) {
+			log_error( 'Module configurations should be defined under altis.extra.modules' );
+		}
+	}
+
 	return $contents;
+}
+
+/**
+ * Throws exception or triggers error depending on environment.
+ *
+ * @param string $msg
+ * @param int $level
+ */
+function log_error( string $msg, int $level = E_USER_ERROR ) {
+	if ( get_environment_type() === 'local' ) {
+		throw new RuntimeException( $msg );
+	}
+	// phpcs:ignore
+	trigger_error( $msg, $level );
 }
 
 /**
