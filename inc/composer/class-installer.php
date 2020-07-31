@@ -59,6 +59,7 @@ class Installer extends BaseInstaller {
 			'humanmade/msm-sitemap',
 			'humanmade/php-basic-auth',
 			'humanmade/publication-checklist',
+			'humanmade/post-cloner',
 			'humanmade/require-login',
 			'humanmade/s3-uploads',
 			'humanmade/smart-media',
