@@ -13,7 +13,11 @@
 		"rlankhorst/wp-consent-level-api": {
 			"type": "vcs",
 			"url": "git@github.com:rlankhorst/wp-consent-level-api.git"
-		  }
+		},
+		"altis/consent": {
+			"type": "vcs",
+			"url": "git@github.com:humanmade/altis-consent.git"
+		}
 	},
 	"require": {
 		"php": ">=7.1",
