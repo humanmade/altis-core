@@ -42,6 +42,7 @@ class Installer extends BaseInstaller {
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
+			'altis/consent',
 			'altis/experiments',
 			'darylldoyle/safe-svg',
 			'humanmade/amp',
@@ -71,6 +72,7 @@ class Installer extends BaseInstaller {
 			'humanmade/wp-seo',
 			'humanmade/wp-simple-saml',
 			'johnbillion/query-monitor',
+			'rlankhorst/wp-consent-level-api',
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
 		];
