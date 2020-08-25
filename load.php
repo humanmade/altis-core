@@ -29,6 +29,14 @@ add_action( 'altis.modules.init', function () {
 		'Core',
 		[
 			'enabled' => true,
+			'consent' => [
+				'display_banner' => false,
+				'privacy_policy_page' => 0,
+				'cookie_policy_page' => 0,
+				'cookie_expiration' => 30,
+				'banner_options' => 'none',
+				'banner_message' => esc_html__( 'This site uses cookies to provide a better user experience', 'altis-core' ),
+			]
 		],
 		__NAMESPACE__ . '\\bootstrap'
 	);
