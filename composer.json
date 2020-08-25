@@ -26,7 +26,8 @@
 	"autoload": {
 		"files": [
 			"inc/namespace.php",
-			"inc/about/namespace.php"
+			"inc/about/namespace.php",
+			"inc/consent/namespace.php"
 		],
 		"classmap": [
 			"inc/"
