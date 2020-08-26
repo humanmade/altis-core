@@ -28,6 +28,11 @@ function set_consent_defaults() {
 		$options['banner_text'] = Settings\get_default_banner_message();
 	}
 
+	// If no privacy policy page was set in the config, but a privacy policy page exists, save that to our options. This will just select it in the dropdown.
+	if ( $options['privacy_policy_page'] === '' && get_privacy_policy_url() ) {
+		$options['privacy_policy_page'] = (int) get_option( 'wp_page_for_privacy_policy' );
+	}
+
 	update_option( 'cookie_consent_option', $options );
 }
 
