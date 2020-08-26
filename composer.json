@@ -22,7 +22,7 @@
 	"require": {
 		"php": ">=7.1",
 		"altis/consent": "*",
-		"aws/aws-sdk-php": "^3.101.1",
+		"aws/aws-sdk-php": "^3.150.0",
 		"composer-plugin-api": "^1.0",
 		"composer/installers": "^1.4",
 		"rlankhorst/wp-consent-level-api": "dev-master as 1.0.0"
