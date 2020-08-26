@@ -51,7 +51,7 @@ function load_plugins() {
 
 	// Unless the consent module has been deactivated, load the plugins.
 	if ( $config ) {
-		require_once Altis\ROOT_DIR . '/vendor/rlankhorst/wp-consent-level-api/wp-consent-level-api.php';
+		require_once Altis\ROOT_DIR . '/vendor/rlankhorst/wp-consent-level-api/wp-consent-api.php';
 		require_once Altis\ROOT_DIR . '/vendor/altis/consent/plugin.php';
 	}
 }
