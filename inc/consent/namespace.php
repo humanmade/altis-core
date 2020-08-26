@@ -19,7 +19,7 @@ function set_consent_defaults() {
 	}
 
 	// Bail if options have been set.
-	if ( is_array( $options ) ) {
+	if ( $options ) {
 		return;
 	}
 
