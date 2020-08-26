@@ -5,16 +5,22 @@ namespace Altis\Consent;
 use Altis;
 use Altis\Consent\Settings;
 
+/**
+ * Kick it off.
+ */
 function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_defaults' );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
 }
 
+/**
+ * Save the defaults to the database if nothing has been set yet.
+ */
 function set_consent_defaults() {
 	$config  = Altis\get_config()['modules']['core']['consent'];
 	$options = get_option( 'cookie_consent_options' );
 
-	// Bail if we've turned consent off explicitly. TODO: is there a way to deactivate the plugin if this is turned off? Or do we just hide the controls?
+	// Bail if we've turned consent off explicitly.
 	if ( $config === false ) {
 		return;
 	}
