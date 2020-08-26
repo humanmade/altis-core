@@ -3,6 +3,7 @@
 namespace Altis\Consent;
 
 use Altis;
+use Altis\Consent\Settings;
 
 function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_defaults' );
