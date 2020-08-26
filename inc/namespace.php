@@ -14,8 +14,7 @@ use Aws\Sdk;
  */
 function bootstrap() {
 	About\bootstrap();
-
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
+	Consent\bootstrap();
 }
 
 /**
@@ -366,18 +365,4 @@ function get_composer_data() : array {
 function register_class_path( string $prefix, string $path ) {
 	$loader = new Autoloader( $prefix, $path );
 	spl_autoload_register( [ $loader, 'load' ] );
-}
-
-/**
- * Load plugins that are bundled in the Core module.
- */
-function load_plugins() {
-	$config = Altis\get_config()['modules']['core'];
-
-	if ( $config['consent'] ) {
-		require_once Altis\ROOT_DIR . '/vendor/rlankhorst/wp-consent-level-api/wp-consent-level-api.php';
-		require_once Altis\ROOT_DIR . '/vendor/altis/consent/plugin.php';
-
-		Consent\bootstrap();
-	}
 }
