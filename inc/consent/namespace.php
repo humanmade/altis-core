@@ -29,7 +29,7 @@ function set_consent_defaults() {
 	}
 
 	// If no privacy policy page was set in the config, but a privacy policy page exists, save that to our options. This will just select it in the dropdown.
-	if ( $options['privacy_policy_page'] === '' && get_privacy_policy_url() ) {
+	if ( $options['privacy_policy_page'] === '' && empty( get_privacy_policy_url() ) ) {
 		$options['privacy_policy_page'] = (int) get_option( 'wp_page_for_privacy_policy' );
 	}
 
