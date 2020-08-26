@@ -31,8 +31,8 @@ add_action( 'altis.modules.init', function () {
 			'enabled' => true,
 			'consent' => [
 				'display_banner'      => false,
-				'privacy_policy_page' => 0,
-				'cookie_policy_page'  => 0,
+				'privacy_policy_page' => '',
+				'cookie_policy_page'  => '',
 				'cookie_expiration'   => 30,
 				'banner_options'      => 'none',
 				'banner_text'         => '',
