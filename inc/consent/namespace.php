@@ -23,7 +23,12 @@ function set_consent_defaults() {
 		return;
 	}
 
-	update_option( 'cookie_consent_option', $config );
+	// If no banner text was set in the config, use the default banner message instead of an empty string.
+	if ( $options['banner_text'] === '' ) {
+		$options['banner_text'] = Settings\get_default_banner_message();
+	}
+
+	update_option( 'cookie_consent_option', $options );
 }
 
 /**
