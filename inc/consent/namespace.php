@@ -1,6 +1,6 @@
 <?php
 
-namespace Altis\Consent;
+namespace Altis\Core\Consent;
 
 use Altis;
 use Altis\Consent\Settings;

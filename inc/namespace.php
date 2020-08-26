@@ -14,7 +14,7 @@ use Aws\Sdk;
  */
 function bootstrap() {
 	About\bootstrap();
-	Consent\bootstrap();
+	Core\Consent\bootstrap();
 }
 
 /**
