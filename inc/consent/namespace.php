@@ -1,5 +1,7 @@
 <?php
 
+namespace Altis\Consent;
+
 use Altis;
 
 function bootstrap() {
