@@ -218,6 +218,9 @@ function get_environment_type() : string {
 	if ( defined( 'HM_ENV_TYPE' ) ) {
 		return HM_ENV_TYPE;
 	}
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+		return WP_ENVIRONMENT_TYPE;
+	}
 	return 'local';
 }
 

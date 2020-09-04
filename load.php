@@ -10,6 +10,18 @@ namespace Altis;
 // Patch plugins URL for vendor directory.
 add_filter( 'plugins_url', 'Altis\\fix_plugins_url', 10, 3 );
 
+// Ensure WP_ENVIRONMENT_TYPE is set.
+add_action( 'altis.loaded_autoloader', function () {
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+		return;
+	}
+	if ( defined( 'HM_ENV_TYPE' ) ) {
+		define( 'WP_ENVIRONMENT_TYPE', HM_ENV_TYPE );
+	} else {
+		define( 'WP_ENVIRONMENT_TYPE', 'local' );
+	}
+}, -10 );
+
 // Fire module init hook and load enabled modules.
 add_action( 'altis.loaded_autoloader', function () {
 	/**
