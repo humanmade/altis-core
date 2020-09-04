@@ -18,26 +18,39 @@ function bootstrap() {
  */
 function set_consent_options() {
 	$config  = Altis\get_config()['modules']['core']['consent'];
-	$options = get_option( 'cookie_consent_options' );
+	$fields  = Settings\get_cookie_consent_settings_fields();
+	$options = [];
 
 	// Bail if we've turned consent off explicitly.
 	if ( empty( $config ) ) {
 		return;
 	}
 
-	// Bail if options have been set.
-	if ( $options ) {
-		return;
+	// Check if display-banner was configured.
+	if ( ! empty( $config['display-banner'] ) ) {
+		// Make sure display-banner is a boolean.
+		if ( is_bool( $config['display-banner'] ) ) {
+			$options['display_banner'] = $config['display-banner'];
+			unset( $fields['display_banner'] );
+		}
 	}
 
-	// If no banner text was set in the config, use the default banner message instead of an empty string.
-	if ( $options['banner_text'] === '' ) {
-		$options['banner_text'] = Settings\get_default_banner_message();
+	// Check if banner-options was configured.
+	if ( ! empty( $config['banner_options'] ) ) {
+		// Make sure any option set in the config is a valid option.
+		if ( in_array( $config['banner-options'], Settings\get_cookie_banner_options(), true ) ) {
+			$options['banner_options'] = $config['banner-options'];
+			unset( $fields['banner_options'] );
+		}
 	}
 
-	// If no privacy policy page was set in the config, but a privacy policy page exists, save that to our options. This will just select it in the dropdown.
-	if ( $options['privacy_policy_page'] === '' && empty( get_privacy_policy_url() ) ) {
-		$options['privacy_policy_page'] = (int) get_option( 'wp_page_for_privacy_policy' );
+	// Check if cookie expiration was configured.
+	if ( ! empty( $config['cookie-expiration'] ) ) {
+		// Make sure the value set in the config is numeric.
+		if ( is_numeric( $config['cookie-expiration'] ) ) {
+			$options['cookie_expiration'] = (int) $config['cookie_expiration'];
+			unset( $fields['cookie_expiration'] );
+		}
 	}
 
 	update_option( 'cookie_consent_option', $options );
