@@ -280,6 +280,22 @@ function fix_plugins_url( string $url, string $path, string $plugin ) : string {
 }
 
 /**
+ * Sets the WP_ENVIRONMENT_TYPE constant.
+ *
+ * @return void
+ */
+function set_wp_environment_type() : void {
+	if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+		return;
+	}
+	if ( defined( 'HM_ENV_TYPE' ) ) {
+		define( 'WP_ENVIRONMENT_TYPE', HM_ENV_TYPE );
+	} else {
+		define( 'WP_ENVIRONMENT_TYPE', 'local' );
+	}
+}
+
+/**
  * Registers a module with the store.
  *
  * @param string $slug The string identifier for the module used for later reference.
