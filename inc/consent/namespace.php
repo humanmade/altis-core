@@ -9,14 +9,14 @@ use Altis\Consent\Settings;
  * Kick it off.
  */
 function bootstrap() {
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_defaults' );
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_options' );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
 }
 
 /**
  * Save the defaults to the database if nothing has been set yet.
  */
-function set_consent_defaults() {
+function set_consent_options() {
 	$config  = Altis\get_config()['modules']['core']['consent'];
 	$options = get_option( 'cookie_consent_options' );
 
