@@ -21,7 +21,7 @@ function set_consent_options() {
 	$options = get_option( 'cookie_consent_options' );
 
 	// Bail if we've turned consent off explicitly.
-	if ( $config === false ) {
+	if ( empty( $config ) ) {
 		return;
 	}
 
