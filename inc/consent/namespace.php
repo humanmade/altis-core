@@ -53,7 +53,11 @@ function set_consent_options() {
 		}
 	}
 
-	update_option( 'cookie_consent_option', $options );
+	// If any options were set in the config, update those values in the database and remove the options on the settings page.
+	if ( ! empty( $options ) ) {
+		update_option( 'cookie_consent_option', $options );
+		add_filter( 'altis.consent.consent_settings_fields', $fields );
+	}
 }
 
 /**
