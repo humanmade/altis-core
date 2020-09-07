@@ -218,9 +218,6 @@ function get_environment_type() : string {
 	if ( defined( 'HM_ENV_TYPE' ) ) {
 		return HM_ENV_TYPE;
 	}
-	if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
-		return WP_ENVIRONMENT_TYPE;
-	}
 	return 'local';
 }
 
@@ -288,11 +285,7 @@ function set_wp_environment_type() : void {
 	if ( defined( 'WP_ENVIRONMENT_TYPE' ) ) {
 		return;
 	}
-	if ( defined( 'HM_ENV_TYPE' ) ) {
-		define( 'WP_ENVIRONMENT_TYPE', HM_ENV_TYPE );
-	} else {
-		define( 'WP_ENVIRONMENT_TYPE', 'local' );
-	}
+	define( 'WP_ENVIRONMENT_TYPE', get_environment_type() );
 }
 
 /**
