@@ -11,6 +11,8 @@ use Altis\Consent\Settings;
 function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_options' );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
+
+	add_filter( 'altis.analytics.noop', __NAMESPACE__ . '\\set_analytics_noop' );
 }
 
 /**
@@ -71,4 +73,20 @@ function load_plugins() {
 		require_once Altis\ROOT_DIR . '/vendor/altis/consent-api/wp-consent-api.php';
 		require_once Altis\ROOT_DIR . '/vendor/altis/consent/plugin.php';
 	}
+}
+
+/**
+ * Set the analytics script to no-op if no consent to statistics has been granted.
+ *
+ * @param bool $noop No-op value to prevent analytics events from being sent to Pinpoint. Defaults to false.
+ *
+ * @return bool      The updated noop value.
+ */
+function set_analytics_noop( bool $noop ) : bool {
+	// Override no-op if we don't have consent for statistics.
+	if ( ! wp_has_consent( 'statistics' ) ) {
+		return true;
+	}
+
+	return $noop;
 }
