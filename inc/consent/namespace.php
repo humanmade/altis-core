@@ -13,6 +13,7 @@ function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
 
 	add_filter( 'altis.analytics.noop', __NAMESPACE__ . '\\set_analytics_noop' );
+	add_filter( 'altis.analytics.data', __NAMESPACE__ . '\\set_analytics_data', 1 );
 }
 
 /**
@@ -89,4 +90,20 @@ function set_analytics_noop( bool $noop ) : bool {
 	}
 
 	return $noop;
+}
+
+/**
+ * Update the Endpoint/User data if we don't have consent for statistics.
+ * Overrides with an empty array if we don't have consent.
+ *
+ * @param array $data An array of analytics data to send to Pinpoint.
+ *
+ * @return array      The filtered analytics variable data.
+ */
+function set_analytics_data( array $data ) : array {
+	if ( ! wp_has_consent( 'statistics' ) ) {
+		$data['Endpoint']['User'] = [];
+	}
+
+	return $data;
 }
