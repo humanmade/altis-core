@@ -47,9 +47,9 @@ function set_consent_options() {
 	}
 
 	// Check if banner-options was configured.
-	if ( ! empty( $config['banner_options'] ) ) {
+	if ( ! empty( $config['banner-options'] ) ) {
 		// Make sure any option set in the config is a valid option.
-		if ( in_array( $config['banner-options'], Settings\get_cookie_banner_options(), true ) ) {
+		if ( in_array( $config['banner-options'], wp_list_pluck( Settings\get_cookie_banner_options(), 'value' ), true ) ) {
 			$options['banner_options'] = $config['banner-options'];
 			unset( $fields['banner_options'] );
 		}
