@@ -30,9 +30,9 @@ add_action( 'altis.modules.init', function () {
 		[
 			'enabled' => true,
 			'consent' => [
-				'display-banner'      => '',
-				'cookie-expiration'   => '',
-				'banner-options'      => '',
+				'display-banner' => null,
+				'cookie-expiration' => null,
+				'banner-options' => null,
 			],
 		],
 		__NAMESPACE__ . '\\bootstrap'
