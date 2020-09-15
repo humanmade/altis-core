@@ -69,6 +69,7 @@ function set_consent_options() {
 		add_filter( 'pre_option_cookie_consent_options', function () use ( $options ) {
 			return $options;
 		} );
+
 		add_filter( 'altis.consent.consent_settings_fields', '__return_empty_array' );
 	}
 }
