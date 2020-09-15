@@ -112,7 +112,7 @@ function set_analytics_noop( bool $noop ) : bool {
  */
 function set_analytics_data( array $data ) : array {
 	if ( ! wp_has_consent( 'statistics' ) ) {
-		$data['Endpoint']['User'] = [];
+		$data['Endpoint']->User = [];
 	}
 
 	return $data;
