@@ -16,10 +16,12 @@ function bootstrap() {
 	add_filter( 'altis.analytics.data', __NAMESPACE__ . '\\set_analytics_data', 1 );
 
 	// If statistics hasn't been consented to, don't load the GTM output.
-	if ( ! wp_get_consent( 'statistics' ) ) {
-		remove_action( 'wp_head', '\\HM\\GTM\\output_tag', 1, 0 );
-		remove_action( 'after_body', '\\HM\\GTM\\output_tag', 1, 0 );
-	}
+	add_action( 'plugins_loaded', function () {
+		if ( ! wp_has_consent( 'statistics' ) ) {
+			remove_action( 'wp_head', '\\HM\\GTM\\output_tag', 1, 0 );
+			remove_action( 'after_body', '\\HM\\GTM\\output_tag', 1, 0 );
+		}
+	}, 10 );
 }
 
 /**
@@ -45,9 +47,9 @@ function set_consent_options() {
 	}
 
 	// Check if banner-options was configured.
-	if ( ! empty( $config['banner_options'] ) ) {
+	if ( ! empty( $config['banner-options'] ) ) {
 		// Make sure any option set in the config is a valid option.
-		if ( in_array( $config['banner-options'], Settings\get_cookie_banner_options(), true ) ) {
+		if ( in_array( $config['banner-options'], wp_list_pluck( Settings\get_cookie_banner_options(), 'value' ), true ) ) {
 			$options['banner_options'] = $config['banner-options'];
 			unset( $fields['banner_options'] );
 		}
@@ -64,8 +66,10 @@ function set_consent_options() {
 
 	// If any options were set in the config, update those values in the database and remove the options on the settings page.
 	if ( ! empty( $options ) ) {
-		update_option( 'cookie_consent_option', $options );
-		add_filter( 'altis.consent.consent_settings_fields', $fields );
+		add_filter( 'pre_option_cookie_consent_options', function () use ( $options ) {
+			return $options;
+		} );
+		add_filter( 'altis.consent.consent_settings_fields', '__return_empty_array' );
 	}
 }
 
@@ -108,7 +112,7 @@ function set_analytics_noop( bool $noop ) : bool {
  */
 function set_analytics_data( array $data ) : array {
 	if ( ! wp_has_consent( 'statistics' ) ) {
-		$data['Endpoint']['User'] = [];
+		$data['Endpoint']->User = [];
 	}
 
 	return $data;
