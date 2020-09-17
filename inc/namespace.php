@@ -135,7 +135,7 @@ function get_json_file_contents_as_array( $file ) : array {
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
 		// phpcs:ignore
-		trigger_error( 'composer.json could not be parsed\n' . json_last_error_msg(), E_USER_WARNING );
+		trigger_error( sprintf( 'composer.json could not be parsed: %s', json_last_error_msg() ), E_USER_WARNING );
 		return [];
 	}
 
