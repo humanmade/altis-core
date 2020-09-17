@@ -169,7 +169,7 @@ function get_json_file_contents_as_array( $file ) : array {
  * @param string $msg
  * @param int $level
  */
-function log_error( string $msg, int $level = E_USER_ERROR ) {
+function log_error( string $msg, int $level = E_USER_WARNING ) {
 	if ( get_environment_type() === 'local' ) {
 		throw new RuntimeException( $msg );
 	}
