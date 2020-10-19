@@ -74,7 +74,7 @@ function get_merged_config() : array {
 }
 
 /**
- * Validate Altis config settings for all environments.
+ * Validate top level Altis config settings.
  *
  * @param array $config Existing configuration.
  * @return void
@@ -136,6 +136,7 @@ function validate_config_settings( array $config ) : void {
 
 		foreach ( $env_errors as $error ) {
 			trigger_error(
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				sprintf( '%s Found in the %s settings.', $error, $env ),
 				E_USER_WARNING
 			);
