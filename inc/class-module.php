@@ -3,11 +3,16 @@
  * The Module object provides a common interface for registering
  * modules and carrying out module related tasks.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis;
 
+/**
+ * Altis Module object.
+ *
+ * Manages the module settings and configuration.
+ */
 class Module {
 	/**
 	 * Store of all registered modules.
@@ -46,6 +51,14 @@ class Module {
 	 */
 	protected $default_settings;
 
+	/**
+	 * Module constructor. Registers settings, defaults and module location.
+	 *
+	 * @param string $slug A string ID for the module.
+	 * @param string $directory The directory the module is located in.
+	 * @param string $title A human readable title for the module.
+	 * @param array|null $default_settings Optional default settings for the module.
+	 */
 	protected function __construct( string $slug, string $directory, string $title, ?array $default_settings = null ) {
 		$this->slug = $slug;
 		$this->directory = $directory;
@@ -61,8 +74,8 @@ class Module {
 	 * @param string $slug The string identifier for the module used for later reference.
 	 * @param string $directory The root directory of the module.
 	 * @param string $title Human readable module title.
-	 * @param ?array $settings Optional default settings array.
-	 * @param ?callable $loader Optional loader function to call module bootstrapping code.
+	 * @param array|null $default_settings Optional default settings array.
+	 * @param callable|null $loader Optional loader function to call module bootstrapping code.
 	 * @return Module
 	 */
 	public static function register( string $slug, string $directory, string $title, ?array $default_settings = null, ?callable $loader = null ) : Module {
@@ -89,7 +102,7 @@ class Module {
 	/**
 	 * Retrieve an individual module by its slug.
 	 *
-	 * @param string $slug
+	 * @param string $slug The module ID string.
 	 * @return Module
 	 */
 	public static function get( string $slug ) : Module {
@@ -151,9 +164,10 @@ class Module {
 	/**
 	 * Get a module setting by name.
 	 *
+	 * @param string $name The setting name to retrieve.
 	 * @return mixed
 	 */
-	public function get_setting( $name ) {
+	public function get_setting( string $name ) {
 		$settings = $this->get_settings();
 
 		return $settings[ $name ] ?? null;

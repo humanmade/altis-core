@@ -2,7 +2,7 @@
 /**
  * Register an autoloader for custom mu-plugins.
  *
- * @package altis
+ * @package altis/core
  */
 
 namespace Altis;
@@ -10,7 +10,7 @@ namespace Altis;
 /**
  * Class Autoloader
  *
- * @package altis
+ * @package altis/core
  */
 class Autoloader {
 	const NS_SEPARATOR = '\\';
