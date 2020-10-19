@@ -196,13 +196,13 @@ function merge_config_settings( array $config, array $overrides ) : array {
 function get_json_file_contents_as_array( $file ) : array {
 	if ( ! strpos( $file, '.json' ) ) {
 		// phpcs:ignore
-		trigger_error( $file . ' is not a JSON file.', E_USER_ERROR );
+		trigger_error( $file . ' is not a JSON file.', E_USER_WARNING );
 		return [];
 	}
 
 	if ( ! is_readable( $file ) ) {
 		// phpcs:ignore
-		trigger_error( 'Could not read ' . $file . ' file.', E_USER_ERROR );
+		trigger_error( 'Could not read ' . $file . ' file.', E_USER_WARNING );
 		return [];
 	}
 
@@ -211,7 +211,7 @@ function get_json_file_contents_as_array( $file ) : array {
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
 		// phpcs:ignore
-		trigger_error( "composer.json could not be parsed\n" . json_last_error_msg(), E_USER_WARNING );
+		trigger_error( "composer.json could not be parsed: " . json_last_error_msg(), E_USER_WARNING );
 		return [];
 	}
 
