@@ -60,11 +60,87 @@ function get_merged_config() : array {
 
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
+	// Catch common config errors and pitfalls, we delay this so that Query Monitor has kicked in.
+	add_action( 'init', function () use ( $config ) {
+		validate_config_settings( $config );
+	} );
+
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
+}
+
+/**
+ * Validate top level Altis config settings.
+ *
+ * @param array $config Existing configuration.
+ * @return void
+ */
+function validate_config_settings( array $config ) : void {
+	$environment = get_environment_type();
+	$registered_modules = Module::get_all();
+
+	// Collect configs to validate.
+	$configs = [
+		'default' => $config,
+	];
+
+	// Collect errors to catch duplicates.
+	$errors = [
+		'default' => [],
+	];
+
+	// Validate all environment types locally to help avoid pushing unforeseen problems to production.
+	if ( $environment === 'local' ) {
+		$environments = array_keys( $config['environments'] ?? [] );
+		foreach ( $environments as $env ) {
+			$configs[ $env ] = merge_config_settings( $config, $config['environments'][ $env ] ?? [] );
+			$errors[ $env ] = [];
+		}
+	} else {
+		$configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+		$errors[ $environment ] = [];
+	}
+
+	foreach ( $configs as $env => $conf ) {
+		// Check custom modules have an entrypoint set.
+		foreach ( ( $conf['modules'] ?? [] ) as $module_name => $module ) {
+			if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
+				$errors[ $env ][] = sprintf(
+					'The custom module "%1$s" is missing the "entrypoint" property.',
+					$module_name
+				);
+			}
+		}
+
+		// Check registered module names are not at the top level.
+		foreach ( $conf as $key => $value ) {
+			if ( array_key_exists( $key, $registered_modules ) ) {
+				$errors[ $env ][] = sprintf(
+					'Settings for the "%1$s" module were found at the top level.',
+					$key
+				);
+			}
+		}
+	}
+
+	// Output errors.
+	foreach ( $errors as $env => $env_errors ) {
+		// Avoid duplicates if the error was already reported in the default settings.
+		if ( $env !== 'default' ) {
+			$env_errors = array_diff( $env_errors, $errors['default'] );
+		}
+
+		foreach ( $env_errors as $error ) {
+			trigger_error(
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				sprintf( '%s Found in the %s settings.', $error, $env ),
+				E_USER_WARNING
+			);
+		}
+	}
 }
 
 /**
@@ -135,7 +211,7 @@ function get_json_file_contents_as_array( $file ) : array {
 
 	if ( json_last_error() !== JSON_ERROR_NONE ) {
 		// phpcs:ignore
-		trigger_error( json_last_error_msg(), E_USER_WARNING );
+		trigger_error( "composer.json could not be parsed: " . json_last_error_msg(), E_USER_WARNING );
 		return [];
 	}
 
