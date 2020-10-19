@@ -56,9 +56,7 @@ function get_merged_config() : array {
 
 	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
-
 	$composer_json = get_json_file_contents_as_array( $composer_file );
-	$environment = get_environment_type();
 
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
@@ -68,6 +66,7 @@ function get_merged_config() : array {
 	} );
 
 	// Look for environment specific settings in the config and merge it in.
+	$environment = get_environment_type();
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
 	return $config;
