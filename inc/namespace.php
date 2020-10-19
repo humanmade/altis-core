@@ -62,7 +62,11 @@ function get_merged_config() : array {
 
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
-	validate_config_settings( $config );
+	// Catch common config errors and pitfalls, we delay this so that Query Monitor has kicked in.
+	add_action( 'init', function () use ( $config ) {
+		validate_config_settings( $config );
+	} );
+
 	// Look for environment specific settings in the config and merge it in.
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
 
@@ -70,55 +74,71 @@ function get_merged_config() : array {
 }
 
 /**
- * Merge settings in an existing configuration file.
+ * Validate Altis config settings for all environments.
  *
  * @param array $config Existing configuration.
- *
+ * @return void
  */
-function validate_config_settings( array $config ) {
+function validate_config_settings( array $config ) : void {
 	$environment = get_environment_type();
-	$error_type = $environment === 'local' ? E_USER_ERROR : E_USER_WARNING;
-	// Get configs to validate.
+	$registered_modules = Module::get_all();
+
+	// Collect configs to validate.
 	$configs = [
 		'default' => $config,
 	];
-	$registered_modules = Module::get_all();
+
+	// Collect errors to catch duplicates.
+	$errors = [
+		'default' => [],
+	];
 
 	// Validate all environment types locally to help avoid pushing unforeseen problems to production.
 	if ( $environment === 'local' ) {
-		$configs['local'] = merge_config_settings( $config, $config['environments']['local'] ?? [] );
-		$configs['development'] = merge_config_settings( $config, $config['environments']['development'] ?? [] );
-		$configs['staging'] = merge_config_settings( $config, $config['environments']['staging'] ?? [] );
-		$configs['production'] = merge_config_settings( $config, $config['environments']['production'] ?? [] );
+		$environments = array_keys( $config['environments'] ?? [] );
+		foreach ( $environments as $env ) {
+			$configs[ $env ] = merge_config_settings( $config, $config['environments'][ $env ] ?? [] );
+			$errors[ $env ] = [];
+		}
 	} else {
 		$configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+		$errors[ $environment ] = [];
 	}
 
-	foreach ( $configs as $type => $conf ) {
-		foreach ( $conf['modules'] as $module_name => $module ) {
+	foreach ( $configs as $env => $conf ) {
+		// Check custom modules have an entrypoint set.
+		foreach ( ( $conf['modules'] ?? [] ) as $module_name => $module ) {
 			if ( ! array_key_exists( $module_name, $registered_modules ) && ! array_key_exists( 'entrypoint', $module ) ) {
-				trigger_error(
-					sprintf(
-						'Custom modules should have entrypoint property! Your module %1$s is missing the entrypoint property at %2$s environment!',
-						$module_name,
-						$type
-					),
-					$error_type
+				$errors[ $env ][] = sprintf(
+					'The custom module "%1$s" is missing the "entrypoint" property.',
+					$module_name
 				);
 			}
 		}
 
+		// Check registered module names are not at the top level.
 		foreach ( $conf as $key => $value ) {
-			if ( $key !== 'modules' && $key !== 'environments' ) {
-				trigger_error(
-					sprintf(
-						'All modules should be under modules property. Your %1$s module is at top level property at %2$s environment!',
-						$key,
-						$type
-					),
-					$error_type
+			if ( array_key_exists( $key, $registered_modules ) ) {
+				$errors[ $env ][] = sprintf(
+					'Settings for the "%1$s" module were found at the top level.',
+					$key
 				);
 			}
+		}
+	}
+
+	// Output errors.
+	foreach ( $errors as $env => $env_errors ) {
+		// Avoid duplicates if the error was already reported in the default settings.
+		if ( $env !== 'default' ) {
+			$env_errors = array_diff( $env_errors, $errors['default'] );
+		}
+
+		foreach ( $env_errors as $error ) {
+			trigger_error(
+				sprintf( '%s Found in the %s settings.', $error, $env ),
+				E_USER_WARNING
+			);
 		}
 	}
 }
