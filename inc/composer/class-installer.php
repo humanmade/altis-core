@@ -49,6 +49,7 @@ class Installer extends BaseInstaller {
 			'humanmade/cavalcade',
 			'humanmade/debug-bar-elasticpress',
 			'humanmade/delegated-oauth',
+			'humanmade/elasticpress',
 			'humanmade/gaussholder',
 			'humanmade/hm-gtm',
 			'humanmade/hm-redirects',
