@@ -10,17 +10,6 @@ use Altis\Consent\Settings;
  */
 function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
-
-	add_filter( 'altis.analytics.noop', __NAMESPACE__ . '\\set_analytics_noop' );
-	add_filter( 'altis.analytics.data', __NAMESPACE__ . '\\set_analytics_data', 1 );
-
-	// If statistics hasn't been consented to, don't load the GTM output.
-	add_action( 'plugins_loaded', function () {
-		if ( ! wp_has_consent( 'statistics' ) ) {
-			remove_action( 'wp_head', '\\HM\\GTM\\output_tag', 1, 0 );
-			remove_action( 'after_body', '\\HM\\GTM\\output_tag', 1, 0 );
-		}
-	}, 10 );
 }
 
 
