@@ -21,7 +21,7 @@ function load_plugins() {
 
 	// Unless the consent module has been deactivated, load the plugins.
 	if ( $config ) {
-		require_once Altis\ROOT_DIR . '/vendor/altis/consent-api/wp-consent-api.php';
+		require_once Altis\ROOT_DIR . '/vendor/altis/consent-api/plugin.php';
 		require_once Altis\ROOT_DIR . '/vendor/altis/consent/plugin.php';
 	}
 }
