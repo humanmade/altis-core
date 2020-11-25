@@ -3,7 +3,6 @@
 namespace Altis\Core\Consent;
 
 use Altis;
-use Altis\Consent\Settings;
 
 /**
  * Kick it off.
