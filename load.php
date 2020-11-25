@@ -32,11 +32,7 @@ add_action( 'altis.modules.init', function () {
 		'Core',
 		[
 			'enabled' => true,
-			'consent' => [
-				'display-banner' => null,
-				'cookie-expiration' => null,
-				'banner-options' => null,
-			],
+			'consent' => true,
 		],
 		__NAMESPACE__ . '\\bootstrap'
 	);
