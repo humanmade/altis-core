@@ -9,7 +9,6 @@ use Altis\Consent\Settings;
  * Kick it off.
  */
 function bootstrap() {
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\set_consent_options' );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
 
 	add_filter( 'altis.analytics.noop', __NAMESPACE__ . '\\set_analytics_noop' );
@@ -24,55 +23,6 @@ function bootstrap() {
 	}, 10 );
 }
 
-/**
- * Save the defaults to the database if nothing has been set yet.
- */
-function set_consent_options() {
-	$config  = Altis\get_config()['modules']['core']['consent'];
-	$fields  = Settings\get_cookie_consent_settings_fields();
-	$options = [];
-
-	// Bail if we've turned consent off explicitly.
-	if ( empty( $config ) ) {
-		return;
-	}
-
-	// Check if display-banner was configured.
-	if ( ! empty( $config['display-banner'] ) ) {
-		// Make sure display-banner is a boolean.
-		if ( is_bool( $config['display-banner'] ) ) {
-			$options['display_banner'] = $config['display-banner'];
-			unset( $fields['display_banner'] );
-		}
-	}
-
-	// Check if banner-options was configured.
-	if ( ! empty( $config['banner-options'] ) ) {
-		// Make sure any option set in the config is a valid option.
-		if ( in_array( $config['banner-options'], wp_list_pluck( Settings\get_cookie_banner_options(), 'value' ), true ) ) {
-			$options['banner_options'] = $config['banner-options'];
-			unset( $fields['banner_options'] );
-		}
-	}
-
-	// Check if cookie expiration was configured.
-	if ( ! empty( $config['cookie-expiration'] ) ) {
-		// Make sure the value set in the config is numeric.
-		if ( is_numeric( $config['cookie-expiration'] ) ) {
-			$options['cookie_expiration'] = (int) $config['cookie_expiration'];
-			unset( $fields['cookie_expiration'] );
-		}
-	}
-
-	// If any options were set in the config, update those values in the database and remove the options on the settings page.
-	if ( ! empty( $options ) ) {
-		add_filter( 'pre_option_cookie_consent_options', function () use ( $options ) {
-			return $options;
-		} );
-
-		add_filter( 'altis.consent.consent_settings_fields', '__return_empty_array' );
-	}
-}
 
 /**
  * Load plugins that are part of the consent module.
