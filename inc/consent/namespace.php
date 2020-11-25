@@ -11,7 +11,6 @@ function bootstrap() {
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_plugins', 1 );
 }
 
-
 /**
  * Load plugins that are part of the consent module.
  */
