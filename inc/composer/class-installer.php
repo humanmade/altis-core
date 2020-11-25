@@ -69,7 +69,6 @@ class Installer extends BaseInstaller {
 			'humanmade/wp-seo',
 			'humanmade/wp-simple-saml',
 			'johnbillion/query-monitor',
-			'rlankhorst/wp-consent-level-api',
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
 		];
