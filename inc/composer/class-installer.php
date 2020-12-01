@@ -42,8 +42,6 @@ class Installer extends BaseInstaller {
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
-			'altis/consent',
-			'altis/consent-api',
 			'altis/experiments',
 			'darylldoyle/safe-svg',
 			'humanmade/aws-rekognition',
