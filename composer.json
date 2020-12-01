@@ -12,6 +12,7 @@
 	"require": {
 		"php": ">=7.1",
 		"altis/consent": "~1.0.0",
+		"altis/consent-api": "~1.0.2",
 		"aws/aws-sdk-php": "^3.150.0",
 		"composer-plugin-api": "^1.1 || ^2.0",
 		"composer/installers": "^1.4"
