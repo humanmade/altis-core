@@ -32,7 +32,6 @@ add_action( 'altis.modules.init', function () {
 		'Core',
 		[
 			'enabled' => true,
-			'consent' => true,
 		],
 		__NAMESPACE__ . '\\bootstrap'
 	);
