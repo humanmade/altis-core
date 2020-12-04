@@ -55,6 +55,7 @@ class Installer extends BaseInstaller {
 			'humanmade/hm-gtm',
 			'humanmade/hm-redirects',
 			'humanmade/hm-limit-login-attempts',
+			'humanmade/ludicrousdb',
 			'humanmade/meta-tags',
 			'humanmade/msm-sitemap',
 			'humanmade/php-basic-auth',
