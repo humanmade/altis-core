@@ -49,7 +49,11 @@ function get_module_version_data() : array {
 
 	$data = [];
 	foreach ( $modules as $module ) {
-		/** @var Module $module Altis module object. */
+		/**
+		 * Altis module object.
+		 *
+		 * @var Module $module
+		 */
 		$package = sprintf( 'altis/%s', basename( $module->get_directory() ) );
 		$package_data = $composer_data[ $package ] ?? null;
 		$data[ $module->get_slug() ] = (object) [
