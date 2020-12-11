@@ -340,6 +340,11 @@ function get_composer_data() : array {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$raw_data = json_decode( file_get_contents( $composer_file ) );
 
+		// Composer v2 file version support.
+		if ( isset( $raw_data->packages ) ) {
+			$raw_data = $raw_data->packages;
+		}
+
 		// Re-index by package slug.
 		$data = [];
 		foreach ( $raw_data as $package ) {
