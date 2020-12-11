@@ -57,12 +57,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @param Composer $composer The composer class.
+	 * @param IOInterface $io The composer disk interface.
 	 */
 	public function deactivate( Composer $composer, IOInterface $io ) {
 	}
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @param Composer $composer The composer class.
+	 * @param IOInterface $io The composer disk interface.
 	 */
 	public function uninstall( Composer $composer, IOInterface $io ) {
 	}
