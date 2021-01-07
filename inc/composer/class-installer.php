@@ -26,6 +26,29 @@ class Installer extends BaseInstaller {
 	}
 
 	/**
+	 * Gets all overridden packages from all extra.altis.install-overrides entries
+	 *
+	 * @return string[]
+	 */
+	protected function getAllInstallOverrides() {
+		$rm = $this->composer->getRepositoryManager();
+		$repo = $rm->getLocalRepository();
+		$packages = $repo->getPackages();
+
+		$overridden = [];
+		foreach ( $packages as $package ) {
+			$extra = $package->getExtra();
+			if ( ! isset( $extra['altis'] ) || ! isset( $extra['altis']['install-overrides'] ) ) {
+				continue;
+			}
+
+			$overridden = array_merge( $overridden, $extra['altis']['install-overrides'] );
+		}
+
+		return $overridden;
+	}
+
+	/**
 	 * Modifies the install path for Altis module dependencies.
 	 *
 	 * @param PackageInterface $package Composer package manager interface.
@@ -38,7 +61,7 @@ class Installer extends BaseInstaller {
 		 * installer. We use this to stop plugins that are bundled with modules are
 		 * not installed to the wp-content/plugins path.
 		 */
-		$excluded_plugins = [
+		$legacy = [
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
@@ -74,6 +97,9 @@ class Installer extends BaseInstaller {
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
 		];
+
+		$overrides = $this->getAllInstallOverrides();
+		$excluded_plugins = array_unique( array_merge( $legacy, $overrides ) );
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
 			return parent::getInstallPath( $package, $framework_type );
