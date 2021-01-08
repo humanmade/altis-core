@@ -14,6 +14,7 @@ use Composer\Package\PackageInterface;
  * Altis Core Composer Installer.
  */
 class Installer extends BaseInstaller {
+	protected $installOverrides = [];
 
 	/**
 	 * Check if the installer supports a given type.
@@ -28,24 +29,10 @@ class Installer extends BaseInstaller {
 	/**
 	 * Gets all overridden packages from all extra.altis.install-overrides entries
 	 *
-	 * @return string[]
+	 * @param string[] $overrides
 	 */
-	protected function getAllInstallOverrides() {
-		$rm = $this->composer->getRepositoryManager();
-		$repo = $rm->getLocalRepository();
-		$packages = $repo->getPackages();
-
-		$overridden = [];
-		foreach ( $packages as $package ) {
-			$extra = $package->getExtra();
-			if ( ! isset( $extra['altis'] ) || ! isset( $extra['altis']['install-overrides'] ) ) {
-				continue;
-			}
-
-			$overridden = array_merge( $overridden, $extra['altis']['install-overrides'] );
-		}
-
-		return $overridden;
+	public function setInstallOverrides( $overrides ) : void {
+		$this->installOverrides = $overrides;
 	}
 
 	/**
@@ -98,8 +85,7 @@ class Installer extends BaseInstaller {
 			'stuttter/wp-user-signups',
 		];
 
-		$overrides = $this->getAllInstallOverrides();
-		$excluded_plugins = array_unique( array_merge( $legacy, $overrides ) );
+		$excluded_plugins = array_unique( array_merge( $legacy, $this->installOverrides ) );
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
 			return parent::getInstallPath( $package, $framework_type );

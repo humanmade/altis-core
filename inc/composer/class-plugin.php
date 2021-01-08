@@ -9,13 +9,16 @@ namespace Altis\Composer;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
+use Composer\Installer\InstallerEvent;
 use Composer\IO\IOInterface;
+use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
 
 /**
  * Altis core composer plugin.
  */
 class Plugin implements PluginInterface, EventSubscriberInterface {
+	protected $installer;
 
 	/**
 	 * Called when the plugin is activated.
@@ -27,8 +30,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 		$this->composer = $composer;
 		$this->io = $io;
 
-		$installer = new Installer( $this->io, $this->composer );
-		$this->composer->getInstallationManager()->addInstaller( $installer );
+		$this->installer = new Installer( $this->io, $this->composer );
+		$this->composer->getInstallationManager()->addInstaller( $this->installer );
 	}
 
 	/**
@@ -39,6 +42,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	public static function getSubscribedEvents() {
 		return [
 			'init' => 'init',
+			'post-dependencies-solving' => 'post_dependencies_solving',
 		];
 	}
 
@@ -51,8 +55,76 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * in addition to the $this->activate() method.
 	 */
 	public function init() {
-		$installer = new Installer( $this->io, $this->composer );
-		$this->composer->getInstallationManager()->addInstaller( $installer );
+		$this->installer = new Installer( $this->io, $this->composer );
+		$this->composer->getInstallationManager()->addInstaller( $this->installer );
+	}
+
+	/**
+	 * Update install overrides once dependencies have been resolved.
+	 *
+	 * @param InstallerEvent $event
+	 * @return void
+	 */
+	public function post_dependencies_solving( InstallerEvent $event )  {
+		$operations = $event->getOperations();
+		if ( empty( $operations ) ) {
+			return;
+		}
+
+		// First, work out which packages we already have.
+		$repo = $event->getInstalledRepo();
+		$packages = [];
+		foreach ( $repo->getPackages() as $package ) {
+			$packages[ $package->getName() ] = $package;
+		}
+
+		// Then, resolve the operations we're about to apply.
+		foreach ( $operations as $operation ) {
+			switch ( $operation->getJobType() ) {
+				case 'install':
+				case 'markAliasInstalled':
+					$package = $operation->getPackage();
+					$packages[ $package->getName() ] = $package;
+					break;
+
+				case 'update':
+					$package = $operation->getTargetPackage();
+					$packages[ $package->getName() ] = $package;
+					break;
+
+				case 'uninstall':
+				case 'markAliasUninstalled':
+					$package = $operation->getPackage();
+					unset( $packages[ $package->getName() ] );
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		$overrides = $this->getAllInstallOverrides( $packages );
+		$this->installer->setInstallOverrides( $overrides );
+	}
+
+	/**
+	 * Gets all overridden packages from all extra.altis.install-overrides entries
+	 *
+	 * @param PackageInterface[] $packages
+	 * @return string[]
+	 */
+	protected function getAllInstallOverrides( $packages ) {
+		$overridden = [];
+		foreach ( $packages as $package ) {
+			$extra = $package->getExtra();
+			if ( ! isset( $extra['altis'] ) || ! isset( $extra['altis']['install-overrides'] ) ) {
+				continue;
+			}
+
+			$overridden = array_merge( $overridden, $extra['altis']['install-overrides'] );
+		}
+
+		return $overridden;
 	}
 
 	/**
