@@ -42,6 +42,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	public static function getSubscribedEvents() {
 		return [
 			'init' => 'init',
+			'pre-operations-exec' => 'pre_operations_exec',
 			'post-dependencies-solving' => 'post_dependencies_solving',
 		];
 	}
@@ -60,7 +61,57 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	}
 
 	/**
-	 * Update install overrides once dependencies have been resolved.
+	 * Update install overrides once dependencies have been resolved. (Composer v2)
+	 *
+	 * @param InstallerEvent $event
+	 * @return void
+	 */
+	public function pre_operations_exec( InstallerEvent $event )  {
+		$transaction = $event->getTransaction();
+		$operations = $transaction->getOperations();
+		if ( empty( $operations ) ) {
+			return;
+		}
+
+		// Work out which packages we already have.
+		$repo = $event->getComposer()->getLocker()->getLockedRepository( $event->isDevMode() );
+		$packages = [];
+		foreach ( $repo->getPackages() as $package ) {
+			$packages[ $package->getName() ] = $package;
+		}
+
+		// Then, resolve the operations we're about to apply.
+		// (In Composer v2, this is when running the initial install step.)
+		foreach ( $operations as $operation ) {
+			switch ( $operation::TYPE ) {
+				case 'install':
+				case 'markAliasInstalled':
+					$package = $operation->getPackage();
+					$packages[ $package->getName() ] = $package;
+					break;
+
+				case 'update':
+					$package = $operation->getTargetPackage();
+					$packages[ $package->getName() ] = $package;
+					break;
+
+				case 'uninstall':
+				case 'markAliasUninstalled':
+					$package = $operation->getPackage();
+					unset( $packages[ $package->getName() ] );
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		$overrides = $this->getAllInstallOverrides( $packages );
+		$this->installer->setInstallOverrides( $overrides );
+	}
+
+	/**
+	 * Update install overrides once dependencies have been resolved. (Composer v1)
 	 *
 	 * @param InstallerEvent $event
 	 * @return void
