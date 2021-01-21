@@ -79,7 +79,12 @@ function get_merged_config() : array {
  * @return void
  */
 function validate_config_settings( array $config ) : void {
-	$environment = get_environment_type();
+	// Only validate on local environments as some modules may be
+	// dev dependencies.
+	if ( get_environment_type() !== 'local' ) {
+		return;
+	}
+
 	$registered_modules = Module::get_all();
 
 	// Collect configs to validate.
@@ -93,15 +98,10 @@ function validate_config_settings( array $config ) : void {
 	];
 
 	// Validate all environment types locally to help avoid pushing unforeseen problems to production.
-	if ( $environment === 'local' ) {
-		$environments = array_keys( $config['environments'] ?? [] );
-		foreach ( $environments as $env ) {
-			$configs[ $env ] = merge_config_settings( $config, $config['environments'][ $env ] ?? [] );
-			$errors[ $env ] = [];
-		}
-	} else {
-		$configs[ $environment ] = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
-		$errors[ $environment ] = [];
+	$environments = array_keys( $config['environments'] ?? [] );
+	foreach ( $environments as $env ) {
+		$configs[ $env ] = merge_config_settings( $config, $config['environments'][ $env ] ?? [] );
+		$errors[ $env ] = [];
 	}
 
 	foreach ( $configs as $env => $conf ) {
