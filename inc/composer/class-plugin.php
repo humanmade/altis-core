@@ -8,9 +8,12 @@
 namespace Altis\Composer;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\InstallerEvent;
+use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
+use Composer\DependencyResolver\Operation\OperationInterface;
 use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
 
@@ -44,6 +47,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			'init' => 'init',
 			'pre-operations-exec' => 'pre_operations_exec',
 			'post-dependencies-solving' => 'post_dependencies_solving',
+			'post-package-install' => 'post_package_install',
 		];
 	}
 
@@ -80,6 +84,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			$packages[ $package->getName() ] = $package;
 		}
 
+		$overrides = $this->resolve_packages_composer_v2( $packages, $operations );
+		$this->installer->setInstallOverrides( $overrides );
+	}
+
+	/**
+	 * Resolve packages after operations for Composer v2
+	 *
+	 * @param array $packages Map of package name => package instance for already installed packages.
+	 * @param OperationInterface[] $operations List of operations
+	 * @return string[] List of packages to override.
+	 */
+	protected function resolve_packages_composer_v2( array $packages, array $operations ) {
 		// Then, resolve the operations we're about to apply.
 		// (In Composer v2, this is when running the initial install step.)
 		foreach ( $operations as $operation ) {
@@ -106,8 +122,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			}
 		}
 
-		$overrides = $this->getAllInstallOverrides( $packages );
-		$this->installer->setInstallOverrides( $overrides );
+		return $this->getAllInstallOverrides( $packages );
 	}
 
 	/**
@@ -155,6 +170,44 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 		}
 
 		$overrides = $this->getAllInstallOverrides( $packages );
+		$this->installer->setInstallOverrides( $overrides );
+	}
+
+	/**
+	 * Handle first install of the altis/core package.
+	 *
+	 * @param PackageEvent Package installation event.
+	 */
+	public function post_package_install( PackageEvent $event ) {
+		// See if we just got installed.
+		$operation = $event->getOperation();
+		if ( ! $operation instanceof InstallOperation || $operation->getPackage()->getName() !== 'altis/core' ) {
+			return;
+		}
+
+		// Just Installed! 👰🤵
+		// This means we won't have caught the dependency resolution event,
+		// so we need to do so now. PackageEvent subclasses InstallerEvent
+		// in Composer v1, but not in v2.
+		if ( $event instanceof InstallerEvent ) {
+			// Composer v1
+			$this->post_dependencies_solving( $event );
+			return;
+		}
+
+		$operations = $event->getOperations();
+		if ( empty( $operations ) ) {
+			return;
+		}
+
+		// Work out which packages we already have.
+		$repo = $event->getComposer()->getLocker()->getLockedRepository( $event->isDevMode() );
+		$packages = [];
+		foreach ( $repo->getPackages() as $package ) {
+			$packages[ $package->getName() ] = $package;
+		}
+
+		$overrides = $this->resolve_packages_composer_v2( $packages, $operations );
 		$this->installer->setInstallOverrides( $overrides );
 	}
 
