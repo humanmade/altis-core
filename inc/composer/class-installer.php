@@ -10,12 +10,17 @@ namespace Altis\Composer;
 use Composer\Installers\Installer as BaseInstaller;
 use Composer\Package\PackageInterface;
 
-// @codingStandardsIgnoreStart WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Snake case to match Composer.
-
 /**
  * Altis Core Composer Installer.
  */
 class Installer extends BaseInstaller {
+	/**
+	 * Overridden packages.
+	 *
+	 * Set in setInstallOverrides by the plugin hooks.
+	 *
+	 * @var string[]
+	 */
 	protected $installOverrides = [];
 
 	/**
