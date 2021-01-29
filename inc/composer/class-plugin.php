@@ -20,6 +20,11 @@ use Composer\Plugin\PluginInterface;
  * Altis core composer plugin.
  */
 class Plugin implements PluginInterface, EventSubscriberInterface {
+	/**
+	 * Custom installer instance.
+	 *
+	 * @var Installer
+	 */
 	protected $installer;
 
 	/**
@@ -67,7 +72,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	/**
 	 * Update install overrides once dependencies have been resolved. (Composer v2)
 	 *
-	 * @param InstallerEvent $event
+	 * @param InstallerEvent $event Pre-operations installer event.
 	 * @return void
 	 */
 	public function pre_operations_exec( InstallerEvent $event ) : void {
@@ -128,7 +133,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	/**
 	 * Update install overrides once dependencies have been resolved. (Composer v1)
 	 *
-	 * @param InstallerEvent $event
+	 * @param InstallerEvent $event Post-solving event.
 	 * @return void
 	 */
 	public function post_dependencies_solving( InstallerEvent $event ) : void {
