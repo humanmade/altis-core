@@ -127,7 +127,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			}
 		}
 
-		return $this->getAllInstallOverrides( $packages );
+		return $this->get_all_install_overrides( $packages );
 	}
 
 	/**
@@ -174,7 +174,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			}
 		}
 
-		$overrides = $this->getAllInstallOverrides( $packages );
+		$overrides = $this->get_all_install_overrides( $packages );
 		$this->installer->setInstallOverrides( $overrides );
 	}
 
@@ -182,8 +182,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * Handle first install of the altis/core package.
 	 *
 	 * @param PackageEvent Package installation event.
+	 * @return void
 	 */
-	public function post_package_install( PackageEvent $event ) {
+	public function post_package_install( PackageEvent $event ) : void {
 		// See if we just got installed.
 		$operation = $event->getOperation();
 		if ( ! $operation instanceof InstallOperation && ! $operation instanceof UpdateOperation ) {
@@ -227,7 +228,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * @param \Composer\Package\PackageInterface[] $packages
 	 * @return string[]
 	 */
-	protected function getAllInstallOverrides( $packages ) {
+	protected function get_all_install_overrides( $packages ) : array {
 		$overridden = [];
 		foreach ( $packages as $package ) {
 			$extra = $package->getExtra();
