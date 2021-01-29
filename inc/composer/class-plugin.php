@@ -70,7 +70,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * @param InstallerEvent $event
 	 * @return void
 	 */
-	public function pre_operations_exec( InstallerEvent $event )  {
+	public function pre_operations_exec( InstallerEvent $event ) : void {
 		$transaction = $event->getTransaction();
 		$operations = $transaction->getOperations();
 		if ( empty( $operations ) ) {
@@ -84,6 +84,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			$packages[ $package->getName() ] = $package;
 		}
 
+		// Then, resolve the operations we're about to apply.
+		// In Composer v2, this is when running the initial install step.
 		$overrides = $this->resolve_packages_composer_v2( $packages, $operations );
 		$this->installer->setInstallOverrides( $overrides );
 	}
@@ -95,9 +97,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * @param \Composer\DependencyResolver\Operation\OperationInterface[] $operations List of operations
 	 * @return string[] List of packages to override.
 	 */
-	protected function resolve_packages_composer_v2( array $packages, array $operations ) {
-		// Then, resolve the operations we're about to apply.
-		// (In Composer v2, this is when running the initial install step.)
+	protected function resolve_packages_composer_v2( array $packages, array $operations ) : array {
 		foreach ( $operations as $operation ) {
 			switch ( $operation::TYPE ) {
 				case 'install':
@@ -131,7 +131,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * @param InstallerEvent $event
 	 * @return void
 	 */
-	public function post_dependencies_solving( InstallerEvent $event )  {
+	public function post_dependencies_solving( InstallerEvent $event ) : void {
 		$operations = $event->getOperations();
 		if ( empty( $operations ) ) {
 			return;
