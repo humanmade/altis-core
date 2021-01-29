@@ -39,7 +39,7 @@ class Installer extends BaseInstaller {
 	/**
 	 * Gets all overridden packages from all extra.altis.install-overrides entries
 	 *
-	 * @param string[] $overrides
+	 * @param string[] $overrides Overridden package names.
 	 */
 	public function setInstallOverrides( $overrides ) : void {
 		$this->installOverrides = $overrides;
