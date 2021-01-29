@@ -14,8 +14,6 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\InstallerEvent;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
-use Composer\DependencyResolver\Operation\OperationInterface;
-use Composer\Package\PackageInterface;
 use Composer\Plugin\PluginInterface;
 
 /**
@@ -94,7 +92,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * Resolve packages after operations for Composer v2
 	 *
 	 * @param array $packages Map of package name => package instance for already installed packages.
-	 * @param OperationInterface[] $operations List of operations
+	 * @param \Composer\DependencyResolver\Operation\OperationInterface[] $operations List of operations
 	 * @return string[] List of packages to override.
 	 */
 	protected function resolve_packages_composer_v2( array $packages, array $operations ) {
@@ -221,7 +219,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	/**
 	 * Gets all overridden packages from all extra.altis.install-overrides entries
 	 *
-	 * @param PackageInterface[] $packages
+	 * @param \Composer\Package\PackageInterface[] $packages
 	 * @return string[]
 	 */
 	protected function getAllInstallOverrides( $packages ) {
