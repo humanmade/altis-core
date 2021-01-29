@@ -4,12 +4,13 @@
  *
  * @package altis/core
  */
-// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Snake case to match Composer.
 
 namespace Altis\Composer;
 
 use Composer\Installers\Installer as BaseInstaller;
 use Composer\Package\PackageInterface;
+
+// @codingStandardsIgnoreStart WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Snake case to match Composer.
 
 /**
  * Altis Core Composer Installer.
