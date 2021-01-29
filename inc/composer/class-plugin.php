@@ -181,7 +181,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	/**
 	 * Handle first install of the altis/core package.
 	 *
-	 * @param PackageEvent Package installation event.
+	 * @param PackageEvent $event Package installation event.
 	 * @return void
 	 */
 	public function post_package_install( PackageEvent $event ) : void {
@@ -201,7 +201,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 		// so we need to do so now. PackageEvent subclasses InstallerEvent
 		// in Composer v1, but not in v2.
 		if ( $event instanceof InstallerEvent ) {
-			// Composer v1
+			// Composer v1.
 			$this->post_dependencies_solving( $event );
 			return;
 		}
@@ -225,7 +225,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	/**
 	 * Gets all overridden packages from all extra.altis.install-overrides entries
 	 *
-	 * @param \Composer\Package\PackageInterface[] $packages
+	 * @param \Composer\Package\PackageInterface[] $packages All packages being installed.
 	 * @return string[]
 	 */
 	protected function get_all_install_overrides( $packages ) : array {
