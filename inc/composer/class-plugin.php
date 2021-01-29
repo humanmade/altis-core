@@ -9,6 +9,7 @@ namespace Altis\Composer;
 
 use Composer\Composer;
 use Composer\DependencyResolver\Operation\InstallOperation;
+use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\InstallerEvent;
 use Composer\Installer\PackageEvent;
@@ -48,6 +49,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 			'pre-operations-exec' => 'pre_operations_exec',
 			'post-dependencies-solving' => 'post_dependencies_solving',
 			'post-package-install' => 'post_package_install',
+			'post-package-update' => 'post_package_install',
 		];
 	}
 
@@ -181,7 +183,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	public function post_package_install( PackageEvent $event ) {
 		// See if we just got installed.
 		$operation = $event->getOperation();
-		if ( ! $operation instanceof InstallOperation || $operation->getPackage()->getName() !== 'altis/core' ) {
+		if ( ! $operation instanceof InstallOperation && ! $operation instanceof UpdateOperation ) {
+			return;
+		}
+
+		$package = $operation instanceof UpdateOperation ? $operation->getTargetPackage() : $operation->getPackage();
+		if ( $package->getName() !== 'altis/core' ) {
 			return;
 		}
 
