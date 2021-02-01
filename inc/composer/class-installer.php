@@ -10,10 +10,21 @@ namespace Altis\Composer;
 use Composer\Installers\Installer as BaseInstaller;
 use Composer\Package\PackageInterface;
 
+// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Snake case to match Composer.
+// phpcs:disable WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase -- Snake case to match Composer.
+
 /**
  * Altis Core Composer Installer.
  */
 class Installer extends BaseInstaller {
+	/**
+	 * Overridden packages.
+	 *
+	 * Set in setInstallOverrides by the plugin hooks.
+	 *
+	 * @var string[]
+	 */
+	protected $installOverrides = [];
 
 	/**
 	 * Check if the installer supports a given type.
@@ -23,6 +34,15 @@ class Installer extends BaseInstaller {
 	 */
 	public function supports( $type ) {
 		return in_array( $type, [ 'wordpress-plugin', 'wordpress-muplugin' ], true );
+	}
+
+	/**
+	 * Gets all overridden packages from all extra.altis.install-overrides entries
+	 *
+	 * @param string[] $overrides Overridden package names.
+	 */
+	public function setInstallOverrides( $overrides ) : void {
+		$this->installOverrides = $overrides;
 	}
 
 	/**
@@ -38,7 +58,7 @@ class Installer extends BaseInstaller {
 		 * installer. We use this to stop plugins that are bundled with modules are
 		 * not installed to the wp-content/plugins path.
 		 */
-		$excluded_plugins = [
+		$legacy = [
 			'10up/elasticpress',
 			'altis/aws-analytics',
 			'altis/browser-security',
@@ -74,6 +94,8 @@ class Installer extends BaseInstaller {
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
 		];
+
+		$excluded_plugins = array_unique( array_merge( $legacy, $this->installOverrides ) );
 
 		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
 			return parent::getInstallPath( $package, $framework_type );
