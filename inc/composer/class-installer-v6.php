@@ -16,7 +16,7 @@ use Composer\Package\PackageInterface;
 /**
  * Altis Core Composer Installer.
  */
-class Installer extends BaseInstaller {
+class Installer_V6 extends BaseInstaller {
 	/**
 	 * Overridden packages.
 	 *
