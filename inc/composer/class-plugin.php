@@ -37,7 +37,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 		$this->composer = $composer;
 		$this->io = $io;
 
-		$this->installer = new Installer( $this->io, $this->composer );
+		$this->installer = new Installer_V6( $this->io, $this->composer );
 		$this->composer->getInstallationManager()->addInstaller( $this->installer );
 	}
 
@@ -65,7 +65,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 * in addition to the $this->activate() method.
 	 */
 	public function init() {
-		$this->installer = new Installer( $this->io, $this->composer );
+		$this->installer = new Installer_V6( $this->io, $this->composer );
 		$this->composer->getInstallationManager()->addInstaller( $this->installer );
 	}
 
