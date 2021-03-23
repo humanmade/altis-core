@@ -51,7 +51,7 @@ The credentials can be supplied by providing the `modules.core.aws` setting in t
 							"aws":{
 								"region": "us-east-1",
 								"key": "xxxxxxxxxxxxxxxxxxxx",
-								"secret: "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+								"secret": "xxxxxxxxxxxxxxxxxxxxxxxxxx"
 							}
 						}
 					}
