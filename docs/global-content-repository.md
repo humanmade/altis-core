@@ -12,13 +12,31 @@ You might have a user who is an author on the main site, but only a subscriber t
 
 Conversely you may have a user who does not have access to your primary site but who can create and edit content on the Global Content Repository.
 
+## Functions
+
+**`Altis\Global_Content\get_site_id() : ?int`**
+
+Returns the Global Content Repository site ID or null if it doesn't exist yet.
+
+**`Altis\GlobaL_Content\get_site_url() : ?string`**
+
+Returns the Global Content Repository site URL or null if it doesn't exist yet.
+
+**`Altis\Global_Content\is_global_site( ?int $site_id = null ) : bool`**
+
+Returns `true` if the current site is the Global Content Repository or if the site with the passed `$site_id` is.
+
+**`Altis\Global_Content\get_allowed_admin_pages() : array`**
+
+Returns the list of page slugs allowe din the Global Content Repository site admin menu.
+
 ## Filters
 
-**`altis.core.global_content_site_args: array $args`**
+**`altis.core.global_content_site_args : array $args`**
 
 Filters the arguments used to create the Global Content Repository site. The arguments are passed to `wp_insert_site()`.
 
-**`altis.core.global_content_site_menu_pages: array $pages`**
+**`altis.core.global_content_site_menu_pages : array $pages`**
 
 Filters the allowed top level admin menu pages. Defaults to `[ 'users.php' ]`. To add support for pages you could use the following code:
 
