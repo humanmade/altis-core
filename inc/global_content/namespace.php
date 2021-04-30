@@ -174,6 +174,9 @@ function get_allowed_admin_pages() : array {
 
 	// Always allow users.php.
 	$allowed_menu_pages[] = 'users.php';
+	$allowed_menu_pages[] = 'profile.php';
+	$allowed_menu_pages[] = 'user-new.php';
+	$allowed_menu_pages[] = 'user-edit.php';
 
 	return $allowed_menu_pages;
 }
@@ -275,7 +278,11 @@ function redirect_admin_pages() : void {
 		return;
 	}
 
-	if ( in_array( $pagenow, get_allowed_admin_pages(), true ) ) {
+	if ( $pagenow !== 'index.php' ) {
+		return;
+	}
+
+	if ( in_array( 'index.php', get_allowed_admin_pages(), true ) ) {
 		return;
 	}
 
