@@ -25,7 +25,7 @@ class Command extends WP_CLI_Command {
 	 * @param array $assoc_args Command associative arguments.
 	 */
 	public function migrate( array $args, array $assoc_args ) {
-		WP_CLI::success( 'Running Altis migration scripts...' );
+		WP_CLI::log( 'Running Altis migration scripts...' );
 
 		/**
 		 * Triggered by the `wp altis migrate` command. Attach any custom

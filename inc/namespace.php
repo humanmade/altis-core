@@ -8,6 +8,7 @@
 namespace Altis;
 
 use Aws\Sdk;
+use WP_CLI;
 
 /**
  * Bootstrap any core functions as necessary.

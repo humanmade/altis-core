@@ -136,7 +136,8 @@ function maybe_create_site() {
 	}
 
 	// Store the site URL and ID.
-	$site_url = get_site_url( $site_id );
+	$site = get_site( $site_id );
+	$site_url = set_url_scheme( sprintf( 'https://%s%s', $site->domain, $site->path ) );
 	update_site_option( 'global_content_site_url', rtrim( $site_url, '/' ) );
 	update_site_option( 'global_content_site_id', $site_id );
 
