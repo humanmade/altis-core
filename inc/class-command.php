@@ -27,6 +27,9 @@ class Command extends WP_CLI_Command {
 	public function migrate( array $args, array $assoc_args ) {
 		WP_CLI::log( 'Running Altis migration scripts...' );
 
+		// Ensure the database is up to date.
+		WP_CLI::runcommand( 'core update-db --network' );
+
 		/**
 		 * Triggered by the `wp altis migrate` command. Attach any custom
 		 * behaviour you need to run post deployment or upgrade.
