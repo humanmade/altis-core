@@ -319,7 +319,7 @@ function redirect_frontend() : void {
 }
 
 /**
- * Update netowrk option on site URL changes.
+ * Update network option on site URL changes.
  *
  * @param string $old_value The old option value.
  * @param string $value The new option value.
