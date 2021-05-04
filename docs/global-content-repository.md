@@ -8,9 +8,9 @@ By default the Global Content Repository only exposes the user management admin.
 
 Users on the multisite network can have different roles on different sites. This gives you control over who can add and edit global content versus who can only use the global content on their own site.
 
-You might have a user who is an author on the main site, but only a subscriber to the Global Content Repository meaning they could read content to use in their posts but not create or edit global content.
+You might have a user who is an author on the main site, but have no role on the Global Content Repository meaning they could read content to use in their posts but not create or edit global content nor access the global site admin.
 
-Conversely you may have a user who does not have access to your primary site but who can create and edit content on the Global Content Repository.
+Conversely you may have a user who does not have a role on your primary site but who can create and edit content on the Global Content Repository site.
 
 ## Functions
 
@@ -35,6 +35,20 @@ Returns the list of page slugs allowe din the Global Content Repository site adm
 **`altis.core.global_content_site_args : array $args`**
 
 Filters the arguments used to create the Global Content Repository site. The arguments are passed to `wp_insert_site()`.
+
+The below example changes the title, path and domain of the site created. These could also be edited via the network admin as well:
+
+```php
+use Altis\Cloud;
+
+add_filter( 'altis.core.global_content_site_menu_pages', function ( array $args ) : array {
+    // Use the subdomain global.example.org.
+    $args['domain'] = sprintf( 'global.%s', parse_url( Cloud\get_main_site_url(), PHP_URL_HOST ) );
+    $args['path'] = '/';
+    $args['title'] = __( 'Shared Content' );
+    return $args;
+} );
+```
 
 **`altis.core.global_content_site_menu_pages : array $pages`**
 

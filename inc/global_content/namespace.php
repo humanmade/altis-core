@@ -118,21 +118,17 @@ function maybe_create_site() {
 		'domain' => wp_parse_url( home_url(), PHP_URL_HOST ),
 		'path' => '/repo/',
 		'title' => __( 'Global Content Repository', 'altis' ),
-		'user_id' => get_user_by( 'login', get_super_admins()[0] )->ID,
-		'meta' => [
-			'is_global_site' => true,
-		],
 	] );
 
 	// Ensure user and global site meta is set.
-	if ( ! isset( $global_site_args['user_id'] ) ) {
-		$global_site_args['user_id'] = get_user_by( 'login', get_super_admins()[0] )->ID;
-	}
-	if ( ! isset( $global_site_args['meta'] ) ) {
-		$global_site_args['meta'] = [];
-	}
+	$global_site_args = wp_parse_args( $global_site_args, [
+		'user_id' => get_user_by( 'login', get_super_admins()[0] )->ID,
+		'meta' => [],
+	] );
+
 	$global_site_args['meta']['is_global_site'] = true;
 
+	// Create the site.
 	$site_id = wp_insert_site( $global_site_args );
 
 	if ( is_wp_error( $site_id ) ) {
