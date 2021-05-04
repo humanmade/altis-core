@@ -18,7 +18,8 @@
 	"autoload": {
 		"files": [
 			"inc/namespace.php",
-			"inc/about/namespace.php"
+			"inc/about/namespace.php",
+			"inc/global_content/namespace.php"
 		],
 		"classmap": [
 			"inc/"

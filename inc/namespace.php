@@ -8,12 +8,23 @@
 namespace Altis;
 
 use Aws\Sdk;
+use WP_CLI;
 
 /**
  * Bootstrap any core functions as necessary.
  */
 function bootstrap() {
 	About\bootstrap();
+	Global_Content\bootstrap();
+
+	// Register the Altis command.
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		WP_CLI::add_command( 'altis', __NAMESPACE__ . '\\Command' );
+		// Bind the migrate command to run after initial install.
+		WP_CLI::add_hook( 'after_invoke:core multisite-install', function () {
+			WP_CLI::runcommand( 'altis migrate' );
+		} );
+	}
 }
 
 /**
