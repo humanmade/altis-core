@@ -14,6 +14,39 @@ use Aws\Sdk;
  */
 function bootstrap() {
 	About\bootstrap();
+	Upgrades\bootstrap();
+}
+
+/**
+ * Get the major version of Altis in use.
+ *
+ * @return int|null Major version if available, or null if invalid or development version.
+ */
+function get_version() : ?int {
+	$data = get_composer_data();
+	$core = $data['altis/core'] ?? null;
+	if ( ! $core ) {
+		// Uh… I guess there's no Altis here then!
+		return null;
+	}
+
+	// Cast to array for Composer v2 compat.
+	$core = (array) $core;
+
+	// Is this a dev version?
+	if ( substr( $core['version'], 0, 4 ) === 'dev-' ) {
+		return null;
+	}
+
+	$version = $core['version_normalized'];
+	$parts = explode( '.', $version, 2 );
+	if ( count( $parts ) < 2 ) {
+		// Invalid version, probably another development version.
+		return null;
+	}
+
+	$major = intval( $parts[0] );
+	return $major;
 }
 
 /**
