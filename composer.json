@@ -19,7 +19,8 @@
 		"files": [
 			"inc/namespace.php",
 			"inc/about/namespace.php",
-			"inc/global_content/namespace.php"
+			"inc/global_content/namespace.php",
+			"inc/upgrades/namespace.php"
 		],
 		"classmap": [
 			"inc/"
