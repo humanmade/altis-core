@@ -79,7 +79,6 @@ class Override_Installer extends BaseInstaller {
 			'humanmade/meta-tags',
 			'humanmade/php-basic-auth',
 			'humanmade/publication-checklist',
-			'humanmade/post-cloner',
 			'humanmade/require-login',
 			'humanmade/s3-uploads',
 			'humanmade/smart-media',
@@ -93,6 +92,7 @@ class Override_Installer extends BaseInstaller {
 			'johnbillion/query-monitor',
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
+			'yoast/duplicate-post',
 		];
 
 		$excluded_plugins = array_unique( array_merge( $legacy, $this->installOverrides ) );
