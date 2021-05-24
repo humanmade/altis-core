@@ -92,7 +92,6 @@ class Override_Installer extends BaseInstaller {
 			'johnbillion/query-monitor',
 			'stuttter/ludicrousdb',
 			'stuttter/wp-user-signups',
-			'yoast/duplicate-post',
 		];
 
 		$excluded_plugins = array_unique( array_merge( $legacy, $this->installOverrides ) );
