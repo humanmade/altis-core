@@ -88,6 +88,10 @@ function get_site_url() : ?string {
  * @return boolean
  */
 function is_global_site( ?int $site_id = null ) : bool {
+	if ( defined( 'WP_INITIAL_INSTALL' ) && WP_INITIAL_INSTALL ) {
+		return;
+	}
+
 	return ! empty( get_site_meta( $site_id ?? get_current_blog_id(), 'is_global_site' ) );
 }
 
