@@ -28,7 +28,7 @@ Returns `true` if the current site is the Global Content Repository or if the si
 
 **`Altis\Global_Content\get_allowed_admin_pages() : array`**
 
-Returns the list of page slugs allowe din the Global Content Repository site admin menu.
+Returns the list of page slugs allowed in the Global Content Repository site admin menu.
 
 ## Filters
 
