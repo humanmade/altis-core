@@ -10,6 +10,7 @@ namespace Altis\Global_Content;
 use Exception;
 use WP_Admin_Bar;
 use WP_CLI;
+use WP_Http_Cookie;
 use WP_Site;
 
 /**
@@ -61,6 +62,9 @@ function bootstrap_site() : void {
 	// Handle network admin sites list.
 	add_filter( 'manage_sites_action_links', __NAMESPACE__ . '\\sites_list_row_actions', 10, 2 );
 	add_filter( 'display_site_states', __NAMESPACE__ . '\\add_global_site_state', 10, 2 );
+
+	// Handles passing current user cookies to global content requests to allow authenticated requests.
+	add_filter( 'http_request_args', __NAMESPACE__ . '\\filter_global_content_requests_for_auth', 10, 2 );
 }
 
 /**
@@ -365,4 +369,31 @@ function prevent_site_deletion( array $caps, string $cap, int $user_id, array $a
 	}
 
 	return [ 'do_not_allow' ];
+}
+
+/**
+ * Filter all requests to the global content repo to pass-through current user cookies
+ *
+ * @param array $parsed_args Parsed request arguments.
+ * @param string $url Request URL.
+ *
+ * @filters http_request_args
+ *
+ * @return array Parsed request arguments including current session cookies.
+ */
+function filter_global_content_requests_for_auth( array $parsed_args, string $url ) : array {
+	$global_site_url = get_site_url();
+
+	if ( strpos( $url, $global_site_url ) !== 0 ) {
+		return $parsed_args;
+	}
+
+	$parsed_args['cookies'] = array_map( function( $value, $name ) {
+		return new WP_Http_Cookie( [
+			'name' => $name,
+			'value' => $value,
+		] );
+	}, $_COOKIE, array_keys( $_COOKIE ) );
+
+	return $parsed_args;
 }
