@@ -388,7 +388,7 @@ function filter_global_content_requests_for_auth( array $parsed_args, string $ur
 		return $parsed_args;
 	}
 
-	$parsed_args['cookies'] = array_map( function( $value, $name ) {
+	$parsed_args['cookies'] = array_map( function ( $value, $name ) {
 		return new WP_Http_Cookie( [
 			'name' => $name,
 			'value' => $value,
