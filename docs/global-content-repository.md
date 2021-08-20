@@ -4,7 +4,7 @@ Altis includes a Global Content Repository framework. This is a site on the netw
 
 By default the Global Content Repository only exposes the user management admin. Other Altis modules may extend this, for example [the Altis Media module has a Global Media Library feature](docs://media/global-media-library.md) built on top of the Global Content Repository that allows for uploading media files and accessing them from all sites on the network.
 
-Global Content Repository site is set to be a private site by default, this can be modified by switching the site to a public one from the Network Admin > Sites management page, clicking `Edit` on the site, and checking the `Public` checkbox.
+The Global Content Repository site is set to be a private site by default. This can be modified by switching the site to a public one from the Network Admin > Sites management page, clicking `Edit` on the site, and checking the `Public` checkbox.
 
 ## User Management
 
