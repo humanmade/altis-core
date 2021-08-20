@@ -125,6 +125,7 @@ function maybe_create_site() {
 	$global_site_args = apply_filters( 'altis.core.global_content_site_args', [
 		'domain' => wp_parse_url( home_url(), PHP_URL_HOST ),
 		'path' => '/repo/',
+		'public' => 0,
 		'title' => __( 'Global Content Repository', 'altis' ),
 	] );
 
