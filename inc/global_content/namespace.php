@@ -92,7 +92,7 @@ function get_site_url() : ?string {
  * @return boolean
  */
 function is_global_site( ?int $site_id = null ) : bool {
-	if ( defined( 'WP_INITIAL_INSTALL' ) && WP_INITIAL_INSTALL ) {
+	if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
 		return false;
 	}
 
