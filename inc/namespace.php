@@ -513,7 +513,7 @@ function register_class_path( string $prefix, string $path ) {
  * @return void Outputs directly.
  */
 function powered_by( $format = null ) {
-	/** translators: %s: brand name */
+	/* translators: %s: brand name */
 	$format = $format ?? __( 'Powered by %s', 'altis' );
 	$args = [
 		'utm_campaign' => 'powered-by',
@@ -521,11 +521,13 @@ function powered_by( $format = null ) {
 		'utm_medium' => 'web',
 	];
 	$url = add_query_arg( urlencode_deep( $args ), 'https://www.altis-dxp.com/' );
+
+	// phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
 	printf(
 		$format,
 		sprintf(
 			'<a href="%s" rel="generator">%s</a>',
-			$url,
+			esc_url( $url ),
 			esc_html__( 'Altis DXP', 'altis' )
 		)
 	);
