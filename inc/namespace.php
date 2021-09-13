@@ -503,3 +503,30 @@ function register_class_path( string $prefix, string $path ) {
 	$loader = new Autoloader( $prefix, $path );
 	spl_autoload_register( [ $loader, 'load' ] );
 }
+
+/**
+ * Output "powered by" statement.
+ *
+ * Not required, but we appreciate it. :)
+ *
+ * @param string $format Format to output as, with a %s placeholder for the brand name.
+ * @return void Outputs directly.
+ */
+function powered_by( $format = null ) {
+	/** translators: %s: brand name */
+	$format = $format ?? __( 'Powered by %s', 'altis' );
+	$args = [
+		'utm_campaign' => 'powered-by',
+		'utm_source' => $_SERVER['HTTP_HOST'] ?? '',
+		'utm_medium' => 'web',
+	];
+	$url = add_query_arg( urlencode_deep( $args ), 'https://www.altis-dxp.com/' );
+	printf(
+		$format,
+		sprintf(
+			'<a href="%s" rel="generator">%s</a>',
+			$url,
+			esc_html__( 'Altis DXP', 'altis' )
+		)
+	);
+}
