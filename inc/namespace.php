@@ -524,8 +524,8 @@ function powered_by( $format = null ) {
 
 	// phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
 	printf(
-		$format,
 		// phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
+		$format,
 		sprintf(
 			'<a href="%s" rel="generator">%s</a>',
 			esc_url( $url ),
