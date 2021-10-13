@@ -1,0 +1,4 @@
+- match:
+    dependency_name: aws/aws-sdk-php
+    dependency_type: all
+    update_type: semver:minor
