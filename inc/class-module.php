@@ -149,6 +149,15 @@ class Module {
 	}
 
 	/**
+	 * Get the module options.
+	 *
+	 * @return array
+	 */
+	public function get_options() : array {
+		return $this->options;
+	}
+
+	/**
 	 * Get the module settings.
 	 *
 	 * @return array
