@@ -8,8 +8,6 @@
 
 namespace Altis;
 
-use Exception;
-
 /**
  * Altis Module object.
  *
