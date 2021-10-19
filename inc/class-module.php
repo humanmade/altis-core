@@ -45,9 +45,9 @@ class Module {
 	/**
 	 * Module options.
 	 *
-	 * Must include default settings at a minimum indicate the enabled status of the
-	 * module but can contain any arbitrary values to use as feature flags
-	 * or to modify the modules behaviour.
+	 * Must include default settings at a minimum to indicate the enabled status
+	 * of the module but can contain any arbitrary values to use as feature flags
+	 * or to modify the module's behaviour.
 	 *
 	 * @var array
 	 */
@@ -59,7 +59,7 @@ class Module {
 	 * @param string $slug A string ID for the module.
 	 * @param string $directory The directory the module is located in.
 	 * @param string $title A human readable title for the module.
-	 * @param array|null $options Optional settings for the module.
+	 * @param array|null $options Module options array.
 	 */
 	protected function __construct( string $slug, string $directory, string $title, ?array $options = null ) {
 		$this->slug = $slug;
@@ -84,7 +84,7 @@ class Module {
 	 * @param string $slug The string identifier for the module used for later reference.
 	 * @param string $directory The root directory of the module.
 	 * @param string $title Human readable module title.
-	 * @param array|null $options Optional settings array.
+	 * @param array|null $options Module options array.
 	 * @param callable|null $loader Optional loader function to call module bootstrapping code.
 	 * @return Module
 	 */
