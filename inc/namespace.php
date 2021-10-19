@@ -415,12 +415,12 @@ function set_wp_environment_type() : void {
  * @param string $slug The string identifier for the module used for later reference.
  * @param string $directory The root directory of the module.
  * @param string $title Human readable module title.
- * @param ?array $default_settings Optional default settings array.
+ * @param ?array $options Optional settings array.
  * @param ?callable $loader Optional loader function to call module bootstrapping code.
  * @return Module
  */
-function register_module( string $slug, string $directory, string $title, ?array $default_settings = null, ?callable $loader = null ) : Module {
-	return Module::register( $slug, $directory, $title, $default_settings, $loader );
+function register_module( string $slug, string $directory, string $title, ?array $options = null, ?callable $loader = null ) : Module {
+	return Module::register( $slug, $directory, $title, $options, $loader );
 }
 
 /**

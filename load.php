@@ -31,7 +31,9 @@ add_action( 'altis.modules.init', function () {
 		__DIR__,
 		'Core',
 		[
-			'enabled' => true,
+			'defaults' => [
+				'enabled' => true,
+			],
 		],
 		__NAMESPACE__ . '\\bootstrap'
 	);

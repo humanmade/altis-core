@@ -43,13 +43,15 @@ class Module {
 	protected $title;
 
 	/**
-	 * Module default settings at a minimum indicate the enabled status of the
-	 * module but can contain any arbitrary values to use as feature flags
-	 * or to modify the modules behaviour.
+	 * Module options.
+	 *
+	 * Must include default settings at a minimum to indicate the enabled status
+	 * of the module but can contain any arbitrary values to use as feature flags
+	 * or to modify the module's behaviour.
 	 *
 	 * @var array
 	 */
-	protected $default_settings;
+	protected $options;
 
 	/**
 	 * Module constructor. Registers settings, defaults and module location.
@@ -57,15 +59,23 @@ class Module {
 	 * @param string $slug A string ID for the module.
 	 * @param string $directory The directory the module is located in.
 	 * @param string $title A human readable title for the module.
-	 * @param array|null $default_settings Optional default settings for the module.
+	 * @param array|null $options Module options array.
 	 */
-	protected function __construct( string $slug, string $directory, string $title, ?array $default_settings = null ) {
+	protected function __construct( string $slug, string $directory, string $title, ?array $options = null ) {
 		$this->slug = $slug;
 		$this->directory = $directory;
 		$this->title = $title;
-		$this->default_settings = array_merge( [
+		$this->options = array_merge( [
+			'defaults' => [],
+		], $options ?? [] );
+		// Ensure 'enabled' setting is present.
+		if ( ! is_array( $this->options['defaults'] ) ) {
+			trigger_error( sprintf( 'The %s Module options "defaults" property must be an array.', $title ), E_USER_WARNING );
+			$this->options['defaults'] = [];
+		}
+		$this->options['defaults'] = array_merge( [
 			'enabled' => false,
-		], $default_settings ?? [] );
+		], $this->options['defaults'] );
 	}
 
 	/**
@@ -74,12 +84,12 @@ class Module {
 	 * @param string $slug The string identifier for the module used for later reference.
 	 * @param string $directory The root directory of the module.
 	 * @param string $title Human readable module title.
-	 * @param array|null $default_settings Optional default settings array.
+	 * @param array|null $options Module options array.
 	 * @param callable|null $loader Optional loader function to call module bootstrapping code.
 	 * @return Module
 	 */
-	public static function register( string $slug, string $directory, string $title, ?array $default_settings = null, ?callable $loader = null ) : Module {
-		$module = new Module( $slug, $directory, $title, $default_settings );
+	public static function register( string $slug, string $directory, string $title, ?array $options = null, ?callable $loader = null ) : Module {
+		$module = new Module( $slug, $directory, $title, $options );
 
 		// Store the module.
 		self::$modules[ $slug ] = $module;
@@ -137,12 +147,21 @@ class Module {
 	}
 
 	/**
+	 * Get the module options.
+	 *
+	 * @return array
+	 */
+	public function get_options() : array {
+		return $this->options;
+	}
+
+	/**
 	 * Get the module settings.
 	 *
 	 * @return array
 	 */
 	public function get_default_settings() : array {
-		return $this->default_settings;
+		return $this->options['defaults'] ?? [];
 	}
 
 	/**
