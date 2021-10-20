@@ -13,4 +13,4 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: roborourke/action-dependabot-auto-merge@v2.4.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.ACTION_DEPENDABOT_TOKEN }}
