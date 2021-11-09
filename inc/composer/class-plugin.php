@@ -67,6 +67,23 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	public function init() {
 		$this->installer = new Override_Installer( $this->io, $this->composer );
 		$this->composer->getInstallationManager()->addInstaller( $this->installer );
+
+		// If we have a lockfile set the overrides early to handle
+		// dump-autoload commands correctly.
+		$lock_file = dirname( $this->composer->getConfig()->get( 'vendor-dir' ) ) . DIRECTORY_SEPARATOR . 'composer.lock';
+		if ( ! is_readable( $lock_file ) ) {
+			return;
+		}
+
+		$repo = $this->composer->getLocker()->getLockedRepository( true );
+		$packages = [];
+		foreach ( $repo->getPackages() as $package ) {
+			$packages[ $package->getName() ] = $package;
+		}
+
+		// Set the overrides based on currently known packages.
+		$overrides = $this->get_all_install_overrides( $packages );
+		$this->installer->setInstallOverrides( $overrides );
 	}
 
 	/**
