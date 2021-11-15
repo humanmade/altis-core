@@ -48,7 +48,7 @@ class AdminCest {
 		];
 
 		foreach ( $packages as $package ) {
-			if ( false === strpos( $package->name, 'altis/' ) || ! in_array( $package->name, array_keys( $modules ) ) ) {
+			if ( false === strpos( $package->name, 'altis/' ) || ! in_array( $package->name, array_keys( $modules ), true ) ) {
 				continue;
 			}
 			$modules[ $package->name ]['version'] = $package->version;
