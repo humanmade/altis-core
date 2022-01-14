@@ -16,6 +16,7 @@ use WP_CLI;
 function bootstrap() {
 	About\bootstrap();
 	Upgrades\bootstrap();
+	Telemetry\bootstrap();
 
 	Global_Content\bootstrap();
 
