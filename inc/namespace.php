@@ -357,6 +357,42 @@ function get_environment_region() : ?string {
 }
 
 /**
+ * Get the Feature Tier for this environment.
+ *
+ * @return string|null
+ */
+function get_feature_tier() : ?string {
+	if ( defined( 'ALTIS_FEATURE_TIER' ) ) {
+		return ALTIS_FEATURE_TIER;
+	}
+	return null;
+}
+
+/**
+ * Get the Environment Tier for this environment.
+ *
+ * @return string|null
+ */
+function get_environment_tier() : ?string {
+	if ( defined( 'ALTIS_ENVIRONMENT_TIER' ) ) {
+		return ALTIS_ENVIRONMENT_TIER;
+	}
+	return null;
+}
+
+/**
+ * Get the Support Tier for this environment.
+ *
+ * @return string|null
+ */
+function get_support_tier() : ?string {
+	if ( defined( 'ALTIS_SUPPORT_TIER' ) ) {
+		return ALTIS_SUPPORT_TIER;
+	}
+	return null;
+}
+
+/**
  * Get the current revision of the codebase deployed to the current environment.
  *
  * @return ?string
