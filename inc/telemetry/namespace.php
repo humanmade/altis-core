@@ -284,7 +284,7 @@ function enqueue_scripts() {
 
 	wp_enqueue_style(
 		'altis-telemetry',
-		plugins_url( 'assets/opt-in.css', dirname( __FILE__, 2 ) ),
+		plugins_url( 'assets/opt-in.css', dirname( __FILE__, 2 ) )
 	);
 }
 
