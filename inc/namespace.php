@@ -359,37 +359,37 @@ function get_environment_region() : ?string {
 /**
  * Get the Feature Tier for this environment.
  *
- * @return string|null
+ * @return string
  */
-function get_feature_tier() : ?string {
+function get_feature_tier() : string {
 	if ( defined( 'ALTIS_FEATURE_TIER' ) ) {
 		return ALTIS_FEATURE_TIER;
 	}
-	return null;
+	return 'legacy';
 }
 
 /**
  * Get the Environment Tier for this environment.
  *
- * @return string|null
+ * @return string
  */
-function get_environment_tier() : ?string {
+function get_environment_tier() : string {
 	if ( defined( 'ALTIS_ENVIRONMENT_TIER' ) ) {
 		return ALTIS_ENVIRONMENT_TIER;
 	}
-	return null;
+	return 'legacy';
 }
 
 /**
  * Get the Support Tier for this environment.
  *
- * @return string|null
+ * @return string
  */
-function get_support_tier() : ?string {
+function get_support_tier() : string {
 	if ( defined( 'ALTIS_SUPPORT_TIER' ) ) {
 		return ALTIS_SUPPORT_TIER;
 	}
-	return null;
+	return 'legacy';
 }
 
 /**
