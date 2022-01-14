@@ -10,12 +10,15 @@ namespace Altis;
 use Aws\Sdk;
 use WP_CLI;
 
+const API_NAMESPACE = 'altis/v1';
+
 /**
  * Bootstrap any core functions as necessary.
  */
 function bootstrap() {
 	About\bootstrap();
 	Upgrades\bootstrap();
+	Telemetry\bootstrap();
 
 	Global_Content\bootstrap();
 
