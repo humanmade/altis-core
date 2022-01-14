@@ -13,7 +13,6 @@ use WP_REST_Request;
 use WP_REST_Server;
 use WP_User;
 
-const API_NAMESPACE = 'altis/v1';
 const ACTION_OPT_IN = 'altis_tracking_opt_in';
 const META_OPT_IN = 'altis_tracking_opt_in';
 const SEGMENT_ID = 'GHqd7Vfs060yZBWOEGV4ajz3S3QHYKhk';
@@ -256,7 +255,7 @@ function render_identity_tag() {
  * @return void
  */
 function register_api_routes() {
-	register_rest_route( API_NAMESPACE, '/telemetry', [
+	register_rest_route( Altis\API_NAMESPACE, '/telemetry', [
 		'methods' => WP_REST_Server::EDITABLE,
 		'permission_callback' => function () {
 			return is_user_logged_in();
