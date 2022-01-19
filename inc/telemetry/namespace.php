@@ -43,15 +43,18 @@ function bootstrap() {
 
 /**
  * Initialize segment.io.
+ *
+ * @return bool True if Segment has initialised successfully.
  */
-function initialize() {
+function initialize() : bool {
 	static $initialized;
-	if ( $initialized ) {
-		return;
+	if ( is_bool( $initialized ) ) {
+		return $initialized;
 	}
 
 	if ( ! is_user_logged_in() ) {
-		return;
+		$initialized = false;
+		return $initialized;
 	}
 
 	// Connect.
@@ -81,6 +84,7 @@ function initialize() {
 	}
 
 	$initialized = true;
+	return $initialized;
 }
 
 /**
@@ -90,7 +94,9 @@ function initialize() {
  * @return void
  */
 function track( array $message ) {
-	initialize();
+	if ( ! initialize() ) {
+		return;
+	}
 
 	// Add user ID if missing.
 	if ( ! isset( $message['userId'] ) ) {
