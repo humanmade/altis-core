@@ -106,13 +106,13 @@ function is_global_site( ?int $site_id = null ) : bool {
  */
 function maybe_create_site() {
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		WP_CLI::log( 'Creating Global Content Repository site...' );
+		WP_CLI::line( 'Creating Global Content Repository site...' );
 	}
 
 	// Check if site exists.
 	if ( ! empty( get_site_id() ) ) {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			WP_CLI::log( 'Global Content Repository site exists, skipping.' );
+			WP_CLI::line( 'Global Content Repository site exists, skipping.' );
 		}
 		return;
 	}
@@ -156,7 +156,7 @@ function maybe_create_site() {
 	update_site_option( 'global_content_site_id', $site_id );
 
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		WP_CLI::success( 'Global Content Repository site created!' );
+		WP_CLI::line( WP_CLI::colorize( '%GGlobal Content Repository site created!%n' ) );
 	}
 }
 
