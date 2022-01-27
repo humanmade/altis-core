@@ -396,5 +396,11 @@ function filter_global_content_requests_for_auth( array $parsed_args, string $ur
 		] );
 	}, $_COOKIE, array_keys( $_COOKIE ) );
 
+	// Check for Auth header and forward it, for Basic Auth feature support.
+	if ( ! isset( $parsed_args['headers']['Authorization'] ) && ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$parsed_args['headers']['Authorization'] = wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] );
+	}
+
 	return $parsed_args;
 }
