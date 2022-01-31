@@ -13,7 +13,7 @@
 		"php": ">=7.1",
 		"aws/aws-sdk-php": "^3.209.15",
 		"composer-plugin-api": "^1.1 || ^2.0",
-		"composer/installers": "^1.12",
+		"composer/installers": "^1.12 || ^2.0",
 		"segmentio/analytics-php": "~2.0.0"
 	},
 	"autoload": {
