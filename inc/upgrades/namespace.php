@@ -232,12 +232,19 @@ function render_widget() {
 				>
 					<?php
 						// phpcs:ignore
-						echo clean_html( sprintf(
-							'%1$s <span class="screen-reader-text">%2$s</span>',
-							__( 'Learn more about Altis upgrades' ),
-							/* translators: Accessibility text. */
-							__( '(opens in a new tab)' )
-						), 'span' );
+						echo clean_html(
+							sprintf(
+								'%1$s <span class="screen-reader-text">%2$s</span>',
+								__( 'Learn more about Altis upgrades' ),
+								/* translators: Accessibility text. */
+								__( '(opens in a new tab)' )
+							),
+							[
+								'span' => [
+									'class' => true,
+								],
+							]
+						);
 					?>
 					<span aria-hidden="true" class="dashicons dashicons-external"></span>
 				</a>
