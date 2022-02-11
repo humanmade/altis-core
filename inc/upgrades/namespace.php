@@ -16,6 +16,9 @@ function bootstrap() {
 	add_action( 'load-index.php', __NAMESPACE__ . '\\maybe_render_header', 0 );
 }
 
+/**
+ * Conditionally render the upgrade notice.
+ */
 function maybe_render_header() {
 	if ( ! current_user_can( 'edit_options' ) ) {
 		return;
