@@ -13,14 +13,10 @@ use Altis;
  * Bootstrap the actions.
  */
 function bootstrap() {
-	add_action( 'wp_network_dashboard_setup', __NAMESPACE__ . '\\register_widget' );
-	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\register_widget' );
+	add_action( 'load-index.php', __NAMESPACE__ . '\\maybe_render_header', 0 );
 }
 
-/**
- * Register our dashboard widget.
- */
-function register_widget() {
+function maybe_render_header() {
 	if ( ! current_user_can( 'edit_options' ) ) {
 		return;
 	}
@@ -29,61 +25,66 @@ function register_widget() {
 		return;
 	}
 
-	add_action( 'admin_head-index.php', function () {
-		?>
-		<style>
-			#altis-upgrade-warning {
-				position: relative;
-				margin: 40px 0 10px;
-				padding: 8px 12px;
-				border: 2px solid #df3232;
-				border-radius: 1px;
-				box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-				background: #fff;
-				font-size: 13px;
-				line-height: 1.7;
-			}
-
-			#altis-upgrade-warning h1 {
-				background: #df3232;
-				color: #f0f0f0;
-				padding: 8px 12px;
-				margin: -8px -12px 0;
-				font-weight: bold;
-			}
-
-			#altis-upgrade-warning h1 .dashicons {
-				color: #df3232;
-				color: #f0f0f0;
-				font-size: 23px;
-				height: 23px;
-				width: 23px;
-				line-height: 1.3;
-			}
-
-			#altis-upgrade-warning p {
-				font-size: 14px;
-			}
-
-			#altis-upgrade-warning p:last-of-type {
-				margin-bottom: 4px;
-			}
-
-			#altis-upgrade-warning .button .dashicons-external {
-				line-height: 43px;
-			}
-		</style>
-		<?php
-	} );
-
-	add_action( 'all_admin_notices', function () {
+	add_action( 'admin_head-index.php', __NAMESPACE__ . '\\render_styles' );
+	add_action( 'in_admin_header', function () {
 		global $pagenow;
 		if ( $pagenow !== 'index.php' ) {
 			return;
 		}
 
 		render_widget();
-	} );
+	}, 0 );
+}
+
+/**
+ * Render stylesheet.
+ */
+function render_styles() {
+	?>
+	<style>
+		#altis-upgrade-warning {
+			position: relative;
+			margin: 0;
+			padding: 8px 12px;
+			border: 5px solid #df3232;
+			border-radius: 1px;
+			box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+			background: #fff;
+			font-size: 13px;
+			line-height: 1.7;
+		}
+
+		#altis-upgrade-warning h1 {
+			background: #df3232;
+			color: #fff;
+			padding: 8px 12px;
+			margin: -8px -12px 0;
+			font-weight: bold;
+		}
+
+		#altis-upgrade-warning h1 .dashicons {
+			color: #df3232;
+			color: #fff;
+			font-size: 23px;
+			height: 23px;
+			width: 23px;
+			line-height: 1.3;
+			vertical-align: baseline;
+		}
+
+		#altis-upgrade-warning p {
+			font-size: 14px;
+		}
+
+		#altis-upgrade-warning p:last-of-type {
+			margin-bottom: 4px;
+		}
+
+		#altis-upgrade-warning .button .dashicons-external {
+			line-height: 43px;
+		}
+	</style>
+	<?php
 }
 
 /**
@@ -193,7 +194,6 @@ function render_widget() {
 	$latest = $releases[0];
 
 	?>
-	<div class="wrap">
 		<div id="altis-upgrade-warning">
 			<h1>
 				<span aria-hidden="true" class="dashicons dashicons-warning"></span>
@@ -243,6 +243,5 @@ function render_widget() {
 				</a>
 			</p>
 		</div>
-	</div>
 	<?php
 }
