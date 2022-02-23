@@ -124,6 +124,11 @@ function get_current_version_info() : ?array {
  */
 function is_version_latest() : bool {
 	$version = Altis\get_version();
+
+	if ( ! isset( $version ) ) {
+		return true;
+	}
+
 	$releases = get_supported_version_info();
 	return $version === ( $releases[0]['version'] ?? $version );
 }
