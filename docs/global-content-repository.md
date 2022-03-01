@@ -6,7 +6,7 @@ By default the Global Content Repository only exposes the user management admin.
 
 The Global Content Repository site is set to be a private site by default. This can be modified by switching the site to a public one from the Network Admin > Sites management page, clicking `Edit` on the site, and checking the `Public` checkbox.
 
-**Note:**When using media from the Global Content Repository, the URL for the selected media will always be relative to that of your Global Content Repository site and not the site it's being displayed on.
+**Note:** When using media from the Global Content Repository, the URL for the selected media will always be relative to that of your Global Content Repository site and not the site it's being displayed on.
 
 ## User Management
 
