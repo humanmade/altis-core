@@ -137,7 +137,7 @@ function is_user_opted_in( ?WP_User $user = null ) : ?bool {
  */
 function get_segmentio_user_details() : array {
 	$current_user = wp_get_current_user();
-	$auto_id = substr( bin2hex( $current_user->user_registered ), 0, 8 );
+	$auto_id = substr( sha1( $current_user->ID . $current_user->user_registered ), 0, 8 );
 	$did_opt_in = is_user_opted_in( $current_user );
 
 	if ( ! $did_opt_in ) {
