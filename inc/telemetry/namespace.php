@@ -148,7 +148,7 @@ function get_segmentio_user_details() : array {
 	}
 
 	$email = $current_user->user_email;
-	$id = bin2hex( $current_user->user_email );
+	$id = sha1( $current_user->user_email );
 	if ( Altis\get_environment_type() === 'local' ) {
 		// Create distinct_id (important for Mixpanel).
 		$id = $auto_id;
