@@ -228,6 +228,7 @@ function get_environment_details() : array {
 		'traits' => [
 			'environment' => $type,
 			'domain' => get_site_url(),
+			'multisite' => is_multisite(),
 			'feature_tier' => Altis\get_feature_tier(),
 			'environment_tier' => Altis\get_environment_tier(),
 			'support_tier' => Altis\get_support_tier(),
