@@ -195,9 +195,16 @@ function get_local_install_id() : ?string {
 		return $id;
 	}
 
-	// Hash the registration date of the first site to get a unique ID.
-	$site = get_blog_details( get_main_site_id(), false );
-	$generated = 'local-' . substr( hash( 'sha1', $site->registered ), 0, 6 );
+	if ( is_multisite() ) {
+		// Hash the registration date of the first site to get a unique ID.
+		$site = get_blog_details( get_main_site_id(), false );
+		$generated = 'local-' . substr( hash( 'sha1', $site->registered ), 0, 6 );
+	} else {
+		// Get the oldest piece of content.
+		global $wpdb;
+		$first = $wpdb->get_col( "SELECT post_date FROM $wpdb->posts ORDER BY post_date ASC LIMIT 1" );
+		$generated = 'local-' . substr( hash( 'sha1', $first[0] ), 0, 6 );
+	}
 	update_network_option( null, 'altis_tracking_id', $generated );
 
 	return $generated;
@@ -221,6 +228,7 @@ function get_environment_details() : array {
 		'traits' => [
 			'environment' => $type,
 			'domain' => get_site_url(),
+			'multisite' => is_multisite(),
 			'feature_tier' => Altis\get_feature_tier(),
 			'environment_tier' => Altis\get_environment_tier(),
 			'support_tier' => Altis\get_support_tier(),
