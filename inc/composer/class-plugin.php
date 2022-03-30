@@ -121,7 +121,17 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 */
 	protected function resolve_packages_composer_v2( array $packages, array $operations ) : array {
 		foreach ( $operations as $operation ) {
-			switch ( $operation::TYPE ) {
+			$operation_type = null;
+			// Composer 2.0 - 2.2.
+			if ( defined( get_class( $operation ) . '::TYPE' ) ) {
+				$operation_type = $operation::TYPE;
+			}
+			// Composer 2.3+.
+			if ( method_exists( $operation, 'getJobType' ) ) {
+				$operation_type = $operation->getJobType();
+			}
+
+			switch ( $operation_type ) {
 				case 'install':
 				case 'markAliasInstalled':
 					$package = $operation->getPackage();
