@@ -121,7 +121,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	 */
 	protected function resolve_packages_composer_v2( array $packages, array $operations ) : array {
 		foreach ( $operations as $operation ) {
-			switch ( $operation::TYPE ) {
+			switch ( $operation->getOperationType() ) {
 				case 'install':
 				case 'markAliasInstalled':
 					$package = $operation->getPackage();
