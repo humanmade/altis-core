@@ -131,13 +131,33 @@ function is_user_opted_in( ?WP_User $user = null ) : ?bool {
 }
 
 /**
+ * Return an automatic, pseudo-anonymous ID for the current user.
+ *
+ * @return string
+ */
+function get_anonymous_id() : string {
+	$current_user = wp_get_current_user();
+	return substr( sha1( $current_user->ID . $current_user->user_registered ), 0, 8 );
+}
+
+/**
+ * Return a known ID for the current user.
+ *
+ * @return string
+ */
+function get_id() : string {
+	$current_user = wp_get_current_user();
+	return sha1( $current_user->user_email );
+}
+
+/**
  * Get details for the current user.
  *
  * @return array
  */
 function get_segmentio_user_details() : array {
 	$current_user = wp_get_current_user();
-	$auto_id = substr( sha1( $current_user->ID . $current_user->user_registered ), 0, 8 );
+	$auto_id = get_anonymous_id();
 	$did_opt_in = is_user_opted_in( $current_user );
 
 	if ( ! $did_opt_in ) {
@@ -148,7 +168,7 @@ function get_segmentio_user_details() : array {
 	}
 
 	$email = $current_user->user_email;
-	$id = sha1( $current_user->user_email );
+	$id = get_id();
 	if ( Altis\get_environment_type() === 'local' ) {
 		// Create distinct_id (important for Mixpanel).
 		$id = $auto_id;
@@ -162,6 +182,7 @@ function get_segmentio_user_details() : array {
 		'username' => $current_user->user_login,
 		'created' => $current_user->user_registered,
 		'avatar' => get_avatar_url( $current_user->ID ),
+		'roles' => (array) $current_user->roles,
 	];
 
 	/**
@@ -223,16 +244,26 @@ function get_environment_details() : array {
 		$id = get_local_install_id();
 	}
 
+	$traits = [
+		'environment' => $type,
+		'domain' => get_site_url(),
+		'multisite' => is_multisite(),
+		'feature_tier' => Altis\get_feature_tier(),
+		'environment_tier' => Altis\get_environment_tier(),
+		'support_tier' => Altis\get_support_tier(),
+		'version' => Altis\get_version(),
+	];
+
+	/**
+	 * Filter environment traits delivered to segment.io.
+	 *
+	 * @param array $traits Environment traits to send to Segment.io.
+	 */
+	$traits = (array) apply_filters( 'altis.telemetry.env_traits', $traits );
+
 	return [
 		'id' => $id,
-		'traits' => [
-			'environment' => $type,
-			'domain' => get_site_url(),
-			'multisite' => is_multisite(),
-			'feature_tier' => Altis\get_feature_tier(),
-			'environment_tier' => Altis\get_environment_tier(),
-			'support_tier' => Altis\get_support_tier(),
-		],
+		'traits' => $traits,
 	];
 }
 
@@ -284,6 +315,14 @@ function render_identity_tag() {
 function opt_in( bool $did_opt_in, ?WP_User $user = null ) {
 	$user = $user ?? wp_get_current_user();
 	update_user_meta( $user->ID, META_OPT_IN, $did_opt_in ? 1 : 0 );
+
+	// Alias previously unknown user if they opted in.
+	if ( $did_opt_in ) {
+		Segment::alias( [
+			'userId' => get_id(),
+			'previousId' => get_anonymous_id(),
+		] );
+	}
 }
 
 /**
