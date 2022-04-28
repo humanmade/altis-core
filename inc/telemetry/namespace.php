@@ -245,6 +245,7 @@ function get_environment_details() : array {
 	}
 
 	$traits = [
+		'site_name' => get_site_option( 'site_name', get_option( 'blogname', '' ) ),
 		'environment' => $type,
 		'domain' => get_site_url(),
 		'multisite' => is_multisite(),
