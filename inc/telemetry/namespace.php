@@ -331,6 +331,9 @@ function opt_in( bool $did_opt_in, ?WP_User $user = null ) {
 
 	// Alias previously unknown user if they opted in.
 	if ( $did_opt_in ) {
+		if ( ! initialize() ) {
+			return;
+		}
 		Segment::alias( [
 			'userId' => get_id(),
 			'previousId' => get_anonymous_id(),
