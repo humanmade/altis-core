@@ -228,7 +228,7 @@ function get_local_install_id() : ?string {
 		return $id;
 	}
 
-	if ( is_multisite() ) {
+	if ( is_multisite() && function_exists( 'get_blog_details' ) ) {
 		// Hash the registration date of the first site to get a unique ID.
 		$site = get_blog_details( get_main_site_id(), false );
 		$generated = 'local-' . substr( hash( 'sha1', $site->registered ), 0, 6 );
