@@ -19,7 +19,8 @@ use WP_Site;
  * @return void
  */
 function bootstrap() : void {
-	// Create the site on upgrade.
+	// Create the site on install / upgrade.
+	add_action( 'wp_install', __NAMESPACE__ . '\\maybe_create_site' );
 	add_action( 'altis.migrate', __NAMESPACE__ . '\\maybe_create_site' );
 
 	// Bootstrap media site if it exists.
@@ -114,6 +115,11 @@ function maybe_create_site() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			WP_CLI::log( 'Global Content Repository site exists, skipping.' );
 		}
+		return;
+	}
+
+	// Make sure multisite functions are available.
+	if ( ! function_exists( 'wp_insert_site' ) ) {
 		return;
 	}
 
