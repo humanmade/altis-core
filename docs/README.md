@@ -16,7 +16,7 @@ Returns the current hosting stack name based on the `HM_ENV` constant. On local 
 
 **`get_environment_type() : string`**
 
-Returns one of `local`, `development`, `staging` or `production`. This is read from the `HM_ENV_TYPE` constant except on local setups.
+Returns one of `local`, `ci`, `development`, `staging` or `production`. This is read from the `HM_ENV_TYPE` constant except on local setups. CI environments are checked via the `CI` environment variable, which is set for a number of CI/CD service tools (e.g. Travis CI, CircleCI, GitHub Actions).
 
 **`get_environment_region() : ?string`**
 
