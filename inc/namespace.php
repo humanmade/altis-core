@@ -334,11 +334,14 @@ function get_environment_name() : string {
 /**
  * Get the type of the current environment.
  *
- * Can be "local", "development", "staging", "production" etc.
+ * Can be "local", "ci", "development", "staging", "production" etc.
  *
  * @return string
  */
 function get_environment_type() : string {
+	if ( getenv( 'CI' ) ) {
+		return 'ci';
+	}
 	if ( defined( 'HM_ENV_TYPE' ) ) {
 		return HM_ENV_TYPE;
 	}
