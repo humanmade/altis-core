@@ -23,6 +23,11 @@ const SEGMENT_ID = 'GHqd7Vfs060yZBWOEGV4ajz3S3QHYKhk';
  * @return void
  */
 function bootstrap() {
+	// Do not run on CI.
+	if ( getenv( 'CI' ) || defined( 'CI' ) ) {
+		return;
+	}
+
 	add_action( 'admin_init', __NAMESPACE__ . '\\handle_opt_in_form' );
 	add_action( 'admin_head', __NAMESPACE__ . '\\load_segment_js' );
 	add_action( 'admin_footer', __NAMESPACE__ . '\\render_identity_tag' );
