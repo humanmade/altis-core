@@ -24,7 +24,7 @@ const SEGMENT_ID = 'GHqd7Vfs060yZBWOEGV4ajz3S3QHYKhk';
  */
 function bootstrap() {
 	// Do not run on CI.
-	if ( getenv( 'CI' ) || defined( 'CI' ) ) {
+	if ( getenv( 'CI' ) || ( defined( 'CI' ) && CI ) ) {
 		return;
 	}
 
@@ -53,7 +53,15 @@ function bootstrap() {
  */
 function initialize() : bool {
 	static $initialized;
+
+	// Run once.
 	if ( is_bool( $initialized ) ) {
+		return $initialized;
+	}
+
+	// Do not run during imports.
+	if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+		$initialized = false;
 		return $initialized;
 	}
 

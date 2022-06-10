@@ -97,13 +97,15 @@ function get_config() : array {
  * @return array Configuration data.
  */
 function get_merged_config() : array {
+	$default_config = [];
+
 	if ( function_exists( 'apply_filters' ) ) {
 		/**
 		 * Use this filter to build up the default configuration.
 		 *
 		 * @param array $default_config
 		 */
-		$default_config = apply_filters( 'altis.config.default', [] );
+		$default_config = apply_filters( 'altis.config.default', $default_config );
 	}
 
 	// Get custom config overrides.
@@ -122,6 +124,11 @@ function get_merged_config() : array {
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+
+	// Support CI environment specific settings.
+	if ( getenv( 'CI' ) ) {
+		$config = merge_config_settings( $config, $config['environments']['ci'] ?? [] );
+	}
 
 	return $config;
 }
