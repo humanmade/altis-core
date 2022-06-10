@@ -78,12 +78,14 @@ function get_config() : array {
 	if ( empty( $config ) ) {
 		$config = get_merged_config();
 
-		/**
-		 * Filter the entire altis config.
-		 *
-		 * @param array $config The full config array.
-		 */
-		$config = apply_filters( 'altis.config', $config );
+		if ( function_exists( 'apply_filters' ) ) {
+			/**
+			 * Filter the entire altis config.
+			 *
+			 * @param array $config The full config array.
+			 */
+			$config = apply_filters( 'altis.config', $config );
+		}
 	}
 
 	return $config;
@@ -95,12 +97,16 @@ function get_config() : array {
  * @return array Configuration data.
  */
 function get_merged_config() : array {
-	/**
-	 * Use this filter to build up the default configuration.
-	 *
-	 * @param array $default_config
-	 */
-	$default_config = apply_filters( 'altis.config.default', [] );
+	$default_config = [];
+
+	if ( function_exists( 'apply_filters' ) ) {
+		/**
+		 * Use this filter to build up the default configuration.
+		 *
+		 * @param array $default_config
+		 */
+		$default_config = apply_filters( 'altis.config.default', $default_config );
+	}
 
 	// Get custom config overrides.
 	$composer_file = ROOT_DIR . '/composer.json';
@@ -108,14 +114,21 @@ function get_merged_config() : array {
 
 	$config = merge_config_settings( $default_config, $composer_json['extra']['altis'] ?? [] );
 
-	// Catch common config errors and pitfalls, we delay this so that Query Monitor has kicked in.
-	add_action( 'init', function () use ( $config ) {
-		validate_config_settings( $config );
-	} );
+	if ( function_exists( 'add_action' ) ) {
+		// Catch common config errors and pitfalls, we delay this so that Query Monitor has kicked in.
+		add_action( 'init', function () use ( $config ) {
+			validate_config_settings( $config );
+		} );
+	}
 
 	// Look for environment specific settings in the config and merge it in.
 	$environment = get_environment_type();
 	$config = merge_config_settings( $config, $config['environments'][ $environment ] ?? [] );
+
+	// Support CI environment specific settings.
+	if ( getenv( 'CI' ) ) {
+		$config = merge_config_settings( $config, $config['environments']['ci'] ?? [] );
+	}
 
 	return $config;
 }
