@@ -7,6 +7,7 @@
 
 namespace Altis\Global_Content;
 
+use Altis;
 use Exception;
 use WP_Admin_Bar;
 use WP_CLI;
@@ -406,6 +407,11 @@ function filter_global_content_requests_for_auth( array $parsed_args, string $ur
 	if ( ! isset( $parsed_args['headers']['Authorization'] ) && ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$parsed_args['headers']['Authorization'] = wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] );
+	}
+
+	// Allow local requests to ignore SSL certs.
+	if ( Altis\get_environment_type() === 'local' ) {
+		$parsed_args['sslverify'] = false;
 	}
 
 	return $parsed_args;
