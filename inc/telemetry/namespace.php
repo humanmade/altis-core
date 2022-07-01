@@ -41,6 +41,9 @@ function bootstrap() {
 	// Default event tracking.
 	add_action( 'save_post', __NAMESPACE__ . '\\track_new_or_updated_content', 10, 3 );
 
+	// Preview event Tracking.
+	add_action( 'wp_head', __NAMESPACE__ . '\\track_preview' );
+
 	// Allow action hook for tracking, this makes it easy to track events in other code
 	// without having a direct dependency on this module.
 	add_action( 'altis.telemetry.track', __NAMESPACE__ . '\\track' );
@@ -564,5 +567,14 @@ function track_new_or_updated_content( $post_id, $post, $update ) {
 			'blocks' => $block_counts,
 			'images' => $image_count,
 		],
+	] );
+}
+
+function track_preview () {
+	if ( ! is_preview() ){
+		return;
+	}
+	track( [
+		'event' => 'Preview',
 	] );
 }
