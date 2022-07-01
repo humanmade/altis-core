@@ -511,17 +511,58 @@ function track_new_or_updated_content( $post_id, $post, $update ) {
 		return;
 	}
 
+	// Set the event value.
 	if ( $update ) {
 		$action = 'update';
 	} else {
 		$action = 'create';
 	}
 
+	// Set the visibility value.
+	if ( 'private' === $post->post_status ) {
+		$visibility = 'Private';
+	} elseif ( ! empty( $post->post_password ) ) {
+		$visibility = 'Protected';
+	} else {
+		$visibility = 'Public';
+	}
+
+	// Set the tags value.
+	$posttags = get_the_tags( $post->ID );
+	$post_tags = [];
+	if ( $posttags ) {
+		foreach ( $posttags as $tag ) {
+			$post_tags[] = $tag->name;
+		}
+		$post_tags = implode( ', ', $post_tags );
+	}
+
+	// Set the blocks value.
+	$block_counts = '';
+	$blocks = parse_blocks( $post->post_content );
+	$count = [];
+	foreach ( $blocks as $block ) {
+		if ( isset( $block['blockName'] ) ){
+			$count[] = $block['blockName'];
+		}
+	}
+	$block_counts = json_encode( array_count_values( $count ), JSON_UNESCAPED_SLASHES );
+
+
+	// Set the image count.
+	$image_count = substr_count( $post->post_content, '<img' );
+
+	// Segment tacking.
 	track( [
-		'event' => 'Content',
+		'event' => $action,
 		'properties' => [
+			'status' => $post->post_status,
 			'content_type' => $post->post_type,
-			'content_action' => $action,
+			'visibility' => $visibility,
+			'scheduled' => ( $post->post_status === 'future' ? 'true' : 'false' ),
+			'tags' => ( !empty( $post_tags ) ? $post_tags : "" ),
+			'blocks' => $block_counts,
+			'images' => $image_count,
 		],
 	] );
 }
