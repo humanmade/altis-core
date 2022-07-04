@@ -15,7 +15,7 @@ use WP_User;
 
 const ACTION_OPT_IN = 'altis_tracking_opt_in';
 const META_OPT_IN = 'altis_tracking_opt_in';
-const SEGMENT_ID = 'We14ttAnGx0IFjNhA0knvNPiga2IRZhE';
+const SEGMENT_ID = 'GHqd7Vfs060yZBWOEGV4ajz3S3QHYKhk';
 
 /**
  * Register hooks.
