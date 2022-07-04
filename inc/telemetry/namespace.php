@@ -15,7 +15,7 @@ use WP_User;
 
 const ACTION_OPT_IN = 'altis_tracking_opt_in';
 const META_OPT_IN = 'altis_tracking_opt_in';
-const SEGMENT_ID = 'GHqd7Vfs060yZBWOEGV4ajz3S3QHYKhk';
+const SEGMENT_ID = 'We14ttAnGx0IFjNhA0knvNPiga2IRZhE';
 
 /**
  * Register hooks.
@@ -29,6 +29,7 @@ function bootstrap() {
 	}
 
 	add_action( 'admin_init', __NAMESPACE__ . '\\handle_opt_in_form' );
+	add_action( 'admin_init', __NAMESPACE__ . '\\track_posts_initiated' );
 	add_action( 'admin_head', __NAMESPACE__ . '\\load_segment_js' );
 	add_action( 'admin_footer', __NAMESPACE__ . '\\render_identity_tag' );
 	add_action( 'in_admin_header', __NAMESPACE__ . '\\render_opt_in_form' );
@@ -510,7 +511,7 @@ function handle_telemetry_endpoint( WP_REST_Request $request ) {
  */
 function track_new_or_updated_content( $post_id, $post, $update ) {
 	// Bail on auto-save.
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || 'auto-draft' === $post->post_status ) {
 		return;
 	}
 
@@ -570,11 +571,33 @@ function track_new_or_updated_content( $post_id, $post, $update ) {
 	] );
 }
 
+/**
+ * Push post preview event to Segment.io.
+ *
+ * @return void
+ */
 function track_preview () {
 	if ( ! is_preview() ){
 		return;
 	}
 	track( [
-		'event' => 'Preview',
+		'event' => 'preview',
 	] );
+}
+
+/**
+ * Push post initiated to Segment.io.
+ *
+ * @return void
+ */
+function track_posts_initiated () {
+	global $pagenow;
+	if ( $pagenow === 'post-new.php' ) {
+		track( [
+			'event' => 'initiate_create',
+			'properties' => [
+				'content_type' => ( isset( $_GET['post_type'] ) ? $_GET['post_type'] : 'post' ),
+			],
+		] );
+	}
 }
