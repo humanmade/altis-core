@@ -29,7 +29,6 @@ function bootstrap() {
 	}
 
 	add_action( 'admin_init', __NAMESPACE__ . '\\handle_opt_in_form' );
-	add_action( 'admin_init', __NAMESPACE__ . '\\track_posts_initiated' );
 	add_action( 'admin_head', __NAMESPACE__ . '\\load_segment_js' );
 	add_action( 'admin_footer', __NAMESPACE__ . '\\render_identity_tag' );
 	add_action( 'in_admin_header', __NAMESPACE__ . '\\render_opt_in_form' );
@@ -39,11 +38,10 @@ function bootstrap() {
 
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_api_routes' );
 
-	// Default event tracking.
+	// Segment.io event tracking.
+	add_action( 'admin_init', __NAMESPACE__ . '\\track_posts_initiated' );
+	add_action( 'wp_head', __NAMESPACE__ . '\\track_posts_preview' );
 	add_action( 'save_post', __NAMESPACE__ . '\\track_new_or_updated_content', 10, 3 );
-
-	// Preview event Tracking.
-	add_action( 'wp_head', __NAMESPACE__ . '\\track_preview' );
 
 	// Allow action hook for tracking, this makes it easy to track events in other code
 	// without having a direct dependency on this module.
@@ -576,7 +574,7 @@ function track_new_or_updated_content( $post_id, $post, $update ) {
  *
  * @return void
  */
-function track_preview () {
+function track_posts_preview () {
 	if ( ! is_preview() ){
 		return;
 	}
