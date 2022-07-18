@@ -509,7 +509,12 @@ function handle_telemetry_endpoint( WP_REST_Request $request ) {
  */
 function track_new_or_updated_content( $post_id, $post, $update ) {
 	// Bail on auto-save.
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || 'auto-draft' === $post->post_status ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+
+	// Bail if the status is auto-draft.
+	if ( 'auto-draft' === $post->post_status ) {
 		return;
 	}
 
