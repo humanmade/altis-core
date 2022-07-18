@@ -299,16 +299,10 @@ function get_environment_details() : array {
  * @return void
  */
 function load_segment_js() {
-	$page_name = get_admin_page_title();
-	switch ( $page_name ) {
-		case 'Home':
-			$page_name = 'Dashboard';
-			break;
-		case 'Welcome':
-			$page_name = 'Developer Documentation';
-			break;
-		default:
-			$page_name;
+	if ( isset( $_GET['page'] ) ){
+		$page_name = str_replace( '-', ' ', ucfirst( $_GET['page'] ) );
+	} else {
+		$page_name = get_admin_page_title();
 	}
 	?>
 	<script>
