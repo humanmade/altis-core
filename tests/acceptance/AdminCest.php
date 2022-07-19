@@ -17,6 +17,8 @@ class AdminCest {
 	 *
 	 * @param AcceptanceTester $I Tester
 	 *
+	 * @throws \Exception if Composer's installed.json file could not be parsed.
+	 *
 	 * @return void
 	 */
 	public function moduleVersionsDisplayed( AcceptanceTester $I ) {
