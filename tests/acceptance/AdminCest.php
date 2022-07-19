@@ -26,7 +26,14 @@ class AdminCest {
 		$I->see( 'Current Module Versions' );
 
 		$composer = json_decode( file_get_contents( 'vendor/composer/installed.json' ) );
-		$packages = $composer->packages;
+
+		if ( isset( $composer->packages ) ) {
+			$packages = $composer->packages;
+		} elseif ( is_array( $composer ) ) {
+			$packages = $composer;
+		} else {
+			throw new \Exception( 'Unable to parse Composer\'s installed.json' );
+		}
 
 		$modules = [
 			'altis/cms' => [ 'name' => 'CMS' ],
