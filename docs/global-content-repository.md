@@ -40,7 +40,7 @@ Returns the list of page slugs allowed in the Global Content Repository site adm
 
 Filters the arguments used to create the Global Content Repository site. The arguments are passed to `wp_insert_site()`.
 
-The below example changes the title, path and domain of the site created. These could also be edited via the network admin as well:
+The example below changes the title, path and domain of the site created. These could also be edited via the network admin as well:
 
 ```php
 use Altis\Cloud;
