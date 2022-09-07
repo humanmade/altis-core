@@ -148,12 +148,21 @@ function maybe_create_site() {
 	$site_id = wp_insert_site( $global_site_args );
 
 	if ( is_wp_error( $site_id ) ) {
+		$message = sprintf(
+			'Global media site could not be created. %s',
+			$site_id->get_error_message()
+		);
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			WP_CLI::error( $message );
+		}
+
 		/**
 		 * The error response.
 		 *
 		 * @var \WP_Error $site_id
 		 */
-		throw new Exception( sprintf( 'Global media site could not be created. %s', $site_id->get_error_message() ) );
+		throw new Exception( $message );
 	}
 
 	// Store the site URL and ID.
