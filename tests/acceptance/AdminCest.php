@@ -17,7 +17,7 @@ class AdminCest {
 	 *
 	 * @param AcceptanceTester $I Tester
 	 *
-	 * @throws \Exception if Composer's installed.json file could not be parsed.
+	 * @throws \Exception If Composer's installed.json file could not be parsed.
 	 *
 	 * @return void
 	 */
