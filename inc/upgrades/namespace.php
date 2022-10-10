@@ -352,13 +352,6 @@ function render_upgrade_widget() {
 	}
 
 	$latest = $releases[0];
-	$current = get_current_version_info();
-
-	// Return early for versions greater or equal to the latest version.
-	if ( $current['version'] >= $latest['version'] ) {
-		return;
-	}
-
 	$link = $latest['blog'] ?: "https://github.com/humanmade/altis/releases/tag/{$latest['tag']}";
 	$img = $latest['prompt_image'] ?? 'https://www.altis-dxp.com/tachyon/2021/08/Marketer-Experience-1.png';
 	$message = $latest['prompt'] ?? sprintf(
