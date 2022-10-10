@@ -129,7 +129,7 @@ function is_version_latest() : bool {
 	}
 
 	$releases = get_supported_version_info();
-	return $version === ( $releases[0]['version'] ?? $version );
+	return ( $version >= $releases[0]['version'] ?? false );
 }
 
 /**
