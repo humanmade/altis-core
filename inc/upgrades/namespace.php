@@ -355,7 +355,7 @@ function render_upgrade_widget() {
 	$current = get_current_version_info();
 
 	// Return early for versions greater or equal to the latest version.
-	if ( $current >= $latest['version'] ) {
+	if ( $current['version'] >= $latest['version'] ) {
 		return;
 	}
 
