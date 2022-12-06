@@ -53,7 +53,6 @@ class AdminCest {
 			'altis/security' => [ 'name' => 'Security' ],
 			'altis/seo' => [ 'name' => 'SEO' ],
 			'altis/sso' => [ 'name' => 'SSO' ],
-			'altis/workflow' => [ 'name' => 'Workflow' ],
 		];
 
 		foreach ( $packages as $package ) {

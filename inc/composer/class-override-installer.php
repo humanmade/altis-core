@@ -85,7 +85,6 @@ class Override_Installer extends BaseInstaller {
 			'humanmade/stream',
 			'humanmade/tachyon-plugin',
 			'humanmade/two-factor',
-			'humanmade/workflows',
 			'humanmade/wp-redis',
 			'humanmade/wp-seo',
 			'humanmade/wp-simple-saml',
