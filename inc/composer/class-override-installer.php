@@ -78,7 +78,6 @@ class Override_Installer extends BaseInstaller {
 			'humanmade/ludicrousdb',
 			'humanmade/meta-tags',
 			'humanmade/php-basic-auth',
-			'humanmade/publication-checklist',
 			'humanmade/require-login',
 			'humanmade/s3-uploads',
 			'humanmade/smart-media',
