@@ -48,7 +48,6 @@ class AdminCest {
 			'altis/local-chassis' => [ 'name' => 'Local Chassis' ],
 			'altis/local-server' => [ 'name' => 'Local Server' ],
 			'altis/media' => [ 'name' => 'Media' ],
-			'altis/multilingual' => [ 'name' => 'Multilingual' ],
 			'altis/privacy' => [ 'name' => 'Privacy' ],
 			'altis/security' => [ 'name' => 'Security' ],
 			'altis/seo' => [ 'name' => 'SEO' ],
