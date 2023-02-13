@@ -14,7 +14,7 @@
 		"aws/aws-sdk-php": "~3.258.8",
 		"composer-plugin-api": "^1.1 || ^2.0",
 		"composer/installers": "^2.2.0",
-		"segmentio/analytics-php": "~2.0.0"
+		"segmentio/analytics-php": "~3.5.0"
 	},
 	"autoload": {
 		"files": [
