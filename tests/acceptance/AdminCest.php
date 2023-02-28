@@ -39,13 +39,11 @@ class AdminCest {
 
 		$modules = [
 			'altis/cms' => [ 'name' => 'CMS' ],
-			'altis/analytics' => [ 'name' => 'Analytics' ],
 			'altis/cloud' => [ 'name' => 'Cloud' ],
 			'altis/core' => [ 'name' => 'Core' ],
 			'altis/dev-tools' => [ 'name' => 'Developer Tools' ],
 			'altis/documentation' => [ 'name' => 'Documentation' ],
 			'altis/enhanced-search' => [ 'name' => 'Search' ],
-			'altis/local-chassis' => [ 'name' => 'Local Chassis' ],
 			'altis/local-server' => [ 'name' => 'Local Server' ],
 			'altis/media' => [ 'name' => 'Media' ],
 			'altis/privacy' => [ 'name' => 'Privacy' ],
