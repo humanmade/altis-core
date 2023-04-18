@@ -28,6 +28,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 	protected $installer;
 
 	/**
+	 * Composer instance.
+	 *
+	 * @var Composer
+	 */
+	protected $composer;
+
+	/**
+	 * IO instance.
+	 *
+	 * @var IOInterface
+	 */
+	protected $io;
+
+	/**
 	 * Called when the plugin is activated.
 	 *
 	 * @param Composer $composer The composer class.
