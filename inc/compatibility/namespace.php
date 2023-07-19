@@ -1,4 +1,9 @@
 <?php
+/**
+ * Compatibility tweaks for optimal performance.
+ *
+ * @package altis/core
+ */
 
 namespace Altis\Compatibility;
 
@@ -28,7 +33,7 @@ function set_woocommerce_compatibility() {
 	add_filter( 'action_scheduler_allow_async_request_runner', '__return_false', 1000 );
 
 	// Allow Action Scheduler to run for 5 minutes (Cavalcade's limit is 60,
-	// but most hosts stay around 1-2 minutes)
+	// but most hosts stay around 1-2 minutes).
 	add_filter( 'action_scheduler_queue_runner_time_limit', function () {
 		return 5 * MINUTE_IN_SECONDS;
 	}, 0 );
