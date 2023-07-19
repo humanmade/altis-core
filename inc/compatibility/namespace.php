@@ -19,7 +19,7 @@ function bootstrap() {
  * easily override for their specific use case.
  */
 function set_woocommerce_compatibility() {
-	if ( class_exists( '\\ActionScheduler' ) ) {
+	if ( ! class_exists( '\\ActionScheduler' ) ) {
 		return;
 	}
 
