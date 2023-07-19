@@ -20,6 +20,7 @@
 		"files": [
 			"inc/namespace.php",
 			"inc/about/namespace.php",
+			"inc/compatibility/namespace.php",
 			"inc/global_content/namespace.php",
 			"inc/upgrades/namespace.php",
 			"inc/telemetry/namespace.php"
