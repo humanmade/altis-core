@@ -39,7 +39,6 @@ class AdminCest {
 
 		$modules = [
 			'altis/cms' => [ 'name' => 'CMS' ],
-			'altis/analytics' => [ 'name' => 'Analytics' ],
 			'altis/cloud' => [ 'name' => 'Cloud' ],
 			'altis/core' => [ 'name' => 'Core' ],
 			'altis/dev-tools' => [ 'name' => 'Developer Tools' ],
