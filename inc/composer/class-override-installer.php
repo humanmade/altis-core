@@ -58,42 +58,7 @@ class Override_Installer extends BaseInstaller {
 		 * installer. We use this to stop plugins that are bundled with modules are
 		 * not installed to the wp-content/plugins path.
 		 */
-		$legacy = [
-			'10up/elasticpress',
-			'altis/aws-analytics',
-			'altis/browser-security',
-			'altis/consent',
-			'altis/consent-api',
-			'altis/experiments',
-			'darylldoyle/safe-svg',
-			'humanmade/aws-rekognition',
-			'humanmade/aws-ses-wp-mail',
-			'humanmade/cavalcade',
-			'humanmade/debug-bar-elasticpress',
-			'humanmade/delegated-oauth',
-			'humanmade/hm-gtm',
-			'humanmade/hm-redirects',
-			'humanmade/hm-limit-login-attempts',
-			'humanmade/ludicrousdb',
-			'humanmade/meta-tags',
-			'humanmade/php-basic-auth',
-			'humanmade/require-login',
-			'humanmade/s3-uploads',
-			'humanmade/smart-media',
-			'humanmade/stream',
-			'humanmade/tachyon-plugin',
-			'humanmade/two-factor',
-			'humanmade/wp-redis',
-			'humanmade/wp-seo',
-			'humanmade/wp-simple-saml',
-			'johnbillion/query-monitor',
-			'stuttter/ludicrousdb',
-			'stuttter/wp-user-signups',
-		];
-
-		$excluded_plugins = array_unique( array_merge( $legacy, $this->installOverrides ) );
-
-		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $excluded_plugins, true ) ) {
+		if ( ! in_array( $package->getType(), [ 'wordpress-plugin', 'wordpress-muplugin' ], true ) || ! in_array( $package->getName(), $this->installOverrides, true ) ) {
 			return parent::getInstallPath( $package, $framework_type );
 		}
 
