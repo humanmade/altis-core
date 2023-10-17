@@ -71,7 +71,6 @@ class Override_Installer extends BaseInstaller {
 			'humanmade/cavalcade',
 			'humanmade/debug-bar-elasticpress',
 			'humanmade/delegated-oauth',
-			'humanmade/hm-gtm',
 			'humanmade/hm-redirects',
 			'humanmade/hm-limit-login-attempts',
 			'humanmade/ludicrousdb',
