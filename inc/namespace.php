@@ -592,7 +592,6 @@ function powered_by( $format = null ) {
  * This includes both secrets and non-secret variables.
  *
  * @param string $name Name of the variable or secret. Must match the name in the Altis Dashboard exactly.
- * @param mixed $default Default value to return if not set (such as in local environments).
  * @return string|null Value as a string if set, null otherwise.
  */
 function get_variable( string $name ) : ?string {
