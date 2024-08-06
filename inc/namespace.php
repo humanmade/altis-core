@@ -17,6 +17,7 @@ const API_NAMESPACE = 'altis/v1';
  */
 function bootstrap() {
 	About\bootstrap();
+	Compatibility\bootstrap();
 	Upgrades\bootstrap();
 	Telemetry\bootstrap();
 
