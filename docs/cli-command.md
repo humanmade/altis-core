@@ -13,12 +13,15 @@ The migration command runs all basic maintenance tasks required after upgrading 
 There are 2 ways to hook into this command:
 
 1. Using the `altis.migrate` action hook:
+
    ```php
    add_action( 'altis.migrate', function ( array $args, array $assoc_args ) {
        // Run upgrade routines here.
    } );
    ```
+
 2. Using WP CLI hooks:
+
    ```php
    WP_CLI::add_hook( 'after_invoke:altis migrate', function () {
        // Run migration routines here.

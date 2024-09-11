@@ -1,20 +1,28 @@
 # Global Content Repository
 
-Altis includes a Global Content Repository framework. This is a site on the network that can be used to distribute content elsewhere via the REST API or directly to other sites on the network.
+Altis includes a Global Content Repository framework. This is a site on the network that can be used to distribute content elsewhere
+via the REST API or directly to other sites on the network.
 
-By default the Global Content Repository only exposes the user management admin. Other Altis modules may extend this, for example [the Altis Media module has a Global Media Library feature](docs://media/global-media-library.md) built on top of the Global Content Repository that allows for uploading media files and accessing them from all sites on the network.
+By default, the Global Content Repository only exposes the user management admin. Other Altis modules may extend this, for
+example [the Altis Media module has a Global Media Library feature](docs://media/global-media-library.md) built on top of the Global
+Content Repository that allows for uploading media files and accessing them from all sites on the network.
 
-The Global Content Repository site is set to be a private site by default. This can be modified by switching the site to a public one from the Network Admin > Sites management page, clicking `Edit` on the site, and checking the `Public` checkbox.
+The Global Content Repository site is set to be a private site by default. This can be modified by switching the site to a public
+one from the Network Admin > Sites management page, clicking `Edit` on the site, and checking the `Public` checkbox.
 
-**Note:** When using media from the Global Content Repository, the URL for the selected media will always be relative to that of your Global Content Repository site and not the site it's being displayed on.
+**Note:** When using media from the Global Content Repository, the URL for the selected media will always be relative to that of
+your Global Content Repository site and not the site it's being displayed on.
 
 ## User Management
 
-Users on the multisite network can have different roles on different sites. This gives you control over who can add and edit global content versus who can only use the global content on their own site.
+Users on the multisite network can have different roles on different sites. This gives you control over who can add and edit global
+content versus who can only use the global content on their own site.
 
-You might have a user who is an author on the main site, but have no role on the Global Content Repository meaning they could read content to use in their posts but not create or edit global content nor access the global site admin.
+You might have a user who is an author on the main site, but have no role on the Global Content Repository meaning they could read
+content to use in their posts but not create or edit global content nor access the global site admin.
 
-Conversely you may have a user who does not have a role on your primary site but who can create and edit content on the Global Content Repository site.
+Conversely you may have a user who does not have a role on your primary site but who can create and edit content on the Global
+Content Repository site.
 
 ## Functions
 
@@ -56,7 +64,8 @@ add_filter( 'altis.core.global_content_site_menu_pages', function ( array $args 
 
 **`altis.core.global_content_site_menu_pages : array $pages`**
 
-Filters the allowed top level admin menu pages. Defaults to `[ 'users.php' ]`. To add support for pages you could use the following code:
+Filters the allowed top level admin menu pages. Defaults to `[ 'users.php' ]`. To add support for pages you could use the following
+code:
 
 ```php
 add_filter( 'altis.core.global_content_site_menu_pages', function ( array $pages ) : array {
