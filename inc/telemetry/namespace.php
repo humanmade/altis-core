@@ -38,7 +38,9 @@ function bootstrap() {
 
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_api_routes' );
 
-	// Default event tracking.
+	// Segment.io event tracking.
+	add_action( 'admin_init', __NAMESPACE__ . '\\track_posts_initiated' );
+	add_action( 'wp_head', __NAMESPACE__ . '\\track_posts_preview' );
 	add_action( 'save_post', __NAMESPACE__ . '\\track_new_or_updated_content', 10, 3 );
 
 	// Allow action hook for tracking, this makes it easy to track events in other code
@@ -511,17 +513,94 @@ function track_new_or_updated_content( $post_id, $post, $update ) {
 		return;
 	}
 
+	// Bail if the status is auto-draft.
+	if ( 'auto-draft' === $post->post_status ) {
+		return;
+	}
+
+	// Set the event value.
 	if ( $update ) {
 		$action = 'update';
 	} else {
 		$action = 'create';
 	}
 
+	// Set the visibility value.
+	if ( 'private' === $post->post_status ) {
+		$visibility = 'Private';
+	} elseif ( ! empty( $post->post_password ) ) {
+		$visibility = 'Protected';
+	} else {
+		$visibility = 'Public';
+	}
+
+	// Set the tags value.
+	$posttags = get_the_tags( $post->ID );
+	$post_tags = [];
+	if ( $posttags ) {
+		foreach ( $posttags as $tag ) {
+			$post_tags[] = $tag->name;
+		}
+		$post_tags = implode( ', ', $post_tags );
+	}
+
+	// Set the blocks value.
+	$block_counts = '';
+	$blocks = parse_blocks( $post->post_content );
+	$count = [];
+	foreach ( $blocks as $block ) {
+		if ( isset( $block['blockName'] ) ){
+			$count[] = $block['blockName'];
+		}
+	}
+	$block_counts = json_encode( array_count_values( $count ), JSON_UNESCAPED_SLASHES );
+
+
+	// Set the image count.
+	$image_count = substr_count( $post->post_content, '<img' );
+
+	// Segment tacking.
 	track( [
-		'event' => 'Content',
+		'event' => $action,
 		'properties' => [
+			'status' => $post->post_status,
 			'content_type' => $post->post_type,
-			'content_action' => $action,
+			'visibility' => $visibility,
+			'scheduled' => ( $post->post_status === 'future' ? 'true' : 'false' ),
+			'tags' => ( !empty( $post_tags ) ? $post_tags : "" ),
+			'blocks' => $block_counts,
+			'images' => $image_count,
 		],
 	] );
+}
+
+/**
+ * Push post preview event to Segment.io.
+ *
+ * @return void
+ */
+function track_posts_preview () {
+	if ( ! is_preview() ){
+		return;
+	}
+	track( [
+		'event' => 'preview',
+	] );
+}
+
+/**
+ * Push post initiated to Segment.io.
+ *
+ * @return void
+ */
+function track_posts_initiated () {
+	global $pagenow;
+	if ( $pagenow === 'post-new.php' ) {
+		track( [
+			'event' => 'initiate_create',
+			'properties' => [
+				'content_type' => ( isset( $_GET['post_type'] ) ? $_GET['post_type'] : 'post' ),
+			],
+		] );
+	}
 }
