@@ -22,6 +22,15 @@ function bootstrap() {
  *
  * The time limit and batch size hooks are set at priority 0 to allow sites to
  * easily override for their specific use case.
+ *
+ * We disable the async task runner entirely, to avoid the loopback HTTP
+ * requests to admin-ajax.php. This triggers when AS detects cron not working,
+ * but doesn't account for the Cavalcade backlog and scaling system, and
+ * triggers too eagerly. Instead, we prefer a slight delay as Cavalcade scales
+ * up, avoiding the loopbacks.
+ *
+ * The limits are adjusted to account for the better processing power and
+ * limits of Cavalcade.
  */
 function set_woocommerce_compatibility() {
 	if ( ! class_exists( '\\ActionScheduler' ) ) {
