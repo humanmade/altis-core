@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1",
+		"php": ">=8.2",
 		"aws/aws-sdk-php": "~3.336.8",
 		"composer-plugin-api": "^1.1 || ^2.0",
 		"composer/installers": "^1.12 || ^2.3.0",
