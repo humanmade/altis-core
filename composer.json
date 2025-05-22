@@ -11,7 +11,7 @@
 	],
 	"require": {
 		"php": ">=8.2",
-		"aws/aws-sdk-php": "~3.343.8",
+		"aws/aws-sdk-php": "~3.343.16",
 		"composer-plugin-api": "^1.1 || ^2.0",
 		"composer/installers": "^1.12 || ^2.3.0",
 		"segmentio/analytics-php": "~3.8.1"
