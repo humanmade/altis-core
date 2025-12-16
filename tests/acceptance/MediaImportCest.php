@@ -44,6 +44,6 @@ class MediaImportCest {
 		$I->waitForElement( 'img.pinkynail', 30 );
 
 		// Verify the upload was successful by checking for the filename in the uploaded item.
-		$I->see( 'wp-logo' ); // on multiple runs this may be 'wp-logo-1', 'wp-logo-2', etc. so just check for 'wp-logo'
+		$I->see( 'wp-logo' ); // on multiple runs this may be 'wp-logo-1', 'wp-logo-2', etc. so just check for 'wp-logo'.
 	}
 }
