@@ -46,7 +46,7 @@ add_action( 'altis.loaded_autoloader', function () {
 	}
 } );
 
-// Disable BrowseHappy requests
+// Disable BrowseHappy requests.
 add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 
 	if ( ! is_admin() ) {
@@ -68,7 +68,7 @@ add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 
 }, 10, 3 );
 
-// Remove BrowseHappy dashboard nag
+// Remove BrowseHappy dashboard nag.
 add_action( 'wp_dashboard_setup', function () {
 
 	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
