@@ -68,7 +68,7 @@ add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 			return new \WP_Error(
 				'altis_disabled_browsehappy',
 				'Altis disables BrowseHappy requests for privacy.'
-		);
+			);
 	}
 
 	return $preempt;
