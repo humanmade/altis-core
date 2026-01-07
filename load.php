@@ -45,3 +45,37 @@ add_action( 'altis.loaded_autoloader', function () {
 		require_once ROOT_DIR . '/.config/load.php';
 	}
 } );
+
+// Disable BrowseHappy requests
+add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
+
+	if ( ! is_admin() ) {
+		return $preempt;
+	}
+
+	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
+		return $preempt;
+	}
+
+	if ( false !== strpos( $url, 'api.wordpress.org/core/browse-happy/' ) ) {
+		return new \WP_Error(
+			'altis_disabled_browsehappy',
+			'Altis disables BrowseHappy requests for privacy.'
+		);
+	}
+
+	return $preempt;
+
+}, 10, 3 );
+
+// Remove BrowseHappy dashboard nag
+add_action( 'wp_dashboard_setup', function () {
+
+	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
+		return;
+	}
+
+	remove_meta_box( 'dashboard_browser_nag', 'dashboard', 'normal' );
+	remove_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' );
+
+}, 999 );
