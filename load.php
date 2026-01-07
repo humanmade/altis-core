@@ -59,15 +59,15 @@ add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 
 	$parts = \parse_url( $url );
 
-	if ( 	is_array( $parts )
+	if ( is_array( $parts )
 			&& ! empty( $parts['host'] )
 			&& ! empty( $parts['path'] )
-		 	&& \strcasecmp( $parts['host'], 'api.wordpress.org' ) === 0
-		 	&& \strpos( $parts['path'], '/core/browse-happy/' ) === 0
+			&& \strcasecmp( $parts['host'], 'api.wordpress.org' ) === 0
+			&& \strpos( $parts['path'], '/core/browse-happy/' ) === 0
 		) {
 			return new \WP_Error(
-			'altis_disabled_browsehappy',
-			'Altis disables BrowseHappy requests for privacy.'
+				'altis_disabled_browsehappy',
+				'Altis disables BrowseHappy requests for privacy.'
 		);
 	}
 
