@@ -57,8 +57,15 @@ add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
 		return $preempt;
 	}
 
-	if ( false !== strpos( $url, 'api.wordpress.org/core/browse-happy/' ) ) {
-		return new \WP_Error(
+	$parts = \parse_url( $url );
+
+	if ( is_array( $parts )
+		 && ! empty( $parts['host'] )
+		 && ! empty( $parts['path'] )
+		 && \strcasecmp( $parts['host'], 'api.wordpress.org' ) === 0
+		 && \strpos( $parts['path'], '/core/browse-happy/' ) === 0
+		) {
+			return new \WP_Error(
 			'altis_disabled_browsehappy',
 			'Altis disables BrowseHappy requests for privacy.'
 		);
@@ -76,6 +83,8 @@ add_action( 'wp_dashboard_setup', function () {
 	}
 
 	remove_meta_box( 'dashboard_browser_nag', 'dashboard', 'normal' );
-	remove_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' );
+	if ( has_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' ) ) {
+		remove_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' );
+	}
 
 }, 999 );
