@@ -48,18 +48,20 @@ add_action( 'altis.loaded_autoloader', function () {
 
 // Disable BrowseHappy browser check (privacy).
 add_action( 'admin_init', function () {
-    // Escape hatch: allow re-enabling if needed.
-    if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
-        return;
-    }
-    // Generate the MD5 key based on user agent.
-    if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
-        return;
-    }
-    $key = md5( $_SERVER['HTTP_USER_AGENT'] );
-    add_filter( 'pre_site_transient_browser_' . $key, function ( $value ) {
-        return [
-            'upgrade' => '',
-        ];
-    } );
+	// Escape hatch: allow re-enabling if needed.
+	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
+		return;
+	}
+
+	// Generate the MD5 key based on user agent.
+	if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+		return;
+	}
+
+	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
+	add_filter( 'pre_site_transient_browser_' . $key, function ( $value ) {
+		return [
+			'upgrade' => '',
+		];
+	} );
 } );
