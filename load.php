@@ -46,45 +46,20 @@ add_action( 'altis.loaded_autoloader', function () {
 	}
 } );
 
-// Disable BrowseHappy requests.
-add_filter( 'pre_http_request', function ( $preempt, $args, $url ) {
-
-	if ( ! is_admin() ) {
-		return $preempt;
-	}
-
-	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
-		return $preempt;
-	}
-
-	$parts = \parse_url( $url );
-
-	if ( is_array( $parts )
-			&& ! empty( $parts['host'] )
-			&& ! empty( $parts['path'] )
-			&& \strcasecmp( $parts['host'], 'api.wordpress.org' ) === 0
-			&& \strpos( $parts['path'], '/core/browse-happy/' ) === 0
-		) {
-			return new \WP_Error(
-				'altis_disabled_browsehappy',
-				'Altis disables BrowseHappy requests for privacy.'
-			);
-	}
-
-	return $preempt;
-
-}, 10, 3 );
-
-// Remove BrowseHappy dashboard nag.
-add_action( 'wp_dashboard_setup', function () {
-
-	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
-		return;
-	}
-
-	remove_meta_box( 'dashboard_browser_nag', 'dashboard', 'normal' );
-	if ( has_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' ) ) {
-		remove_filter( 'postbox_classes_dashboard_dashboard_browser_nag', 'dashboard_browser_nag_class' );
-	}
-
-}, 999 );
+// Disable BrowseHappy browser check (privacy).
+add_action( 'admin_init', function () {
+    // Escape hatch: allow re-enabling if needed.
+    if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
+        return;
+    }
+    // Generate the MD5 key based on user agent.
+    if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+        return;
+    }
+    $key = md5( $_SERVER['HTTP_USER_AGENT'] );
+    add_filter( 'pre_site_transient_browser_' . $key, function ( $value ) {
+        return [
+            'upgrade' => '',
+        ];
+    } );
+} );
