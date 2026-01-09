@@ -46,7 +46,12 @@ add_action( 'altis.loaded_autoloader', function () {
 	}
 } );
 
-// Disable BrowseHappy browser check (privacy).
+/**
+ * Disable BrowseHappy browser check
+ *
+ * For Privacy reasons we don't want to call this API (that doesn't actually work anymore).
+ * To disable it we fake the cached API response so it never gets called.
+ */
 add_action( 'admin_init', function () {
 	// Escape hatch: allow re-enabling if needed.
 	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
