@@ -45,3 +45,28 @@ add_action( 'altis.loaded_autoloader', function () {
 		require_once ROOT_DIR . '/.config/load.php';
 	}
 } );
+
+/**
+ * Disable BrowseHappy browser check
+ *
+ * For Privacy reasons we don't want to call this API (that doesn't actually work anymore).
+ * To disable it we fake the cached API response so it never gets called.
+ */
+add_action( 'admin_init', function () {
+	// Escape hatch: allow re-enabling if needed.
+	if ( ! apply_filters( 'altis_disable_browsehappy', true ) ) {
+		return;
+	}
+
+	// Generate the MD5 key based on user agent.
+	if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+		return;
+	}
+
+	$key = md5( $_SERVER['HTTP_USER_AGENT'] );
+	add_filter( 'pre_site_transient_browser_' . $key, function ( $value ) {
+		return [
+			'upgrade' => '',
+		];
+	} );
+} );
