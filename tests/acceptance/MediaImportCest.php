@@ -33,7 +33,7 @@ class MediaImportCest {
 		$I->see( 'Upload New Media' );
 
 		// Attach the test image file to the file input.
-		// The file path is relative to the Codeception _data directory or absolute.
+		// The file is in the shared dev-tools/tests/_data directory.
 		$I->attachFile( 'input[type="file"]', 'wp-logo.png' );
 
 		// Sleep to allow any JS processing to complete (e.g., generating thumbnails).
