@@ -23,7 +23,8 @@
 			"inc/compatibility/namespace.php",
 			"inc/global_content/namespace.php",
 			"inc/upgrades/namespace.php",
-			"inc/telemetry/namespace.php"
+			"inc/telemetry/namespace.php",
+			"inc/post_sync/namespace.php"
 		],
 		"classmap": [
 			"inc/"

@@ -22,6 +22,7 @@ function bootstrap() {
 	Telemetry\bootstrap();
 
 	Global_Content\bootstrap();
+	Post_Sync\bootstrap();
 
 	// Register the Altis command.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
