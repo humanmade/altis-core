@@ -41,7 +41,6 @@ WP_CLI::add_hook( 'after_invoke:altis migrate', function () {
 The post-sync command runs routine maintenance tasks after syncing an environment, for example after pulling a production 
 database to staging or development. By default, this includes:
 
-- Flushing the object cache
 - Reindexing Elasticsearch (if available)
 - Truncating the Cavalcade cron logs table
 
@@ -72,9 +71,6 @@ All default tasks are registered as named functions, so they can be unhooked ind
 ```php
 // Skip the Elasticsearch reindex.
 remove_action( 'altis.post_sync', 'Altis\Post_Sync\reindex_elasticsearch' );
-
-// Skip flushing the object cache.
-remove_action( 'altis.post_sync', 'Altis\Post_Sync\flush_object_cache' );
 
 // Skip truncating Cavalcade logs.
 remove_action( 'altis.post_sync', 'Altis\Post_Sync\truncate_cavalcade_logs' );

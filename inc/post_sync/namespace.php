@@ -18,20 +18,8 @@ use WP_CLI;
  * @return void
  */
 function bootstrap() : void {
-	add_action( 'altis.post_sync', __NAMESPACE__ . '\\flush_object_cache' );
 	add_action( 'altis.post_sync', __NAMESPACE__ . '\\reindex_elasticsearch' );
 	add_action( 'altis.post_sync', __NAMESPACE__ . '\\truncate_cavalcade_logs' );
-}
-
-/**
- * Flush the object cache.
- *
- * @return void
- */
-function flush_object_cache() : void {
-	WP_CLI::log( 'Flushing object cache...' );
-	wp_cache_flush();
-	WP_CLI::success( 'Object cache flushed.' );
 }
 
 /**

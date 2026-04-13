@@ -44,8 +44,7 @@ class Command extends WP_CLI_Command {
 	 * Run post-sync tasks.
 	 *
 	 * This command runs routine synchronization and maintenance tasks such as
-	 * flushing the object cache, reindexing Elasticsearch, and truncating
-	 * Cavalcade logs. It is intended to be run after syncing an environment,
+	 * reindexing Elasticsearch and truncating Cavalcade logs. It is intended to be run after syncing an environment,
 	 * for example pulling a production database to staging.
 	 *
 	 * Custom code can hook into this command using the `altis.post_sync` hook.
