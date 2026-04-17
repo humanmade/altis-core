@@ -41,8 +41,9 @@ WP_CLI::add_hook( 'after_invoke:altis migrate', function () {
 The post-sync command runs routine maintenance tasks after syncing an environment, for example after pulling a production 
 database to staging or development. By default, this includes:
 
-- Reindexing Elasticsearch (if available)
 - Truncating the Cavalcade cron logs table
+- Reindexing Elasticsearch when the Search module is enabled (see
+  [Search module docs](docs://search/cli-command.md))
 
 ### Hooking into the command
 
@@ -69,12 +70,12 @@ There are 2 ways to hook into this command:
 All default tasks are registered as named functions, so they can be unhooked individually:
 
 ```php
-// Skip the Elasticsearch reindex.
-remove_action( 'altis.post_sync', 'Altis\Post_Sync\reindex_elasticsearch' );
-
 // Skip truncating Cavalcade logs.
 remove_action( 'altis.post_sync', 'Altis\Post_Sync\truncate_cavalcade_logs' );
 ```
+
+Tasks contributed by other modules (for example the Search module's Elasticsearch reindex) are documented
+alongside those modules.
 
 ### Customer examples
 

@@ -18,26 +18,7 @@ use WP_CLI;
  * @return void
  */
 function bootstrap() : void {
-	add_action( 'altis.post_sync', __NAMESPACE__ . '\\reindex_elasticsearch' );
 	add_action( 'altis.post_sync', __NAMESPACE__ . '\\truncate_cavalcade_logs' );
-}
-
-/**
- * Reindex Elasticsearch if available.
- *
- * Skips reindexing if Elasticsearch is not configured for this environment.
- *
- * @return void
- */
-function reindex_elasticsearch() : void {
-	if ( ! defined( 'ELASTICSEARCH_HOST' ) || ! ELASTICSEARCH_HOST ) {
-		WP_CLI::log( 'Elasticsearch not available, skipping reindex.' );
-		return;
-	}
-
-	WP_CLI::log( 'Reindexing Elasticsearch...' );
-	WP_CLI::runcommand( 'elasticpress sync --setup --network-wide --yes' );
-	WP_CLI::success( 'Elasticsearch reindex complete.' );
 }
 
 /**
