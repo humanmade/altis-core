@@ -40,4 +40,43 @@ class Command extends WP_CLI_Command {
 		do_action( 'altis.migrate', $args, $assoc_args );
 	}
 
+	/**
+	 * Run post-sync tasks.
+	 *
+	 * This command runs routine synchronization and maintenance tasks such as
+	 * truncating Cavalcade logs. Other modules (for example Search) may hook in
+	 * additional tasks. It is intended to be run after syncing an environment,
+	 * for example pulling a production database to staging.
+	 *
+	 * Custom code can hook into this command using the `altis.post_sync` hook.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     # Run all post-sync tasks
+	 *     $ wp altis post-sync
+	 *
+	 *     # Run post-sync on a specific site
+	 *     $ wp altis post-sync --url=example.com
+	 *
+	 * @subcommand post-sync
+	 *
+	 * @param array $args Command arguments.
+	 * @param array $assoc_args Command associative arguments.
+	 */
+	public function post_sync( array $args, array $assoc_args ) {
+		WP_CLI::log( 'Running Altis post-sync tasks...' );
+
+		/**
+		 * Triggered by the `wp altis post-sync` command. Attach any custom
+		 * synchronization or maintenance tasks you need to run after syncing
+		 * an environment.
+		 *
+		 * @param array $args Any plain args passed to the command e.g. `wp altis post-sync myarg`.
+		 * @param array $assoc_args Any named arguments passed to the command e.g. `wp altis post-sync --url=example.org`.
+		 */
+		do_action( 'altis.post_sync', $args, $assoc_args );
+
+		WP_CLI::success( 'Post-sync tasks complete.' );
+	}
+
 }
