@@ -171,6 +171,11 @@ function maybe_create_site() {
 	update_site_option( 'global_content_site_url', rtrim( $site_url, '/' ) );
 	update_site_option( 'global_content_site_id', $site_id );
 
+	// A stale `notoptions` cache entry — populated when other requests read these
+	// options before this function ran — can otherwise mask the values we just set,
+	// since get_network_option consults notoptions before the value cache.
+	wp_cache_delete( get_current_network_id() . ':notoptions', 'site-options' );
+
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		WP_CLI::success( 'Global Content Repository site created!' );
 	}
