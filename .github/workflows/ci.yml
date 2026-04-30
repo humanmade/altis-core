@@ -1,0 +1,26 @@
+name: CI
+
+# Caller for the reusable Module CI workflow.
+# After the reusable workflow lands on master, bump `@master` to a pinned SHA via
+# scripts/update-module-gha-ref.sh.
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - 'v*-branch'
+  pull_request:
+    branches:
+      - master
+      - main
+      - 'v*-branch'
+
+jobs:
+  ci:
+    uses: humanmade/altis-dev-tools/.github/workflows/module-ci.yml@master
+    with:
+      altis-package: altis/core
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
