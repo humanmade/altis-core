@@ -53,6 +53,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 
 		$this->installer = new Override_Installer( $this->io, $this->composer );
 		$this->composer->getInstallationManager()->addInstaller( $this->installer );
+
+		// Populate overrides from the lock file immediately. Composer dispatches
+		// the `init` event by calling EventDispatcher::makeAutoloader() *before*
+		// invoking listeners — that builds a package map via getInstallPath() on
+		// every package, so if overrides are not set yet, every wordpress-plugin
+		// resolves to the root installer-paths template (content/plugins/{name}/)
+		// and ClassMapGenerator emits "Could not scan for classes inside ..."
+		// warnings against those non-existent paths.
+		$this->populate_overrides_from_lock();
 	}
 
 	/**
@@ -84,6 +93,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
 
 		// If we have a lockfile set the overrides early to handle
 		// dump-autoload commands correctly.
+		$this->populate_overrides_from_lock();
+	}
+
+	/**
+	 * Populate install overrides on $this->installer from the lock file, if available.
+	 *
+	 * @return void
+	 */
+	protected function populate_overrides_from_lock() : void {
 		$lock_file = dirname( $this->composer->getConfig()->get( 'vendor-dir' ) ) . DIRECTORY_SEPARATOR . 'composer.lock';
 		if ( ! is_readable( $lock_file ) ) {
 			return;
