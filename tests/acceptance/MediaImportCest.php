@@ -30,7 +30,7 @@ class MediaImportCest {
 		$I->amOnAdminPage( 'media-new.php' );
 
 		// Verify we're on the upload page.
-		$I->see( 'Upload New Media' );
+		$I->see( 'Upload Media' );
 
 		// Attach the test image file to the file input.
 		// The file is in the shared dev-tools/tests/_data directory.
