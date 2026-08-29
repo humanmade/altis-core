@@ -1,0 +1,149 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://schemas.altis-dxp.com/schema.json",
+	"title": "Altis Core schema for composer.json",
+	"type": "object",
+	"definitions": {
+		"altis-modules": {
+			"title": "Configuration for Altis modules",
+			"description": "https://docs.altis-dxp.com/getting-started/configuration/",
+			"type": "object",
+			"properties": {
+				"analytics": {
+					"title": "Analytics module for Altis",
+					"description": "https://docs.altis-dxp.com/analytics/",
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"description": "Whether this module is enabled",
+							"type": "boolean",
+							"default": true
+						},
+						"native": {
+							"description": "Whether to use native analytics",
+							"type": "boolean",
+							"default": true
+						}
+					}
+				},
+				"cms": {
+					"title": "CMS module for Altis",
+					"description": "https://docs.altis-dxp.com/cms/",
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"description": "Whether this module is enabled",
+							"type": "boolean",
+							"default": true
+						},
+						"xmlrpc": {
+							"description": "Whether the XML-RPC API is enabled",
+							"type": "boolean",
+							"default": true
+						},
+						"shared-blocks": {
+							"description": "Whether shared blocks are enabled",
+							"type": "boolean",
+							"default": true
+						},
+						"favicon": {
+							"title": "Custom Favicon",
+							"description": "A project root relative path to an image file, or boolean false to disable the custom favicon",
+							"type": [
+								"string",
+								"boolean"
+							]
+						}
+					}
+				},
+				"dev-tools": {
+					"title": "Dev tools module for Altis",
+					"description": "https://docs.altis-dxp.com/dev-tools/",
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"description": "Whether this module is enabled",
+							"type": "boolean",
+							"default": true
+						},
+						"phpunit": {
+							"title": "PHPUnit configuration parameters",
+							"type": "object"
+						}
+					}
+				}
+			}
+		}
+	},
+	"allOf": [
+		{
+			"type": "object",
+			"properties": {
+				"extra": {
+					"type": "object",
+					"properties": {
+						"altis": {
+							"type": "object",
+							"description": "Altis configuration",
+							"properties": {
+								"modules": {
+									"$ref": "#/definitions/altis-modules"
+								},
+								"environments": {
+									"description": "Configuration for local and Altis Cloud environments",
+									"type": "object",
+									"properties": {
+										"local": {
+											"description": "Local server environment",
+											"properties": {
+												"modules": {
+													"$ref": "#/definitions/altis-modules"
+												}
+											}
+										},
+										"ci": {
+											"description": "CI environment",
+											"properties": {
+												"modules": {
+													"$ref": "#/definitions/altis-modules"
+												}
+											}
+										},
+										"development": {
+											"description": "Development server cloud environment",
+											"properties": {
+												"modules": {
+													"$ref": "#/definitions/altis-modules"
+												}
+											}
+										},
+										"staging": {
+											"description": "Staging server cloud environment",
+											"properties": {
+												"modules": {
+													"$ref": "#/definitions/altis-modules"
+												}
+											}
+										},
+										"production": {
+											"description": "Production server cloud environment",
+											"properties": {
+												"modules": {
+													"$ref": "#/definitions/altis-modules"
+												}
+											}
+										}
+									},
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$ref": "https://getcomposer.org/schema.json"
+		}
+	]
+}
