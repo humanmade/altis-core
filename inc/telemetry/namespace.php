@@ -82,8 +82,12 @@ function initialize() : bool {
 		return $initialized;
 	}
 
-	// Connect.
-	Segment::init( get_segment_id() );
+	// Connect. Keep retries short as they block the current request (limits apply from analytics-php 3.9).
+	Segment::init( get_segment_id(), [
+		'retry_count' => 2,
+		'max_total_backoff_duration' => 5,
+		'max_rate_limit_duration' => 5,
+	] );
 
 	// Identify our user.
 	$user = get_segmentio_user_details();
