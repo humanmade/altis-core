@@ -583,7 +583,7 @@ function powered_by( $format = null ) {
 		sprintf(
 			'<a href="%s" rel="generator">%s</a>',
 			esc_url( $url ),
-			esc_html__( 'Altis DXP', 'altis' )
+			esc_html__( 'Altis Enterprise Cloud for WordPress', 'altis' )
 		)
 	);
 }
